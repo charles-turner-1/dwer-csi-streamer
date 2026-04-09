@@ -1,5 +1,9 @@
 # DWER CSI Streamer
 
+> [!WARNING]
+> This package has been scaffolded by Claude. Details may be and probably are incorrect whilst this warning is still here. 
+
+
 A fully serverless, static web application for streaming scientific datasets directly to the browser from cloud object storage. No backend, no tiling service — just HTTP range requests against object storage and in-browser decompression.
 
 Built as a collaboration between [Murdoch University](https://www.murdoch.edu.au), the [WA Department of Water and Environmental Regulation (DWER)](https://www.der.wa.gov.au), and [ACCESS-NRI](https://www.access-nri.org.au), with compute and storage infrastructure provided by the [Pawsey Supercomputing Research Centre](https://pawsey.org.au).
