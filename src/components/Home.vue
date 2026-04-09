@@ -2,7 +2,7 @@
   <div class="container mx-auto px-6 py-12">
     <div class="text-center mb-12 mt-12">
       <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-        DWER CSI Streamer
+        DWER Climate Science Initiative Zarr Data Streamer
       </h1>
       <p
         class="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed"
@@ -59,8 +59,8 @@
       <p class="flex items-center gap-2 font-semibold text-gray-500 dark:text-gray-400">
         <i class="pi pi-info-circle text-blue-500"></i>
         Disclaimer: This info was written by Claude Sonnet 4.6. It's mostly
-        right (especially the technical bits), but may be subtly misleading.
-        At some point, I might come back and rewrite it.
+        right (especially the generic technical bits), but may be subtly misleading.
+        At some point, I will aim to come back and rewrite it.
       </p>
 
       <p>
