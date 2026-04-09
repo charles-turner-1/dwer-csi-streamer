@@ -1,0 +1,822 @@
+{
+  "version": 1,
+  "refs": {
+    ".zgroup": "{\"zarr_format\":2}",
+    ".zattrs": "{\"filename\":\"ocean_year.nc\",\"title\":\"ACCESS-OM2-BGC\",\"grid_type\":\"mosaic\",\"grid_tile\":\"1\"}",
+    "sst\/0.0.0": ["s3:\/\/1deg\/output1830\/ocean_year.nc", 14109608, 155960],
+    "sst\/1.0.0": ["s3:\/\/1deg\/output1831\/ocean_year.nc", 14214084, 156240],
+    "sst\/2.0.0": ["s3:\/\/1deg\/output1832\/ocean_year.nc", 14266248, 156282],
+    "sst\/3.0.0": ["s3:\/\/1deg\/output1833\/ocean_year.nc", 14312161, 155786],
+    "sst\/4.0.0": ["s3:\/\/1deg\/output1834\/ocean_year.nc", 14323173, 155825],
+    "sst\/5.0.0": ["s3:\/\/1deg\/output1835\/ocean_year.nc", 14350938, 155633],
+    "sst\/6.0.0": ["s3:\/\/1deg\/output1836\/ocean_year.nc", 14371177, 155584],
+    "sst\/7.0.0": ["s3:\/\/1deg\/output1837\/ocean_year.nc", 14394768, 155410],
+    "sst\/8.0.0": ["s3:\/\/1deg\/output1838\/ocean_year.nc", 14396995, 155439],
+    "sst\/9.0.0": ["s3:\/\/1deg\/output1839\/ocean_year.nc", 14410437, 155689],
+    "sst\/10.0.0": ["s3:\/\/1deg\/output1840\/ocean_year.nc", 14420612, 155834],
+    "sst\/11.0.0": ["s3:\/\/1deg\/output1841\/ocean_year.nc", 14432202, 155472],
+    "sst\/12.0.0": ["s3:\/\/1deg\/output1842\/ocean_year.nc", 14437698, 155860],
+    "sst\/13.0.0": ["s3:\/\/1deg\/output1843\/ocean_year.nc", 14463608, 156445],
+    "sst\/14.0.0": ["s3:\/\/1deg\/output1844\/ocean_year.nc", 14467998, 155651],
+    "sst\/15.0.0": ["s3:\/\/1deg\/output1845\/ocean_year.nc", 14467771, 156359],
+    "sst\/16.0.0": ["s3:\/\/1deg\/output1846\/ocean_year.nc", 14483636, 156240],
+    "sst\/17.0.0": ["s3:\/\/1deg\/output1847\/ocean_year.nc", 14479085, 156094],
+    "sst\/18.0.0": ["s3:\/\/1deg\/output1848\/ocean_year.nc", 14486161, 155451],
+    "sst\/19.0.0": ["s3:\/\/1deg\/output1849\/ocean_year.nc", 14500669, 156182],
+    "sst\/20.0.0": ["s3:\/\/1deg\/output1850\/ocean_year.nc", 14489279, 155628],
+    "sst\/21.0.0": ["s3:\/\/1deg\/output1851\/ocean_year.nc", 14484374, 155482],
+    "sst\/22.0.0": ["s3:\/\/1deg\/output1852\/ocean_year.nc", 14494667, 155573],
+    "sst\/23.0.0": ["s3:\/\/1deg\/output1853\/ocean_year.nc", 14483304, 155197],
+    "sst\/24.0.0": ["s3:\/\/1deg\/output1854\/ocean_year.nc", 14485495, 154966],
+    "sst\/25.0.0": ["s3:\/\/1deg\/output1855\/ocean_year.nc", 14479131, 154882],
+    "sst\/26.0.0": ["s3:\/\/1deg\/output1856\/ocean_year.nc", 14495072, 155676],
+    "sst\/27.0.0": ["s3:\/\/1deg\/output1857\/ocean_year.nc", 14477293, 155365],
+    "sst\/28.0.0": ["s3:\/\/1deg\/output1858\/ocean_year.nc", 14474150, 154907],
+    "sst\/29.0.0": ["s3:\/\/1deg\/output1859\/ocean_year.nc", 14482024, 154789],
+    "sst\/30.0.0": ["s3:\/\/1deg\/output1860\/ocean_year.nc", 14490501, 155419],
+    "sst\/31.0.0": ["s3:\/\/1deg\/output1861\/ocean_year.nc", 14505782, 155519],
+    "sst\/32.0.0": ["s3:\/\/1deg\/output1862\/ocean_year.nc", 14509779, 155776],
+    "sst\/33.0.0": ["s3:\/\/1deg\/output1863\/ocean_year.nc", 14508157, 155470],
+    "sst\/34.0.0": ["s3:\/\/1deg\/output1864\/ocean_year.nc", 14506273, 155190],
+    "sst\/35.0.0": ["s3:\/\/1deg\/output1865\/ocean_year.nc", 14508330, 155950],
+    "sst\/36.0.0": ["s3:\/\/1deg\/output1866\/ocean_year.nc", 14508680, 155382],
+    "sst\/37.0.0": ["s3:\/\/1deg\/output1867\/ocean_year.nc", 14504515, 155997],
+    "sst\/38.0.0": ["s3:\/\/1deg\/output1868\/ocean_year.nc", 14506395, 155418],
+    "sst\/39.0.0": ["s3:\/\/1deg\/output1869\/ocean_year.nc", 14514878, 155610],
+    "sst\/40.0.0": ["s3:\/\/1deg\/output1870\/ocean_year.nc", 14523220, 155997],
+    "sst\/41.0.0": ["s3:\/\/1deg\/output1871\/ocean_year.nc", 14522205, 156093],
+    "sst\/42.0.0": ["s3:\/\/1deg\/output1872\/ocean_year.nc", 14515764, 155533],
+    "sst\/43.0.0": ["s3:\/\/1deg\/output1873\/ocean_year.nc", 14506863, 155071],
+    "sst\/44.0.0": ["s3:\/\/1deg\/output1874\/ocean_year.nc", 14514065, 155212],
+    "sst\/45.0.0": ["s3:\/\/1deg\/output1875\/ocean_year.nc", 14511669, 155550],
+    "sst\/46.0.0": ["s3:\/\/1deg\/output1876\/ocean_year.nc", 14507122, 155263],
+    "sst\/47.0.0": ["s3:\/\/1deg\/output1877\/ocean_year.nc", 14503052, 155098],
+    "sst\/48.0.0": ["s3:\/\/1deg\/output1878\/ocean_year.nc", 14509723, 155408],
+    "sst\/49.0.0": ["s3:\/\/1deg\/output1879\/ocean_year.nc", 14504637, 156057],
+    "sst\/50.0.0": ["s3:\/\/1deg\/output1880\/ocean_year.nc", 14503732, 155238],
+    "sst\/51.0.0": ["s3:\/\/1deg\/output1881\/ocean_year.nc", 14510381, 155057],
+    "sst\/52.0.0": ["s3:\/\/1deg\/output1882\/ocean_year.nc", 14518267, 155585],
+    "sst\/53.0.0": ["s3:\/\/1deg\/output1883\/ocean_year.nc", 14524346, 155612],
+    "sst\/54.0.0": ["s3:\/\/1deg\/output1884\/ocean_year.nc", 14529083, 156036],
+    "sst\/55.0.0": ["s3:\/\/1deg\/output1885\/ocean_year.nc", 14520152, 155820],
+    "sst\/56.0.0": ["s3:\/\/1deg\/output1886\/ocean_year.nc", 14525095, 155567],
+    "sst\/57.0.0": ["s3:\/\/1deg\/output1887\/ocean_year.nc", 14514233, 155465],
+    "sst\/58.0.0": ["s3:\/\/1deg\/output1888\/ocean_year.nc", 14532815, 155909],
+    "sst\/59.0.0": ["s3:\/\/1deg\/output1889\/ocean_year.nc", 14542497, 156347],
+    "sst\/60.0.0": ["s3:\/\/1deg\/output1890\/ocean_year.nc", 14531660, 156079],
+    "sst\/.zarray": "{\"shape\":[61,300,360],\"chunks\":[1,300,360],\"dtype\":\"<f4\",\"fill_value\":0.0,\"order\":\"C\",\"filters\":[{\"id\":\"shuffle\",\"elementsize\":4},{\"id\":\"zlib\",\"level\":5}],\"dimension_separator\":\".\",\"compressor\":null,\"attributes\":{},\"zarr_format\":2}",
+    "sst\/.zattrs": "{\"long_name\":\"Conservative temperature\",\"units\":\"K\",\"valid_range\":[-10.0,500.0],\"missing_value\":-1.0000000200408773e+20,\"_FillValue\":\"AAAAgB2vFcQ=\",\"cell_methods\":\"time: mean\",\"time_avg_info\":\"average_T1,average_T2,average_DT\",\"coordinates\":\"geolon_t geolat_t\",\"standard_name\":\"sea_surface_conservative_temperature\",\"_ARRAY_DIMENSIONS\":[\"time\",\"yt_ocean\",\"xt_ocean\"]}",
+    "sss\/0.0.0": ["s3:\/\/1deg\/output1830\/ocean_year.nc", 14265568, 171100],
+    "sss\/1.0.0": ["s3:\/\/1deg\/output1831\/ocean_year.nc", 14370324, 170930],
+    "sss\/2.0.0": ["s3:\/\/1deg\/output1832\/ocean_year.nc", 14422530, 171087],
+    "sss\/3.0.0": ["s3:\/\/1deg\/output1833\/ocean_year.nc", 14467947, 171017],
+    "sss\/4.0.0": ["s3:\/\/1deg\/output1834\/ocean_year.nc", 14478998, 171066],
+    "sss\/5.0.0": ["s3:\/\/1deg\/output1835\/ocean_year.nc", 14506571, 170931],
+    "sss\/6.0.0": ["s3:\/\/1deg\/output1836\/ocean_year.nc", 14526761, 170880],
+    "sss\/7.0.0": ["s3:\/\/1deg\/output1837\/ocean_year.nc", 14550178, 170943],
+    "sss\/8.0.0": ["s3:\/\/1deg\/output1838\/ocean_year.nc", 14552434, 170782],
+    "sss\/9.0.0": ["s3:\/\/1deg\/output1839\/ocean_year.nc", 14566126, 170849],
+    "sss\/10.0.0": ["s3:\/\/1deg\/output1840\/ocean_year.nc", 14576446, 171048],
+    "sss\/11.0.0": ["s3:\/\/1deg\/output1841\/ocean_year.nc", 14587674, 171309],
+    "sss\/12.0.0": ["s3:\/\/1deg\/output1842\/ocean_year.nc", 14593558, 171174],
+    "sss\/13.0.0": ["s3:\/\/1deg\/output1843\/ocean_year.nc", 14620053, 171248],
+    "sss\/14.0.0": ["s3:\/\/1deg\/output1844\/ocean_year.nc", 14623649, 170746],
+    "sss\/15.0.0": ["s3:\/\/1deg\/output1845\/ocean_year.nc", 14624130, 170837],
+    "sss\/16.0.0": ["s3:\/\/1deg\/output1846\/ocean_year.nc", 14639876, 170911],
+    "sss\/17.0.0": ["s3:\/\/1deg\/output1847\/ocean_year.nc", 14635179, 171105],
+    "sss\/18.0.0": ["s3:\/\/1deg\/output1848\/ocean_year.nc", 14641612, 170911],
+    "sss\/19.0.0": ["s3:\/\/1deg\/output1849\/ocean_year.nc", 14656851, 170892],
+    "sss\/20.0.0": ["s3:\/\/1deg\/output1850\/ocean_year.nc", 14644907, 170694],
+    "sss\/21.0.0": ["s3:\/\/1deg\/output1851\/ocean_year.nc", 14639856, 170783],
+    "sss\/22.0.0": ["s3:\/\/1deg\/output1852\/ocean_year.nc", 14650240, 170832],
+    "sss\/23.0.0": ["s3:\/\/1deg\/output1853\/ocean_year.nc", 14638501, 170727],
+    "sss\/24.0.0": ["s3:\/\/1deg\/output1854\/ocean_year.nc", 14640461, 170554],
+    "sss\/25.0.0": ["s3:\/\/1deg\/output1855\/ocean_year.nc", 14634013, 170336],
+    "sss\/26.0.0": ["s3:\/\/1deg\/output1856\/ocean_year.nc", 14650748, 170669],
+    "sss\/27.0.0": ["s3:\/\/1deg\/output1857\/ocean_year.nc", 14632658, 170457],
+    "sss\/28.0.0": ["s3:\/\/1deg\/output1858\/ocean_year.nc", 14629057, 170683],
+    "sss\/29.0.0": ["s3:\/\/1deg\/output1859\/ocean_year.nc", 14636813, 170548],
+    "sss\/30.0.0": ["s3:\/\/1deg\/output1860\/ocean_year.nc", 14645920, 170658],
+    "sss\/31.0.0": ["s3:\/\/1deg\/output1861\/ocean_year.nc", 14661301, 170722],
+    "sss\/32.0.0": ["s3:\/\/1deg\/output1862\/ocean_year.nc", 14665555, 170872],
+    "sss\/33.0.0": ["s3:\/\/1deg\/output1863\/ocean_year.nc", 14663627, 170819],
+    "sss\/34.0.0": ["s3:\/\/1deg\/output1864\/ocean_year.nc", 14661463, 170907],
+    "sss\/35.0.0": ["s3:\/\/1deg\/output1865\/ocean_year.nc", 14664280, 170946],
+    "sss\/36.0.0": ["s3:\/\/1deg\/output1866\/ocean_year.nc", 14664062, 171045],
+    "sss\/37.0.0": ["s3:\/\/1deg\/output1867\/ocean_year.nc", 14660512, 171349],
+    "sss\/38.0.0": ["s3:\/\/1deg\/output1868\/ocean_year.nc", 14661813, 171110],
+    "sss\/39.0.0": ["s3:\/\/1deg\/output1869\/ocean_year.nc", 14670488, 170990],
+    "sss\/40.0.0": ["s3:\/\/1deg\/output1870\/ocean_year.nc", 14679217, 171004],
+    "sss\/41.0.0": ["s3:\/\/1deg\/output1871\/ocean_year.nc", 14678298, 170898],
+    "sss\/42.0.0": ["s3:\/\/1deg\/output1872\/ocean_year.nc", 14671297, 170867],
+    "sss\/43.0.0": ["s3:\/\/1deg\/output1873\/ocean_year.nc", 14661934, 170715],
+    "sss\/44.0.0": ["s3:\/\/1deg\/output1874\/ocean_year.nc", 14669277, 170929],
+    "sss\/45.0.0": ["s3:\/\/1deg\/output1875\/ocean_year.nc", 14667219, 170929],
+    "sss\/46.0.0": ["s3:\/\/1deg\/output1876\/ocean_year.nc", 14662385, 170836],
+    "sss\/47.0.0": ["s3:\/\/1deg\/output1877\/ocean_year.nc", 14658150, 170748],
+    "sss\/48.0.0": ["s3:\/\/1deg\/output1878\/ocean_year.nc", 14665131, 170940],
+    "sss\/49.0.0": ["s3:\/\/1deg\/output1879\/ocean_year.nc", 14660694, 170912],
+    "sss\/50.0.0": ["s3:\/\/1deg\/output1880\/ocean_year.nc", 14658970, 171050],
+    "sss\/51.0.0": ["s3:\/\/1deg\/output1881\/ocean_year.nc", 14665438, 170823],
+    "sss\/52.0.0": ["s3:\/\/1deg\/output1882\/ocean_year.nc", 14673852, 170981],
+    "sss\/53.0.0": ["s3:\/\/1deg\/output1883\/ocean_year.nc", 14679958, 170760],
+    "sss\/54.0.0": ["s3:\/\/1deg\/output1884\/ocean_year.nc", 14685119, 170679],
+    "sss\/55.0.0": ["s3:\/\/1deg\/output1885\/ocean_year.nc", 14675972, 170564],
+    "sss\/56.0.0": ["s3:\/\/1deg\/output1886\/ocean_year.nc", 14680662, 170711],
+    "sss\/57.0.0": ["s3:\/\/1deg\/output1887\/ocean_year.nc", 14669698, 170834],
+    "sss\/58.0.0": ["s3:\/\/1deg\/output1888\/ocean_year.nc", 14688724, 170770],
+    "sss\/59.0.0": ["s3:\/\/1deg\/output1889\/ocean_year.nc", 14698844, 170984],
+    "sss\/60.0.0": ["s3:\/\/1deg\/output1890\/ocean_year.nc", 14687739, 170939],
+    "sss\/.zarray": "{\"shape\":[61,300,360],\"chunks\":[1,300,360],\"dtype\":\"<f4\",\"fill_value\":0.0,\"order\":\"C\",\"filters\":[{\"id\":\"shuffle\",\"elementsize\":4},{\"id\":\"zlib\",\"level\":5}],\"dimension_separator\":\".\",\"compressor\":null,\"attributes\":{},\"zarr_format\":2}",
+    "sss\/.zattrs": "{\"long_name\":\"Practical Salinity\",\"units\":\"psu\",\"valid_range\":[-10.0,100.0],\"missing_value\":-1.0000000200408773e+20,\"_FillValue\":\"AAAAgB2vFcQ=\",\"cell_methods\":\"time: mean\",\"time_avg_info\":\"average_T1,average_T2,average_DT\",\"coordinates\":\"geolon_t geolat_t\",\"standard_name\":\"sea_surface_salinity\",\"_ARRAY_DIMENSIONS\":[\"time\",\"yt_ocean\",\"xt_ocean\"]}",
+    "mld\/0.0.0": ["s3:\/\/1deg\/output1830\/ocean_year.nc", 16872042, 228701],
+    "mld\/1.0.0": ["s3:\/\/1deg\/output1831\/ocean_year.nc", 17215502, 228987],
+    "mld\/2.0.0": ["s3:\/\/1deg\/output1832\/ocean_year.nc", 17425236, 228940],
+    "mld\/3.0.0": ["s3:\/\/1deg\/output1833\/ocean_year.nc", 17635740, 228796],
+    "mld\/4.0.0": ["s3:\/\/1deg\/output1834\/ocean_year.nc", 17684491, 228890],
+    "mld\/5.0.0": ["s3:\/\/1deg\/output1835\/ocean_year.nc", 17791104, 228684],
+    "mld\/6.0.0": ["s3:\/\/1deg\/output1836\/ocean_year.nc", 17902669, 229038],
+    "mld\/7.0.0": ["s3:\/\/1deg\/output1837\/ocean_year.nc", 18010107, 228248],
+    "mld\/8.0.0": ["s3:\/\/1deg\/output1838\/ocean_year.nc", 18009265, 229015],
+    "mld\/9.0.0": ["s3:\/\/1deg\/output1839\/ocean_year.nc", 18073896, 229252],
+    "mld\/10.0.0": ["s3:\/\/1deg\/output1840\/ocean_year.nc", 18128649, 228523],
+    "mld\/11.0.0": ["s3:\/\/1deg\/output1841\/ocean_year.nc", 18199443, 229319],
+    "mld\/12.0.0": ["s3:\/\/1deg\/output1842\/ocean_year.nc", 18239076, 229347],
+    "mld\/13.0.0": ["s3:\/\/1deg\/output1843\/ocean_year.nc", 18315876, 229239],
+    "mld\/14.0.0": ["s3:\/\/1deg\/output1844\/ocean_year.nc", 18359859, 228702],
+    "mld\/15.0.0": ["s3:\/\/1deg\/output1845\/ocean_year.nc", 18415925, 229403],
+    "mld\/16.0.0": ["s3:\/\/1deg\/output1846\/ocean_year.nc", 18408100, 229270],
+    "mld\/17.0.0": ["s3:\/\/1deg\/output1847\/ocean_year.nc", 18423076, 229663],
+    "mld\/18.0.0": ["s3:\/\/1deg\/output1848\/ocean_year.nc", 18464032, 229155],
+    "mld\/19.0.0": ["s3:\/\/1deg\/output1849\/ocean_year.nc", 18519197, 228681],
+    "mld\/20.0.0": ["s3:\/\/1deg\/output1850\/ocean_year.nc", 18532251, 229037],
+    "mld\/21.0.0": ["s3:\/\/1deg\/output1851\/ocean_year.nc", 18550924, 228715],
+    "mld\/22.0.0": ["s3:\/\/1deg\/output1852\/ocean_year.nc", 18597273, 228751],
+    "mld\/23.0.0": ["s3:\/\/1deg\/output1853\/ocean_year.nc", 18617863, 228900],
+    "mld\/24.0.0": ["s3:\/\/1deg\/output1854\/ocean_year.nc", 18641896, 228501],
+    "mld\/25.0.0": ["s3:\/\/1deg\/output1855\/ocean_year.nc", 18660031, 228614],
+    "mld\/26.0.0": ["s3:\/\/1deg\/output1856\/ocean_year.nc", 18708061, 229051],
+    "mld\/27.0.0": ["s3:\/\/1deg\/output1857\/ocean_year.nc", 18720320, 229345],
+    "mld\/28.0.0": ["s3:\/\/1deg\/output1858\/ocean_year.nc", 18733961, 228612],
+    "mld\/29.0.0": ["s3:\/\/1deg\/output1859\/ocean_year.nc", 18760447, 228399],
+    "mld\/30.0.0": ["s3:\/\/1deg\/output1860\/ocean_year.nc", 18798711, 229457],
+    "mld\/31.0.0": ["s3:\/\/1deg\/output1861\/ocean_year.nc", 18843186, 228857],
+    "mld\/32.0.0": ["s3:\/\/1deg\/output1862\/ocean_year.nc", 18812588, 228566],
+    "mld\/33.0.0": ["s3:\/\/1deg\/output1863\/ocean_year.nc", 18820614, 228214],
+    "mld\/34.0.0": ["s3:\/\/1deg\/output1864\/ocean_year.nc", 18840050, 228579],
+    "mld\/35.0.0": ["s3:\/\/1deg\/output1865\/ocean_year.nc", 18865098, 228451],
+    "mld\/36.0.0": ["s3:\/\/1deg\/output1866\/ocean_year.nc", 18874804, 228537],
+    "mld\/37.0.0": ["s3:\/\/1deg\/output1867\/ocean_year.nc", 18882368, 229039],
+    "mld\/38.0.0": ["s3:\/\/1deg\/output1868\/ocean_year.nc", 18904748, 228787],
+    "mld\/39.0.0": ["s3:\/\/1deg\/output1869\/ocean_year.nc", 18931491, 228081],
+    "mld\/40.0.0": ["s3:\/\/1deg\/output1870\/ocean_year.nc", 18953996, 228999],
+    "mld\/41.0.0": ["s3:\/\/1deg\/output1871\/ocean_year.nc", 18966730, 229113],
+    "mld\/42.0.0": ["s3:\/\/1deg\/output1872\/ocean_year.nc", 18981380, 228971],
+    "mld\/43.0.0": ["s3:\/\/1deg\/output1873\/ocean_year.nc", 18992185, 228616],
+    "mld\/44.0.0": ["s3:\/\/1deg\/output1874\/ocean_year.nc", 19010379, 228475],
+    "mld\/45.0.0": ["s3:\/\/1deg\/output1875\/ocean_year.nc", 19020858, 228378],
+    "mld\/46.0.0": ["s3:\/\/1deg\/output1876\/ocean_year.nc", 19036948, 228745],
+    "mld\/47.0.0": ["s3:\/\/1deg\/output1877\/ocean_year.nc", 19051689, 228892],
+    "mld\/48.0.0": ["s3:\/\/1deg\/output1878\/ocean_year.nc", 19069691, 228320],
+    "mld\/49.0.0": ["s3:\/\/1deg\/output1879\/ocean_year.nc", 19078369, 229009],
+    "mld\/50.0.0": ["s3:\/\/1deg\/output1880\/ocean_year.nc", 19098068, 228827],
+    "mld\/51.0.0": ["s3:\/\/1deg\/output1881\/ocean_year.nc", 19123329, 228264],
+    "mld\/52.0.0": ["s3:\/\/1deg\/output1882\/ocean_year.nc", 19142135, 228807],
+    "mld\/53.0.0": ["s3:\/\/1deg\/output1883\/ocean_year.nc", 19159565, 229137],
+    "mld\/54.0.0": ["s3:\/\/1deg\/output1884\/ocean_year.nc", 19184774, 228803],
+    "mld\/55.0.0": ["s3:\/\/1deg\/output1885\/ocean_year.nc", 19190692, 228867],
+    "mld\/56.0.0": ["s3:\/\/1deg\/output1886\/ocean_year.nc", 19208924, 228840],
+    "mld\/57.0.0": ["s3:\/\/1deg\/output1887\/ocean_year.nc", 19208671, 228242],
+    "mld\/58.0.0": ["s3:\/\/1deg\/output1888\/ocean_year.nc", 19249348, 228685],
+    "mld\/59.0.0": ["s3:\/\/1deg\/output1889\/ocean_year.nc", 19278241, 228746],
+    "mld\/60.0.0": ["s3:\/\/1deg\/output1890\/ocean_year.nc", 19275986, 228505],
+    "mld\/.zarray": "{\"shape\":[61,300,360],\"chunks\":[1,300,360],\"dtype\":\"<f4\",\"fill_value\":0.0,\"order\":\"C\",\"filters\":[{\"id\":\"shuffle\",\"elementsize\":4},{\"id\":\"zlib\",\"level\":5}],\"dimension_separator\":\".\",\"compressor\":null,\"attributes\":{},\"zarr_format\":2}",
+    "mld\/.zattrs": "{\"long_name\":\"mixed layer depth determined by density criteria\",\"units\":\"m\",\"valid_range\":[0.0,1000000.0],\"missing_value\":-1.0000000200408773e+20,\"_FillValue\":\"AAAAgB2vFcQ=\",\"cell_methods\":\"time: mean\",\"time_avg_info\":\"average_T1,average_T2,average_DT\",\"coordinates\":\"geolon_t geolat_t\",\"standard_name\":\"ocean_mixed_layer_thickness_defined_by_sigma_t\",\"_ARRAY_DIMENSIONS\":[\"time\",\"yt_ocean\",\"xt_ocean\"]}",
+    "sea_level\/0.0.0": [
+      "s3:\/\/1deg\/output1830\/ocean_year.nc",
+      17100743,
+      213710
+    ],
+    "sea_level\/1.0.0": [
+      "s3:\/\/1deg\/output1831\/ocean_year.nc",
+      17444489,
+      214530
+    ],
+    "sea_level\/2.0.0": [
+      "s3:\/\/1deg\/output1832\/ocean_year.nc",
+      17654176,
+      214414
+    ],
+    "sea_level\/3.0.0": [
+      "s3:\/\/1deg\/output1833\/ocean_year.nc",
+      17864536,
+      214409
+    ],
+    "sea_level\/4.0.0": [
+      "s3:\/\/1deg\/output1834\/ocean_year.nc",
+      17913381,
+      214258
+    ],
+    "sea_level\/5.0.0": [
+      "s3:\/\/1deg\/output1835\/ocean_year.nc",
+      18019788,
+      213825
+    ],
+    "sea_level\/6.0.0": [
+      "s3:\/\/1deg\/output1836\/ocean_year.nc",
+      18131707,
+      213642
+    ],
+    "sea_level\/7.0.0": [
+      "s3:\/\/1deg\/output1837\/ocean_year.nc",
+      18238355,
+      212812
+    ],
+    "sea_level\/8.0.0": [
+      "s3:\/\/1deg\/output1838\/ocean_year.nc",
+      18238280,
+      213232
+    ],
+    "sea_level\/9.0.0": [
+      "s3:\/\/1deg\/output1839\/ocean_year.nc",
+      18303148,
+      213751
+    ],
+    "sea_level\/10.0.0": [
+      "s3:\/\/1deg\/output1840\/ocean_year.nc",
+      18357172,
+      213239
+    ],
+    "sea_level\/11.0.0": [
+      "s3:\/\/1deg\/output1841\/ocean_year.nc",
+      18428762,
+      213331
+    ],
+    "sea_level\/12.0.0": [
+      "s3:\/\/1deg\/output1842\/ocean_year.nc",
+      18468423,
+      213596
+    ],
+    "sea_level\/13.0.0": [
+      "s3:\/\/1deg\/output1843\/ocean_year.nc",
+      18545115,
+      214117
+    ],
+    "sea_level\/14.0.0": [
+      "s3:\/\/1deg\/output1844\/ocean_year.nc",
+      18588561,
+      213324
+    ],
+    "sea_level\/15.0.0": [
+      "s3:\/\/1deg\/output1845\/ocean_year.nc",
+      18645328,
+      213769
+    ],
+    "sea_level\/16.0.0": [
+      "s3:\/\/1deg\/output1846\/ocean_year.nc",
+      18637370,
+      214074
+    ],
+    "sea_level\/17.0.0": [
+      "s3:\/\/1deg\/output1847\/ocean_year.nc",
+      18652739,
+      213811
+    ],
+    "sea_level\/18.0.0": [
+      "s3:\/\/1deg\/output1848\/ocean_year.nc",
+      18693187,
+      213467
+    ],
+    "sea_level\/19.0.0": [
+      "s3:\/\/1deg\/output1849\/ocean_year.nc",
+      18747878,
+      213151
+    ],
+    "sea_level\/20.0.0": [
+      "s3:\/\/1deg\/output1850\/ocean_year.nc",
+      18761288,
+      212934
+    ],
+    "sea_level\/21.0.0": [
+      "s3:\/\/1deg\/output1851\/ocean_year.nc",
+      18779639,
+      212615
+    ],
+    "sea_level\/22.0.0": [
+      "s3:\/\/1deg\/output1852\/ocean_year.nc",
+      18826024,
+      213363
+    ],
+    "sea_level\/23.0.0": [
+      "s3:\/\/1deg\/output1853\/ocean_year.nc",
+      18846763,
+      213678
+    ],
+    "sea_level\/24.0.0": [
+      "s3:\/\/1deg\/output1854\/ocean_year.nc",
+      18870397,
+      213371
+    ],
+    "sea_level\/25.0.0": [
+      "s3:\/\/1deg\/output1855\/ocean_year.nc",
+      18888645,
+      213038
+    ],
+    "sea_level\/26.0.0": [
+      "s3:\/\/1deg\/output1856\/ocean_year.nc",
+      18937112,
+      214142
+    ],
+    "sea_level\/27.0.0": [
+      "s3:\/\/1deg\/output1857\/ocean_year.nc",
+      18949665,
+      213849
+    ],
+    "sea_level\/28.0.0": [
+      "s3:\/\/1deg\/output1858\/ocean_year.nc",
+      18962573,
+      213173
+    ],
+    "sea_level\/29.0.0": [
+      "s3:\/\/1deg\/output1859\/ocean_year.nc",
+      18988846,
+      212834
+    ],
+    "sea_level\/30.0.0": [
+      "s3:\/\/1deg\/output1860\/ocean_year.nc",
+      19028168,
+      213938
+    ],
+    "sea_level\/31.0.0": [
+      "s3:\/\/1deg\/output1861\/ocean_year.nc",
+      19072043,
+      213940
+    ],
+    "sea_level\/32.0.0": [
+      "s3:\/\/1deg\/output1862\/ocean_year.nc",
+      19041154,
+      213264
+    ],
+    "sea_level\/33.0.0": [
+      "s3:\/\/1deg\/output1863\/ocean_year.nc",
+      19048828,
+      213123
+    ],
+    "sea_level\/34.0.0": [
+      "s3:\/\/1deg\/output1864\/ocean_year.nc",
+      19068629,
+      212875
+    ],
+    "sea_level\/35.0.0": [
+      "s3:\/\/1deg\/output1865\/ocean_year.nc",
+      19093549,
+      212817
+    ],
+    "sea_level\/36.0.0": [
+      "s3:\/\/1deg\/output1866\/ocean_year.nc",
+      19103341,
+      212717
+    ],
+    "sea_level\/37.0.0": [
+      "s3:\/\/1deg\/output1867\/ocean_year.nc",
+      19111407,
+      212855
+    ],
+    "sea_level\/38.0.0": [
+      "s3:\/\/1deg\/output1868\/ocean_year.nc",
+      19133535,
+      213566
+    ],
+    "sea_level\/39.0.0": [
+      "s3:\/\/1deg\/output1869\/ocean_year.nc",
+      19159572,
+      213209
+    ],
+    "sea_level\/40.0.0": [
+      "s3:\/\/1deg\/output1870\/ocean_year.nc",
+      19182995,
+      213647
+    ],
+    "sea_level\/41.0.0": [
+      "s3:\/\/1deg\/output1871\/ocean_year.nc",
+      19195843,
+      214302
+    ],
+    "sea_level\/42.0.0": [
+      "s3:\/\/1deg\/output1872\/ocean_year.nc",
+      19210351,
+      213667
+    ],
+    "sea_level\/43.0.0": [
+      "s3:\/\/1deg\/output1873\/ocean_year.nc",
+      19220801,
+      213551
+    ],
+    "sea_level\/44.0.0": [
+      "s3:\/\/1deg\/output1874\/ocean_year.nc",
+      19238854,
+      213540
+    ],
+    "sea_level\/45.0.0": [
+      "s3:\/\/1deg\/output1875\/ocean_year.nc",
+      19249236,
+      213597
+    ],
+    "sea_level\/46.0.0": [
+      "s3:\/\/1deg\/output1876\/ocean_year.nc",
+      19265693,
+      213433
+    ],
+    "sea_level\/47.0.0": [
+      "s3:\/\/1deg\/output1877\/ocean_year.nc",
+      19280581,
+      213662
+    ],
+    "sea_level\/48.0.0": [
+      "s3:\/\/1deg\/output1878\/ocean_year.nc",
+      19298011,
+      213613
+    ],
+    "sea_level\/49.0.0": [
+      "s3:\/\/1deg\/output1879\/ocean_year.nc",
+      19307378,
+      214002
+    ],
+    "sea_level\/50.0.0": [
+      "s3:\/\/1deg\/output1880\/ocean_year.nc",
+      19326895,
+      214091
+    ],
+    "sea_level\/51.0.0": [
+      "s3:\/\/1deg\/output1881\/ocean_year.nc",
+      19351593,
+      213764
+    ],
+    "sea_level\/52.0.0": [
+      "s3:\/\/1deg\/output1882\/ocean_year.nc",
+      19370942,
+      213580
+    ],
+    "sea_level\/53.0.0": [
+      "s3:\/\/1deg\/output1883\/ocean_year.nc",
+      19388702,
+      214061
+    ],
+    "sea_level\/54.0.0": [
+      "s3:\/\/1deg\/output1884\/ocean_year.nc",
+      19413577,
+      213784
+    ],
+    "sea_level\/55.0.0": [
+      "s3:\/\/1deg\/output1885\/ocean_year.nc",
+      19419559,
+      214054
+    ],
+    "sea_level\/56.0.0": [
+      "s3:\/\/1deg\/output1886\/ocean_year.nc",
+      19437764,
+      213751
+    ],
+    "sea_level\/57.0.0": [
+      "s3:\/\/1deg\/output1887\/ocean_year.nc",
+      19436913,
+      213738
+    ],
+    "sea_level\/58.0.0": [
+      "s3:\/\/1deg\/output1888\/ocean_year.nc",
+      19478033,
+      213495
+    ],
+    "sea_level\/59.0.0": [
+      "s3:\/\/1deg\/output1889\/ocean_year.nc",
+      19506987,
+      213775
+    ],
+    "sea_level\/60.0.0": [
+      "s3:\/\/1deg\/output1890\/ocean_year.nc",
+      19504491,
+      214082
+    ],
+    "sea_level\/.zarray": "{\"shape\":[61,300,360],\"chunks\":[1,300,360],\"dtype\":\"<f4\",\"fill_value\":0.0,\"order\":\"C\",\"filters\":[{\"id\":\"shuffle\",\"elementsize\":4},{\"id\":\"zlib\",\"level\":5}],\"dimension_separator\":\".\",\"compressor\":null,\"attributes\":{},\"zarr_format\":2}",
+    "sea_level\/.zattrs": "{\"long_name\":\"effective sea level (eta_t + patm\/(rho0*g)) on T cells\",\"units\":\"meter\",\"valid_range\":[-1000.0,1000.0],\"missing_value\":-1.0000000200408773e+20,\"_FillValue\":\"AAAAgB2vFcQ=\",\"cell_methods\":\"time: mean\",\"time_avg_info\":\"average_T1,average_T2,average_DT\",\"coordinates\":\"geolon_t geolat_t\",\"standard_name\":\"sea_surface_height_above_geoid\",\"_ARRAY_DIMENSIONS\":[\"time\",\"yt_ocean\",\"xt_ocean\"]}",
+    "time_bounds\/0.0": [
+      "s3:\/\/1deg\/output1830\/ocean_year.nc",
+      17314585,
+      19
+    ],
+    "time_bounds\/1.0": [
+      "s3:\/\/1deg\/output1831\/ocean_year.nc",
+      17659152,
+      20
+    ],
+    "time_bounds\/2.0": [
+      "s3:\/\/1deg\/output1832\/ocean_year.nc",
+      17868722,
+      20
+    ],
+    "time_bounds\/3.0": [
+      "s3:\/\/1deg\/output1833\/ocean_year.nc",
+      18079076,
+      20
+    ],
+    "time_bounds\/4.0": [
+      "s3:\/\/1deg\/output1834\/ocean_year.nc",
+      18127770,
+      20
+    ],
+    "time_bounds\/5.0": [
+      "s3:\/\/1deg\/output1835\/ocean_year.nc",
+      18233745,
+      19
+    ],
+    "time_bounds\/6.0": [
+      "s3:\/\/1deg\/output1836\/ocean_year.nc",
+      18345482,
+      19
+    ],
+    "time_bounds\/7.0": [
+      "s3:\/\/1deg\/output1837\/ocean_year.nc",
+      18451300,
+      19
+    ],
+    "time_bounds\/8.0": [
+      "s3:\/\/1deg\/output1838\/ocean_year.nc",
+      18451645,
+      20
+    ],
+    "time_bounds\/9.0": [
+      "s3:\/\/1deg\/output1839\/ocean_year.nc",
+      18517031,
+      20
+    ],
+    "time_bounds\/10.0": [
+      "s3:\/\/1deg\/output1840\/ocean_year.nc",
+      18570542,
+      20
+    ],
+    "time_bounds\/11.0": [
+      "s3:\/\/1deg\/output1841\/ocean_year.nc",
+      18642224,
+      20
+    ],
+    "time_bounds\/12.0": [
+      "s3:\/\/1deg\/output1842\/ocean_year.nc",
+      18682151,
+      19
+    ],
+    "time_bounds\/13.0": [
+      "s3:\/\/1deg\/output1843\/ocean_year.nc",
+      18759365,
+      19
+    ],
+    "time_bounds\/14.0": [
+      "s3:\/\/1deg\/output1844\/ocean_year.nc",
+      18802017,
+      19
+    ],
+    "time_bounds\/15.0": [
+      "s3:\/\/1deg\/output1845\/ocean_year.nc",
+      18859229,
+      20
+    ],
+    "time_bounds\/16.0": [
+      "s3:\/\/1deg\/output1846\/ocean_year.nc",
+      18851572,
+      20
+    ],
+    "time_bounds\/17.0": [
+      "s3:\/\/1deg\/output1847\/ocean_year.nc",
+      18866677,
+      19
+    ],
+    "time_bounds\/18.0": [
+      "s3:\/\/1deg\/output1848\/ocean_year.nc",
+      18906785,
+      19
+    ],
+    "time_bounds\/19.0": [
+      "s3:\/\/1deg\/output1849\/ocean_year.nc",
+      18961160,
+      19
+    ],
+    "time_bounds\/20.0": [
+      "s3:\/\/1deg\/output1850\/ocean_year.nc",
+      18974354,
+      19
+    ],
+    "time_bounds\/21.0": [
+      "s3:\/\/1deg\/output1851\/ocean_year.nc",
+      18992387,
+      19
+    ],
+    "time_bounds\/22.0": [
+      "s3:\/\/1deg\/output1852\/ocean_year.nc",
+      19039520,
+      19
+    ],
+    "time_bounds\/23.0": [
+      "s3:\/\/1deg\/output1853\/ocean_year.nc",
+      19060573,
+      19
+    ],
+    "time_bounds\/24.0": [
+      "s3:\/\/1deg\/output1854\/ocean_year.nc",
+      19083899,
+      19
+    ],
+    "time_bounds\/25.0": [
+      "s3:\/\/1deg\/output1855\/ocean_year.nc",
+      19101815,
+      19
+    ],
+    "time_bounds\/26.0": [
+      "s3:\/\/1deg\/output1856\/ocean_year.nc",
+      19151386,
+      19
+    ],
+    "time_bounds\/27.0": [
+      "s3:\/\/1deg\/output1857\/ocean_year.nc",
+      19163645,
+      19
+    ],
+    "time_bounds\/28.0": [
+      "s3:\/\/1deg\/output1858\/ocean_year.nc",
+      19175877,
+      19
+    ],
+    "time_bounds\/29.0": [
+      "s3:\/\/1deg\/output1859\/ocean_year.nc",
+      19201811,
+      19
+    ],
+    "time_bounds\/30.0": [
+      "s3:\/\/1deg\/output1860\/ocean_year.nc",
+      19242237,
+      19
+    ],
+    "time_bounds\/31.0": [
+      "s3:\/\/1deg\/output1861\/ocean_year.nc",
+      19286114,
+      19
+    ],
+    "time_bounds\/32.0": [
+      "s3:\/\/1deg\/output1862\/ocean_year.nc",
+      19254550,
+      19
+    ],
+    "time_bounds\/33.0": [
+      "s3:\/\/1deg\/output1863\/ocean_year.nc",
+      19262083,
+      19
+    ],
+    "time_bounds\/34.0": [
+      "s3:\/\/1deg\/output1864\/ocean_year.nc",
+      19281636,
+      19
+    ],
+    "time_bounds\/35.0": [
+      "s3:\/\/1deg\/output1865\/ocean_year.nc",
+      19306499,
+      19
+    ],
+    "time_bounds\/36.0": [
+      "s3:\/\/1deg\/output1866\/ocean_year.nc",
+      19316190,
+      19
+    ],
+    "time_bounds\/37.0": [
+      "s3:\/\/1deg\/output1867\/ocean_year.nc",
+      19324393,
+      19
+    ],
+    "time_bounds\/38.0": [
+      "s3:\/\/1deg\/output1868\/ocean_year.nc",
+      19347232,
+      19
+    ],
+    "time_bounds\/39.0": [
+      "s3:\/\/1deg\/output1869\/ocean_year.nc",
+      19372912,
+      19
+    ],
+    "time_bounds\/40.0": [
+      "s3:\/\/1deg\/output1870\/ocean_year.nc",
+      19396774,
+      19
+    ],
+    "time_bounds\/41.0": [
+      "s3:\/\/1deg\/output1871\/ocean_year.nc",
+      19410278,
+      19
+    ],
+    "time_bounds\/42.0": [
+      "s3:\/\/1deg\/output1872\/ocean_year.nc",
+      19424151,
+      19
+    ],
+    "time_bounds\/43.0": [
+      "s3:\/\/1deg\/output1873\/ocean_year.nc",
+      19434484,
+      19
+    ],
+    "time_bounds\/44.0": [
+      "s3:\/\/1deg\/output1874\/ocean_year.nc",
+      19452525,
+      19
+    ],
+    "time_bounds\/45.0": [
+      "s3:\/\/1deg\/output1875\/ocean_year.nc",
+      19462964,
+      19
+    ],
+    "time_bounds\/46.0": [
+      "s3:\/\/1deg\/output1876\/ocean_year.nc",
+      19479258,
+      19
+    ],
+    "time_bounds\/47.0": [
+      "s3:\/\/1deg\/output1877\/ocean_year.nc",
+      19494376,
+      19
+    ],
+    "time_bounds\/48.0": [
+      "s3:\/\/1deg\/output1878\/ocean_year.nc",
+      19511757,
+      19
+    ],
+    "time_bounds\/49.0": [
+      "s3:\/\/1deg\/output1879\/ocean_year.nc",
+      19521512,
+      19
+    ],
+    "time_bounds\/50.0": [
+      "s3:\/\/1deg\/output1880\/ocean_year.nc",
+      19541117,
+      19
+    ],
+    "time_bounds\/51.0": [
+      "s3:\/\/1deg\/output1881\/ocean_year.nc",
+      19565488,
+      19
+    ],
+    "time_bounds\/52.0": [
+      "s3:\/\/1deg\/output1882\/ocean_year.nc",
+      19584653,
+      19
+    ],
+    "time_bounds\/53.0": [
+      "s3:\/\/1deg\/output1883\/ocean_year.nc",
+      19602895,
+      19
+    ],
+    "time_bounds\/54.0": [
+      "s3:\/\/1deg\/output1884\/ocean_year.nc",
+      19627493,
+      19
+    ],
+    "time_bounds\/55.0": [
+      "s3:\/\/1deg\/output1885\/ocean_year.nc",
+      19633744,
+      19
+    ],
+    "time_bounds\/56.0": [
+      "s3:\/\/1deg\/output1886\/ocean_year.nc",
+      19651646,
+      19
+    ],
+    "time_bounds\/57.0": [
+      "s3:\/\/1deg\/output1887\/ocean_year.nc",
+      19650782,
+      19
+    ],
+    "time_bounds\/58.0": [
+      "s3:\/\/1deg\/output1888\/ocean_year.nc",
+      19691659,
+      19
+    ],
+    "time_bounds\/59.0": [
+      "s3:\/\/1deg\/output1889\/ocean_year.nc",
+      19720893,
+      19
+    ],
+    "time_bounds\/60.0": [
+      "s3:\/\/1deg\/output1890\/ocean_year.nc",
+      19718704,
+      19
+    ],
+    "time_bounds\/.zarray": "{\"shape\":[61,2],\"chunks\":[1,2],\"dtype\":\"<f8\",\"fill_value\":0.0,\"order\":\"C\",\"filters\":[{\"id\":\"shuffle\",\"elementsize\":8},{\"id\":\"zlib\",\"level\":5}],\"dimension_separator\":\".\",\"compressor\":null,\"attributes\":{},\"zarr_format\":2}",
+    "time_bounds\/.zattrs": "{\"long_name\":\"time axis boundaries\",\"units\":\"days\",\"missing_value\":1e+20,\"_FillValue\":\"QIy1eB2vFUQ=\",\"_ARRAY_DIMENSIONS\":[\"time\",\"nv\"]}",
+    "xt_ocean\/0": "base64:AAAAAAB4ccAAAAAAAGhxwAAAAAAAWHHAAAAAAABIccAAAAAAADhxwAAAAAAAKHHAAAAAAAAYccAAAAAAAAhxwAAAAAAA+HDAAAAAAADocMAAAAAAANhwwAAAAAAAyHDAAAAAAAC4cMAAAAAAAKhwwAAAAAAAmHDAAAAAAACIcMAAAAAAAHhwwAAAAAAAaHDAAAAAAABYcMAAAAAAAEhwwAAAAAAAOHDAAAAAAAAocMAAAAAAABhwwAAAAAAACHDAAAAAAADwb8AAAAAAANBvwAAAAAAAsG\/AAAAAAACQb8AAAAAAAHBvwAAAAAAAUG\/AAAAAAAAwb8AAAAAAABBvwAAAAAAA8G7AAAAAAADQbsAAAAAAALBuwAAAAAAAkG7AAAAAAABwbsAAAAAAAFBuwAAAAAAAMG7AAAAAAAAQbsAAAAAAAPBtwAAAAAAA0G3AAAAAAACwbcAAAAAAAJBtwAAAAAAAcG3AAAAAAABQbcAAAAAAADBtwAAAAAAAEG3AAAAAAADwbMAAAAAAANBswAAAAAAAsGzAAAAAAACQbMAAAAAAAHBswAAAAAAAUGzAAAAAAAAwbMAAAAAAABBswAAAAAAA8GvAAAAAAADQa8AAAAAAALBrwAAAAAAAkGvAAAAAAABwa8AAAAAAAFBrwAAAAAAAMGvAAAAAAAAQa8AAAAAAAPBqwAAAAAAA0GrAAAAAAACwasAAAAAAAJBqwAAAAAAAcGrAAAAAAABQasAAAAAAADBqwAAAAAAAEGrAAAAAAADwacAAAAAAANBpwAAAAAAAsGnAAAAAAACQacAAAAAAAHBpwAAAAAAAUGnAAAAAAAAwacAAAAAAABBpwAAAAAAA8GjAAAAAAADQaMAAAAAAALBowAAAAAAAkGjAAAAAAABwaMAAAAAAAFBowAAAAAAAMGjAAAAAAAAQaMAAAAAAAPBnwAAAAAAA0GfAAAAAAACwZ8AAAAAAAJBnwAAAAAAAcGfAAAAAAABQZ8AAAAAAADBnwAAAAAAAEGfAAAAAAADwZsAAAAAAANBmwAAAAAAAsGbAAAAAAACQZsAAAAAAAHBmwAAAAAAAUGbAAAAAAAAwZsAAAAAAABBmwAAAAAAA8GXAAAAAAADQZcAAAAAAALBlwAAAAAAAkGXAAAAAAABwZcAAAAAAAFBlwAAAAAAAMGXAAAAAAAAQZcAAAAAAAPBkwAAAAAAA0GTAAAAAAACwZMAAAAAAAJBkwAAAAAAAcGTAAAAAAABQZMAAAAAAADBkwAAAAAAAEGTAAAAAAADwY8AAAAAAANBjwAAAAAAAsGPAAAAAAACQY8AAAAAAAHBjwAAAAAAAUGPAAAAAAAAwY8AAAAAAABBjwAAAAAAA8GLAAAAAAADQYsAAAAAAALBiwAAAAAAAkGLAAAAAAABwYsAAAAAAAFBiwAAAAAAAMGLAAAAAAAAQYsAAAAAAAPBhwAAAAAAA0GHAAAAAAACwYcAAAAAAAJBhwAAAAAAAcGHAAAAAAABQYcAAAAAAADBhwAAAAAAAEGHAAAAAAADwYMAAAAAAANBgwAAAAAAAsGDAAAAAAACQYMAAAAAAAHBgwAAAAAAAUGDAAAAAAAAwYMAAAAAAABBgwAAAAAAA4F\/AAAAAAACgX8AAAAAAAGBfwAAAAAAAIF\/AAAAAAADgXsAAAAAAAKBewAAAAAAAYF7AAAAAAAAgXsAAAAAAAOBdwAAAAAAAoF3AAAAAAABgXcAAAAAAACBdwAAAAAAA4FzAAAAAAACgXMAAAAAAAGBcwAAAAAAAIFzAAAAAAADgW8AAAAAAAKBbwAAAAAAAYFvAAAAAAAAgW8AAAAAAAOBawAAAAAAAoFrAAAAAAABgWsAAAAAAACBawAAAAAAA4FnAAAAAAACgWcAAAAAAAGBZwAAAAAAAIFnAAAAAAADgWMAAAAAAAKBYwAAAAAAAYFjAAAAAAAAgWMAAAAAAAOBXwAAAAAAAoFfAAAAAAABgV8AAAAAAACBXwAAAAAAA4FbAAAAAAACgVsAAAAAAAGBWwAAAAAAAIFbAAAAAAADgVcAAAAAAAKBVwAAAAAAAYFXAAAAAAAAgVcAAAAAAAOBUwAAAAAAAoFTAAAAAAABgVMAAAAAAACBUwAAAAAAA4FPAAAAAAACgU8AAAAAAAGBTwAAAAAAAIFPAAAAAAADgUsAAAAAAAKBSwAAAAAAAYFLAAAAAAAAgUsAAAAAAAOBRwAAAAAAAoFHAAAAAAABgUcAAAAAAACBRwAAAAAAA4FDAAAAAAACgUMAAAAAAAGBQwAAAAAAAIFDAAAAAAADAT8AAAAAAAEBPwAAAAAAAwE7AAAAAAABATsAAAAAAAMBNwAAAAAAAQE3AAAAAAADATMAAAAAAAEBMwAAAAAAAwEvAAAAAAABAS8AAAAAAAMBKwAAAAAAAQErAAAAAAADAScAAAAAAAEBJwAAAAAAAwEjAAAAAAABASMAAAAAAAMBHwAAAAAAAQEfAAAAAAADARsAAAAAAAEBGwAAAAAAAwEXAAAAAAABARcAAAAAAAMBEwAAAAAAAQETAAAAAAADAQ8AAAAAAAEBDwAAAAAAAwELAAAAAAABAQsAAAAAAAMBBwAAAAAAAQEHAAAAAAADAQMAAAAAAAEBAwAAAAAAAgD\/AAAAAAACAPsAAAAAAAIA9wAAAAAAAgDzAAAAAAACAO8AAAAAAAIA6wAAAAAAAgDnAAAAAAACAOMAAAAAAAIA3wAAAAAAAgDbAAAAAAACANcAAAAAAAIA0wAAAAAAAgDPAAAAAAACAMsAAAAAAAIAxwAAAAAAAgDDAAAAAAAAAL8AAAAAAAAAtwAAAAAAAACvAAAAAAAAAKcAAAAAAAAAnwAAAAAAAACXAAAAAAAAAI8AAAAAAAAAhwAAAAAAAAB7AAAAAAAAAGsAAAAAAAAAWwAAAAAAAABLAAAAAAAAADMAAAAAAAAAEwAAAAAAAAPi\/AAAAAAAA4L8AAAAAAADgPwAAAAAAAPg\/AAAAAAAABEAAAAAAAAAMQAAAAAAAABJAAAAAAAAAFkAAAAAAAAAaQAAAAAAAAB5AAAAAAAAAIUAAAAAAAAAjQAAAAAAAACVAAAAAAAAAJ0AAAAAAAAApQAAAAAAAACtAAAAAAAAALUAAAAAAAAAvQAAAAAAAgDBAAAAAAACAMUAAAAAAAIAyQAAAAAAAgDNAAAAAAACANEAAAAAAAIA1QAAAAAAAgDZAAAAAAACAN0AAAAAAAIA4QAAAAAAAgDlAAAAAAACAOkAAAAAAAIA7QAAAAAAAgDxAAAAAAACAPUAAAAAAAIA+QAAAAAAAgD9AAAAAAABAQEAAAAAAAMBAQAAAAAAAQEFAAAAAAADAQUAAAAAAAEBCQAAAAAAAwEJAAAAAAABAQ0AAAAAAAMBDQAAAAAAAQERAAAAAAADAREAAAAAAAEBFQAAAAAAAwEVAAAAAAABARkAAAAAAAMBGQAAAAAAAQEdAAAAAAADAR0AAAAAAAEBIQAAAAAAAwEhAAAAAAABASUAAAAAAAMBJQAAAAAAAQEpAAAAAAADASkAAAAAAAEBLQAAAAAAAwEtAAAAAAABATEAAAAAAAMBMQAAAAAAAQE1AAAAAAADATUAAAAAAAEBOQAAAAAAAwE5AAAAAAABAT0AAAAAAAMBPQAAAAAAAIFBAAAAAAABgUEAAAAAAAKBQQAAAAAAA4FBAAAAAAAAgUUAAAAAAAGBRQAAAAAAAoFFAAAAAAADgUUAAAAAAACBSQAAAAAAAYFJAAAAAAACgUkAAAAAAAOBSQAAAAAAAIFNAAAAAAABgU0AAAAAAAKBTQAAAAAAA4FNA",
+    "xt_ocean\/.zarray": "{\"shape\":[360],\"chunks\":[360],\"dtype\":\"<f8\",\"fill_value\":null,\"order\":\"C\",\"filters\":null,\"dimension_separator\":\".\",\"compressor\":null,\"attributes\":{},\"zarr_format\":2}",
+    "xt_ocean\/.zattrs": "{\"long_name\":\"tcell longitude\",\"units\":\"degrees_E\",\"cartesian_axis\":\"X\",\"_FillValue\":NaN,\"_ARRAY_DIMENSIONS\":[\"xt_ocean\"]}",
+    "yt_ocean\/0": "base64:amDvmBp4U8ByM285TWhTwM6u+uFtWFPAfgqUeHdIU8BiSSKoWjhTwPz12HASKFPAciJ6oI8XU8BGS69izQZTwMDSOLm89VLATLwwDFnkUsA6ZyCik9JSwDT7JTBowFLAKFLpUcitUsAkIJ0ZsJpSwDI0zIcRh1LAtKMvG+lyUsCMzU1IKV5SwEIaHwnPSFLAmnt4VM0yUsAUp3itIRxSwHIluJq\/BFLAvEt5NaXsUcDaUZigxtNRwIi2eJciulHAMEGw5K2fUcCw7qzwZ4RRwDw4FjhGaFHAsCAn2khLUcDUl8EOZi1RwCrBeLSeDlHAtM9SxunuUMAOJ4DpSM5QwLiWyOKzrFDA+IPsIy2KUMDa+7pArWZQwMCmGnw3QlDAyLzGPMUcUMCMNPwztexPwBZ0y5\/jnU\/ANra5lx9NT8DifAhBX\/pOwHzSbSOupU7AWv5rEARPTsBAkIw6bvZNwGo3Ahzmm03AvtkujXo\/TcC2rJGqJuFMwEoRm+r6gEzASEDqAvQeTMCo03L9I7tLwGqEDh2JVUvA+nL58TbuSsCkmb09LYVKwP4FDAeBGkrATL4IfTOuScC4M4gKW0BJwNBowzj60EjAuu0BwihgSMB0GL9z6u1HwGrXyUBYekfAqr\/kIncFR8Ci7WUsYY9GwEqQXGkcGEbA1Om78MOfRcCKzxHFXiZFwEijSOUIrETAAP36LMowRMDKKNlkv7RDwF7XpiLxN0PAEkpR2Xy6QsAUeqS4azxCwNCiH73bvUHASMtvj9Y+QcAozxCUer9AwHSZm8rRP0DAxEiEuvV\/P8ACAAAAAIA+wP7\/\/\/\/\/fz3AmPBk4DuAPMBaVpTnGYI7wNxtk5kMhjrA9ATv0W+NOcDugPeYppg4wIoUFmn4qDfAXsAxPa++NsAIzkgc9do1wGZLcHry\/TTA6IZ2IqwoNMBuUlL\/IVszwI4hd3ctljLAhuX4r6DZMcAKYEJoJSYxwFS44MJcezDAvFdgVX2zL8D2MNZOdIEuwNBuvp4qYS3A7jiATxxRLMAEnqU\/dlErwHQE0O1YYCrAOsXTb5p9KcC+zhUyCqcowKCDCtIz3CfA2OxyrqMaJ8DCmu19qmEmwOrMaISiriXAft07trMAJcB2XetfGVUkwIqiFKDmqiPAupqWCsT\/IsDO379KkVUiwP7XQbVuqiHAEh1r9TsAIcBCFe1fGVUgwKy0LEDNVR\/ADqUwFYj\/HcA2L4OVIqscwJgfh2rdVBvAwKnZ6ncAGsAimt2\/MqoYwEokMEDNVRfArBQ0FYj\/FcDUnoaVIqsUwDaPimrdVBPAXhnd6ncAEsDACeG\/MqoQwNAnZ4Caqw7AkghvKhD\/C8DiHBQrRVYJwKT9G9W6qQbA9BHB1e8ABMC28sh\/ZVQBwAwO3AA1V\/2\/ks\/rVCD+978y+DVWiqzyv3Bzi1Trpuq\/sMQfV78D4L\/sHv38V0bFvxScsfhXRsU\/+uMMVr8D4D+6knhT66bqP9eHrFWKrPI\/N19iVCD+9z+xnVIANVf9P4g6hH9lVAFAxll81e8ABEB2RdfUuqkGQLRkzypFVglAZFAqKhD\/C0CibyKAmqsOQKmtvr8yqhBAR7266ncAEkAfM2hq3VQTQL1CZJUiqxRAlbgRFYj\/FUAzyA1AzVUXQAs+u78yqhhAqU236ncAGkCBw2Rq3VQbQB\/TYJUiqxxA90gOFYj\/HUCVWApAzVUfQDbn218ZVSBABu9Z9TsAIUDyqTC1bqohQMKxrkqRVSJArmyFCsT\/IkB+dAOg5qojQIKL\/F8ZVSRAaBgitrMAJUD2+nmEoq4lQKzV032qYSZA5BqErqMaJ0CKvvDRM9wnQMr8JjIKpyhAJAC6b5p9KUCAMuHtWGAqQO7Yiz92UStA+maRTxxRLEC6qaSeKmEtQAJf5050gS5AppJGVX2zL0BbT+nCXHswQH99NWglJjFAjXwBsKDZMUADP2p3LZYyQHXpWv8hWzNAXaRpIqwoNEBt4nh68v00QH3rOxz12jVAZVc6Pa++NkD\/MQlp+Kg3QPUXAJmmmDhAaSLi0W+NOUDjBJyZDIY6QM9zh+cZgjtAn4dt4DuAPEBzHfP\/\/389QI3iDAAAgD5AHaxN\/ux\/P0Bstj6Iqj9AQMhzu2wJv0BAhHey3do9QUCAdvckDbxBQFrDKj1pOUJAnlBmCd+1QkBKWotrOTFDQHJD2Xlqq0NAHOnRkj8kREDQmxaQrZtEQPz9RNeEEUVA0EqCib2FRUAS57+QK\/hFQHKwa8vKaEZA3CabFXPXRkCoYmhwJERHQAqxlAa7rkdA9sEsTzsXSEDMbUcNhn1IQHpaoG2k4UhA7gstAXxDSUBwUHPVGqNJQLRaxWlrAEpA\/lYwwoBbSkAUukdXSrRKQDAOoCPgCktA5nYpjjZfS0DEpkJyarFLQO5sugR1AUxA6nGe1ndPTEAOEBO1cJtMQHaHGKeF5UxAwv9+yLgtTUC28\/JCNHRNQBimaCT+uE1ALDTVU0T8TUAQo4BjED5OQK7644GTfk5AkAVjSNq9TkASudioGPxOQMiASbldOU9AksK1nt91T0Bk02JWr7FPQNBWl54E7U9AgMUR3\/gTUECAM9q1VzFQQIHMJUqoTlBAGJmPUwJsUEDAREGAUolQQPq4zbqrplBAnF0LsvrDUEBego9RUuFQQGHHh0mf\/lBAFWg0h\/QbUUBXP8C8PjlRQB5pudmQVlFA9lnnktdzUUBwUsHaJZFRQHEIQmlorlFAd25bNLLLUUA4dcf37+hRQOOxeK00BlJAKshnFW0jUkAghQAurEBSQPOM67veXVJAxot3whd7UkD1zl4LRJhSQEs6LJ92tVJAM4L8TJzSUkD6od4iyO9SQM96kPXmDFNAoZba2AsqU0Bp\/0enI0dTQNcpfXpBZFNAI+jqMlKBU0AVaCDwaJ5TQPs0eZhyu1NA4kRqUYLYU0DXDSsHhfVTQKau\/eSNElRACSzT3IkvVECW0Y4fjExUQHu7paSBaVRAZJxdon2GVEAryGcVbaNUQJyaGzljwFRArUYND03dVECkKETXPfpUQFirzZciF1VAEN7vlA40VUBSzrjY7lBVQDHGLavWbVVAK4XXGbOKVUCclu5vl6dVQKbe5L1wxFVAWYKPUVLhVUBYRq49Kf5VQGqKE9IIG1ZA8P4pI943VkD7OxuCvFRWQCFYVASRcVZA",
+    "yt_ocean\/.zarray": "{\"shape\":[300],\"chunks\":[300],\"dtype\":\"<f8\",\"fill_value\":null,\"order\":\"C\",\"filters\":null,\"dimension_separator\":\".\",\"compressor\":null,\"attributes\":{},\"zarr_format\":2}",
+    "yt_ocean\/.zattrs": "{\"long_name\":\"tcell latitude\",\"units\":\"degrees_N\",\"cartesian_axis\":\"Y\",\"_FillValue\":NaN,\"_ARRAY_DIMENSIONS\":[\"yt_ocean\"]}",
+    "time\/0": "base64:AAAAAKPRJUEAAAAAfdQlQQAAAABY1yVBAAAAADPaJUEAAAAADd0lQQAAAADn3yVBAAAAAMLiJUEAAAAAneUlQQAAAAB36CVBAAAAAFHrJUEAAAAALO4lQQAAAAAH8SVBAAAAAOHzJUEAAAAAu\/YlQQAAAACW+SVBAAAAAHH8JUEAAAAAS\/8lQQAAAAAlAiZBAAAAAAAFJkEAAAAA2wcmQQAAAAC1CiZBAAAAAI8NJkEAAAAAahAmQQAAAABFEyZBAAAAAB8WJkEAAAAA+RgmQQAAAADUGyZBAAAAAK8eJkEAAAAAiSEmQQAAAABjJCZBAAAAAD4nJkEAAAAAGSomQQAAAADzLCZBAAAAAM0vJkEAAAAAqDImQQAAAACDNSZBAAAAAF04JkEAAAAANzsmQQAAAAASPiZBAAAAAO1AJkEAAAAAx0MmQQAAAAChRiZBAAAAAHxJJkEAAAAAV0wmQQAAAAAxTyZBAAAAAAtSJkEAAAAA5lQmQQAAAADBVyZBAAAAAJtaJkEAAAAAdV0mQQAAAABQYCZBAAAAACtjJkEAAAAABWYmQQAAAADfaCZBAAAAALprJkEAAAAAlW4mQQAAAABvcSZBAAAAAEl0JkEAAAAAJHcmQQAAAAD\/eSZBAAAAANl8JkE=",
+    "time\/.zarray": "{\"shape\":[61],\"chunks\":[61],\"dtype\":\"<f8\",\"fill_value\":null,\"order\":\"C\",\"filters\":null,\"dimension_separator\":\".\",\"compressor\":null,\"attributes\":{},\"zarr_format\":2}",
+    "time\/.zattrs": "{\"long_name\":\"time\",\"cartesian_axis\":\"T\",\"calendar_type\":\"GREGORIAN\",\"bounds\":\"time_bounds\",\"units\":\"days since 0001-01-01\",\"calendar\":\"GREGORIAN\",\"_FillValue\":NaN,\"_ARRAY_DIMENSIONS\":[\"time\"]}",
+    "nv\/0": "base64:AAAAAAAA8D8AAAAAAAAAQA==",
+    "nv\/.zarray": "{\"shape\":[2],\"chunks\":[2],\"dtype\":\"<f8\",\"fill_value\":null,\"order\":\"C\",\"filters\":null,\"dimension_separator\":\".\",\"compressor\":null,\"attributes\":{},\"zarr_format\":2}",
+    "nv\/.zattrs": "{\"long_name\":\"vertex number\",\"units\":\"none\",\"cartesian_axis\":\"N\",\"_FillValue\":NaN,\"_ARRAY_DIMENSIONS\":[\"nv\"]}"
+  }
+}
