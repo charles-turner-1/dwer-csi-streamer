@@ -4,13 +4,6 @@
       class="backdrop-blur-xl bg-white/70 dark:bg-gray-900/70 rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 px-6 py-3"
     >
       <div class="flex items-center justify-between gap-4">
-        <!-- Left - Name -->
-        <div
-          class="text-sm font-semibold text-gray-600 dark:text-white whitespace-nowrap"
-        >
-          Charles Turner
-        </div>
-
         <!-- Center - Navigation (desktop) -->
         <div class="hidden sm:flex items-center gap-6">
           <RouterLink
@@ -78,7 +71,8 @@ const menuOpen = ref(false);
 
 const links = [
   { to: "/", label: "Home" },
-  { to: "/zarr-data-streamer", label: "Zarr Data Streamer" },
+  { to: "/access-model", label: "PoC: ACCESS Model Datasets" },
+  { to: "/dwer-csi", label: "DWER Climate Science Initiative" },
 ];
 </script>
 

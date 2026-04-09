@@ -12,11 +12,19 @@ const routes = [
     },
   },
   {
-    path: "/zarr-data-streamer",
-    name: "ZarrDataStreamer",
+    path: "/access-model",
+    name: "AccessModelPoC",
     component: () => import("../components/ZarrDataStreamer.vue"),
     meta: {
-      title: "Zarr Data Streamer",
+      title: "PoC: ACCESS Model Datasets",
+    },
+  },
+  {
+    path: "/dwer-csi",
+    name: "DwerCsi",
+    component: () => import("../components/DwerCsi.vue"),
+    meta: {
+      title: "DWER CSI",
     },
   },
 ];
