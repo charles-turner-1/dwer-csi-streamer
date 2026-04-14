@@ -50,8 +50,6 @@
             varName="tasmax"
             :timeSteps="492"
             :clim="[280, 325]"
-            :proj4String="SWWA_PROJ4"
-            :bounds="SWWA_BOUNDS"
             :spatialDims="SWWA_SPATIAL_DIMS"
             :colormap="COLORMAP_TEMP"
             climUnit=" K"
@@ -64,8 +62,6 @@
             varName="tasmin"
             :timeSteps="492"
             :clim="[270, 310]"
-            :proj4String="SWWA_PROJ4"
-            :bounds="SWWA_BOUNDS"
             :spatialDims="SWWA_SPATIAL_DIMS"
             :colormap="COLORMAP_TEMP"
             climUnit=" K"
@@ -78,8 +74,6 @@
             varName="pr"
             :timeSteps="492"
             :clim="[0, 0.0001]"
-            :proj4String="SWWA_PROJ4"
-            :bounds="SWWA_BOUNDS"
             :spatialDims="SWWA_SPATIAL_DIMS"
             :colormap="COLORMAP_PRECIP"
             climUnit=" kg/m²/s"
@@ -100,8 +94,6 @@ import TabPanels from "primevue/tabpanels";
 import TabPanel from "primevue/tabpanel";
 import ZarrDirectMap from "@/components/ZarrDirectMap.vue";
 import {
-  SWWA_PROJ4,
-  SWWA_BOUNDS,
   SWWA_SPATIAL_DIMS,
   COLORMAP_TEMP,
   COLORMAP_PRECIP,
