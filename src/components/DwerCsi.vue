@@ -8,14 +8,104 @@
       Back to Home
     </RouterLink>
 
-    <h1 class="text-2xl font-bold text-gray-900 dark:text-white mt-2 mb-6">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white mt-2 mb-2">
       DWER Climate Science Initiative
     </h1>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+      WRF-based regional climate model output (ERA5-driven, CORDEX SWWA domain)
+      streamed directly from
+      <a
+        href="https://pawsey.org.au/systems/acacia/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-blue-600 dark:text-blue-400 hover:underline"
+        >Pawsey Acacia</a
+      >
+      object storage. Variables are on a rotated-pole grid (279 × 364) at
+      monthly frequency, 492 time steps (1980–2021).
+    </p>
 
-    <p class="text-gray-500 dark:text-gray-400 text-lg">Coming soon.</p>
+    <Tabs value="tasmax" class="mt-4">
+      <TabList>
+        <Tab
+          value="tasmax"
+          class="px-5 py-2.5 data-[p-active=false]:bg-slate-50 dark:data-[p-active=false]:bg-slate-700"
+          >Max Temperature</Tab
+        >
+        <Tab
+          value="tasmin"
+          class="px-5 py-2.5 data-[p-active=false]:bg-slate-50 dark:data-[p-active=false]:bg-slate-700"
+          >Min Temperature</Tab
+        >
+        <Tab
+          value="pr"
+          class="px-5 py-2.5 data-[p-active=false]:bg-slate-50 dark:data-[p-active=false]:bg-slate-700"
+          >Precipitation</Tab
+        >
+      </TabList>
+      <TabPanels>
+        <TabPanel value="tasmax">
+          <ZarrDirectMap
+            :source="STORE_URL"
+            varName="tasmax"
+            :timeSteps="492"
+            :clim="[280, 325]"
+            :proj4String="SWWA_PROJ4"
+            :bounds="SWWA_BOUNDS"
+            :spatialDims="SWWA_SPATIAL_DIMS"
+            :colormap="COLORMAP_TEMP"
+            climUnit=" K"
+            :fillValue="1e20"
+          />
+        </TabPanel>
+        <TabPanel value="tasmin">
+          <ZarrDirectMap
+            :source="STORE_URL"
+            varName="tasmin"
+            :timeSteps="492"
+            :clim="[270, 310]"
+            :proj4String="SWWA_PROJ4"
+            :bounds="SWWA_BOUNDS"
+            :spatialDims="SWWA_SPATIAL_DIMS"
+            :colormap="COLORMAP_TEMP"
+            climUnit=" K"
+            :fillValue="1e20"
+          />
+        </TabPanel>
+        <TabPanel value="pr">
+          <ZarrDirectMap
+            :source="STORE_URL"
+            varName="pr"
+            :timeSteps="492"
+            :clim="[0, 0.0001]"
+            :proj4String="SWWA_PROJ4"
+            :bounds="SWWA_BOUNDS"
+            :spatialDims="SWWA_SPATIAL_DIMS"
+            :colormap="COLORMAP_PRECIP"
+            climUnit=" kg/m²/s"
+            :fillValue="1e20"
+          />
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
   </div>
 </template>
 
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
+import Tabs from "primevue/tabs";
+import TabList from "primevue/tablist";
+import Tab from "primevue/tab";
+import TabPanels from "primevue/tabpanels";
+import TabPanel from "primevue/tabpanel";
+import ZarrDirectMap from "@/components/ZarrDirectMap.vue";
+import {
+  SWWA_PROJ4,
+  SWWA_BOUNDS,
+  SWWA_SPATIAL_DIMS,
+  COLORMAP_TEMP,
+  COLORMAP_PRECIP,
+} from "@/composables/useZarrDirectMap";
+
+const STORE_URL = "https://projects.pawsey.org.au/dwer-zarr-store/data.zarr";
 </script>

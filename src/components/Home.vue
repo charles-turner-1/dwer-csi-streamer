@@ -23,7 +23,7 @@
       <LinkCard
         href="/dwer-csi"
         name="DWER Climate Science Initiative"
-        description="Stream and visualise DWER CSI datasets directly in the browser."
+        description="Explore WRF regional climate model output (tasmax, tasmin, precipitation) streamed directly from Pawsey Acacia — no download required."
         :icons="['vi-file-type-python', 'vi-file-type-vue']"
       />
     </div>
