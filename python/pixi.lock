@@ -298,6 +298,8 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zlib-ng-2.3.3-hed4e4f5_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zstd-1.5.7-hbf9d68e_6.conda
       - pypi: https://files.pythonhosted.org/packages/b2/b7/545d2c10c1fc15e48653c91efde329a790f2eecfbbf2bd16003b5db2bab0/dotenv-0.9.9-py2.py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/30/c3/6f0e3896f193528bbd2b4d2122d4be8108a37efab0b8475855556a8c4afa/fancycompleter-0.11.1-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/05/4e/0703722c46447fa03c9425386b3ef3e90254a7c1eb5da654c3c33b210317/pdbpp-0.12.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/0b/d7/1959b9648791274998a9c3526f6d0ec8fd2233e4d4acce81bbae76b44b2a/python_dotenv-1.2.2-py3-none-any.whl
 packages:
 - conda: https://conda.anaconda.org/conda-forge/osx-arm64/_openmp_mutex-4.5-7_kmp_llvm.conda
@@ -1256,6 +1258,19 @@ packages:
   - pkg:pypi/executing?source=hash-mapping
   size: 30753
   timestamp: 1756729456476
+- pypi: https://files.pythonhosted.org/packages/30/c3/6f0e3896f193528bbd2b4d2122d4be8108a37efab0b8475855556a8c4afa/fancycompleter-0.11.1-py3-none-any.whl
+  name: fancycompleter
+  version: 0.11.1
+  sha256: 44243d7fab37087208ca5acacf8f74c0aa4d733d04d593857873af7513cdf8a6
+  requires_dist:
+  - pyreadline3 ; python_full_version < '3.13' and sys_platform == 'win32'
+  - pyrepl>=0.11.3 ; python_full_version < '3.13'
+  - pytest ; extra == 'tests'
+  - pytest-cov ; extra == 'tests'
+  - ruff==0.11.8 ; extra == 'dev'
+  - mypy ; extra == 'dev'
+  - fancycompleter[tests] ; extra == 'dev'
+  requires_python: '>=3.8'
 - conda: https://conda.anaconda.org/conda-forge/noarch/fonttools-4.62.0-pyh7db6752_0.conda
   sha256: ed4462f6e49b8dea4e45f7294cca576a38cf4fc41e04bbcd95f9cf55be7776b9
   md5: 049f68f9c90f00069c748cd6fb7bfb55
@@ -3211,6 +3226,18 @@ packages:
   - pkg:pypi/pathlib-abc?source=hash-mapping
   size: 23607
   timestamp: 1760357881073
+- pypi: https://files.pythonhosted.org/packages/05/4e/0703722c46447fa03c9425386b3ef3e90254a7c1eb5da654c3c33b210317/pdbpp-0.12.1-py3-none-any.whl
+  name: pdbpp
+  version: 0.12.1
+  sha256: 3828809519439f468c9475c4c2cbb3899f2f5ba40e79c207d90eabe4c2373f5e
+  requires_dist:
+  - fancycompleter>=0.11.0
+  - pygments
+  - pytest ; extra == 'testing'
+  - pytest-cov ; extra == 'testing'
+  - coverage<7.11.1 ; extra == 'testing'
+  - ipython ; extra == 'testing'
+  - pexpect ; extra == 'testing'
 - conda: https://conda.anaconda.org/conda-forge/noarch/pexpect-4.9.0-pyhd8ed1ab_1.conda
   sha256: 202af1de83b585d36445dc1fda94266697341994d1a3328fabde4989e1b3d07a
   md5: d0d408b1f18883a944376da5cf8101ea
