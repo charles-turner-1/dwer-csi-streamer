@@ -79,11 +79,11 @@
           >
           <InputNumber
             v-model="climState.lower"
-            :min="props.clim[0] - 50"
-            :max="climState.upper - 0.5"
-            :step="0.5"
-            :minFractionDigits="1"
-            :maxFractionDigits="1"
+            :min="props.clim[0] - climRange"
+            :max="climState.upper - climStep"
+            :step="climStep"
+            :minFractionDigits="climFractionDigits"
+            :maxFractionDigits="climFractionDigits"
             showButtons
             :suffix="climUnit"
             size="small"
@@ -98,11 +98,11 @@
           >
           <InputNumber
             v-model="climState.upper"
-            :min="climState.lower + 0.5"
-            :max="props.clim[1] + 50"
-            :step="0.5"
-            :minFractionDigits="1"
-            :maxFractionDigits="1"
+            :min="climState.lower + climStep"
+            :max="props.clim[1] + climRange"
+            :step="climStep"
+            :minFractionDigits="climFractionDigits"
+            :maxFractionDigits="climFractionDigits"
             showButtons
             :suffix="climUnit"
             size="small"
@@ -122,7 +122,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, watch } from "vue";
+import { reactive, computed, watch } from "vue";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useZarrDirectMap } from "@/composables/useZarrDirectMap";
 import InputNumber from "primevue/inputnumber";
@@ -145,6 +145,15 @@ const climState = reactive({
   lower: props.clim[0],
   upper: props.clim[1],
 });
+
+// Derive step and decimal places from the initial clim range so that
+// small-magnitude variables (e.g. precipitation ~0–0.0001) are still
+// adjustable accurately without hardcoding temperature-scale defaults.
+const climRange = computed(() => Math.abs(props.clim[1] - props.clim[0]));
+const climStep = computed(() => Math.max(climRange.value / 100, 1e-7));
+const climFractionDigits = computed(() =>
+  Math.min(7, Math.max(0, Math.ceil(-Math.log10(climStep.value)))),
+);
 
 const climUnit = props.climUnit ?? "";
 
