@@ -1,0 +1,5 @@
+python/
+.mypy_cache/
+.github/
+src/assets/
+plan.md

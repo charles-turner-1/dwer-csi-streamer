@@ -12,25 +12,25 @@ used for the Access Model PoC page.
 
 ## Dataset facts (from zarr.json consolidated metadata)
 
-| Property | Value |
-|---|---|
-| URL | `https://projects.pawsey.org.au/dwer-zarr-store/data.zarr` |
-| Zarr format | v3 |
-| Codecs | `bytes` (little-endian) + `zstd` — no shuffle, no blosc |
-| Variables | `tasmax`, `tasmin`, `pr` |
-| Shape | `[492, 279, 364]` (time × rlat × rlon) |
-| Chunk shape | `[1, 279, 364]` — one full spatial slab per time step |
-| Grid dims | `rlat` (279), `rlon` (364) — **rotated pole grid** |
-| True lat/lon | 2D arrays `lat`/`lon` (279×364) keyed on rlat/rlon — for reference only |
-| Grid mapping | `rotated_latitude_longitude` |
-| North pole lat | 60.31° |
-| North pole lon | 147.63° |
-| `tasmax` units | K — Daily Maximum Near-Surface Air Temperature |
-| `tasmin` units | K — Daily Minimum Near-Surface Air Temperature |
-| `pr` units | kg m⁻² s⁻¹ — Precipitation Flux |
-| `tasmax` fill | `1e20` (`missing_value`) |
-| `tasmin` fill | `1e20` |
-| `pr` fill | `1e20` |
+| Property       | Value                                                                   |
+| -------------- | ----------------------------------------------------------------------- |
+| URL            | `https://projects.pawsey.org.au/dwer-zarr-store/data.zarr`              |
+| Zarr format    | v3                                                                      |
+| Codecs         | `bytes` (little-endian) + `zstd` — no shuffle, no blosc                 |
+| Variables      | `tasmax`, `tasmin`, `pr`                                                |
+| Shape          | `[492, 279, 364]` (time × rlat × rlon)                                  |
+| Chunk shape    | `[1, 279, 364]` — one full spatial slab per time step                   |
+| Grid dims      | `rlat` (279), `rlon` (364) — **rotated pole grid**                      |
+| True lat/lon   | 2D arrays `lat`/`lon` (279×364) keyed on rlat/rlon — for reference only |
+| Grid mapping   | `rotated_latitude_longitude`                                            |
+| North pole lat | 60.31°                                                                  |
+| North pole lon | 147.63°                                                                 |
+| `tasmax` units | K — Daily Maximum Near-Surface Air Temperature                          |
+| `tasmin` units | K — Daily Minimum Near-Surface Air Temperature                          |
+| `pr` units     | kg m⁻² s⁻¹ — Precipitation Flux                                         |
+| `tasmax` fill  | `1e20` (`missing_value`)                                                |
+| `tasmin` fill  | `1e20`                                                                  |
+| `pr` fill      | `1e20`                                                                  |
 
 ---
 
@@ -48,6 +48,7 @@ Create alongside `useZarrMap.ts`. Key differences from the existing composable:
 - Otherwise identical lifecycle: `mapContainer` ref, `onMounted`/`onUnmounted`, `timeIndex`, `opacity`, `loadingState`, `colourbarStyle`, `setClim`
 
 Signature:
+
 ```ts
 export function useZarrDirectMap(
   source: string,
@@ -57,14 +58,15 @@ export function useZarrDirectMap(
   proj4String: string,
   bounds: [number, number, number, number],
   spatialDims: { lat: string; lon: string },
-  units?: 'C' | 'K',
+  units?: "C" | "K",
   fillValue?: number,
-)
+);
 ```
 
 ### Phase 2 — New display component: `src/components/ZarrDirectMap.vue`
 
 Props mirror `useZarrDirectMap` params. Template identical to `ZarrMap.vue`:
+
 - Time-step range slider (1 → N display, 0-based v-model)
 - Opacity slider
 - Map `<div>` with `mapContainer` ref
@@ -83,13 +85,14 @@ Replace the "Coming soon." placeholder entirely. Structure:
 - Brief description paragraph referencing WA-CSI / Murdoch / DWER
 - PrimeVue `<Tabs>` (same import pattern as `ZarrDataStreamer.vue`) with three tabs:
 
-| Tab label | `varName` | `clim` | `units` |
-|---|---|---|---|
-| Max Temperature | `tasmax` | `[280, 325]` | `K` |
-| Min Temperature | `tasmin` | `[270, 310]` | `K` |
-| Precipitation | `pr` | `[0, 0.0001]` | — (raw) |
+| Tab label       | `varName` | `clim`        | `units` |
+| --------------- | --------- | ------------- | ------- |
+| Max Temperature | `tasmax`  | `[280, 325]`  | `K`     |
+| Min Temperature | `tasmin`  | `[270, 310]`  | `K`     |
+| Precipitation   | `pr`      | `[0, 0.0001]` | — (raw) |
 
 Each tab renders `<ZarrDirectMap>` with shared props:
+
 ```
 source = "https://projects.pawsey.org.au/dwer-zarr-store/data.zarr"
 :timeSteps="492"
@@ -121,6 +124,7 @@ Derived from: `o_lon_p = grid_north_pole_longitude − 180 = 147.63 − 180 = �
 
 Need `rlat` and `rlon` array min/max (edge bounds in rotated-degree units, not center-to-center).
 Fetch at implementation time:
+
 - `GET https://projects.pawsey.org.au/dwer-zarr-store/data.zarr/rlat/0`
 - `GET https://projects.pawsey.org.au/dwer-zarr-store/data.zarr/rlon/0`
 
@@ -130,13 +134,13 @@ Decode the 1D float64 arrays and use `[min(rlon), min(rlat), max(rlon), max(rlat
 
 ## Files to Create / Modify
 
-| File | Action |
-|---|---|
-| `src/composables/useZarrDirectMap.ts` | Create |
-| `src/components/ZarrDirectMap.vue` | Create |
-| `src/components/DwerCsi.vue` | Replace (full rewrite) |
-| `src/components/Home.vue` | Minor edit (LinkCard description) |
-| `src/router/index.ts` | No change needed |
+| File                                  | Action                            |
+| ------------------------------------- | --------------------------------- |
+| `src/composables/useZarrDirectMap.ts` | Create                            |
+| `src/components/ZarrDirectMap.vue`    | Create                            |
+| `src/components/DwerCsi.vue`          | Replace (full rewrite)            |
+| `src/components/Home.vue`             | Minor edit (LinkCard description) |
+| `src/router/index.ts`                 | No change needed                  |
 
 ---
 

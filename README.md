@@ -1,8 +1,7 @@
 # DWER CSI Streamer
 
 > [!WARNING]
-> This package has been scaffolded by Claude. Details may be and probably are incorrect whilst this warning is still here. 
-
+> This package has been scaffolded by Claude. Details may be and probably are incorrect whilst this warning is still here.
 
 A fully serverless, static web application for streaming scientific datasets directly to the browser from cloud object storage. No backend, no tiling service — just HTTP range requests against object storage and in-browser decompression.
 
@@ -22,16 +21,16 @@ The reference catalogue format is [Kerchunk](https://fsspec.github.io/kerchunk/)
 
 ## Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend framework | Vue 3 + TypeScript |
-| Build tooling | Vite + vue-tsc |
-| UI components | PrimeVue 4 + Tailwind CSS 4 |
-| Map rendering | MapLibre GL JS |
-| Zarr streaming | zarrita.js + @carbonplan/zarr-layer |
-| State management | Pinia |
-| Analytics | PostHog |
-| Python tooling | VirtualiZarr, Zarr, Xarray, s3fs (via Pixi) |
+| Layer              | Technology                                  |
+| ------------------ | ------------------------------------------- |
+| Frontend framework | Vue 3 + TypeScript                          |
+| Build tooling      | Vite + vue-tsc                              |
+| UI components      | PrimeVue 4 + Tailwind CSS 4                 |
+| Map rendering      | MapLibre GL JS                              |
+| Zarr streaming     | zarrita.js + @carbonplan/zarr-layer         |
+| State management   | Pinia                                       |
+| Analytics          | PostHog                                     |
+| Python tooling     | VirtualiZarr, Zarr, Xarray, s3fs (via Pixi) |
 
 ---
 
