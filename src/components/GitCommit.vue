@@ -56,7 +56,7 @@ const commitSha =
 const buildTime = typeof __BUILD_TIME__ !== "undefined" ? __BUILD_TIME__ : null;
 const shortCommitSha = commitSha ? commitSha.substring(0, 7) : "";
 const commitUrl = commitSha
-  ? `https://github.com/charles-turner-1/personal-homepage/commit/${commitSha}`
+  ? `https://github.com/charles-turner-1/dwer-csi-streamer/commit/${commitSha}`
   : "";
 
 // Popover management for commit SHA
