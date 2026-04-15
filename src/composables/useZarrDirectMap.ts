@@ -41,7 +41,7 @@ export const SWWA_BOUNDS: [number, number, number, number] = [
 
 export const SWWA_SPATIAL_DIMS = { lat: "rlat", lon: "rlon" };
 
-async function fetchTimeDates(source: string): Promise<string[]> {
+export async function fetchTimeDates(source: string): Promise<string[]> {
   const store = new FetchStore(source);
   const arr = await open(root(store).resolve("time"), { kind: "array" });
   const chunk = await get(arr);
