@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { mount } from "@vue/test-utils";
 import { createRouter, createMemoryHistory } from "vue-router";
 import Home from "@/components/Home.vue";
@@ -42,20 +42,20 @@ describe("Home", () => {
   it("first LinkCard links to /access-model", () => {
     const wrapper = mountHome();
     const cards = wrapper.findAllComponents(LinkCard);
-    expect(cards[0].props("href")).toBe("/access-model");
+    expect(cards[0]?.props("href")).toBe("/access-model");
   });
 
   it("second LinkCard links to /dwer-csi", () => {
     const wrapper = mountHome();
     const cards = wrapper.findAllComponents(LinkCard);
-    expect(cards[1].props("href")).toBe("/dwer-csi");
+    expect(cards[1]?.props("href")).toBe("/dwer-csi");
   });
 
   it("LinkCard names are descriptive", () => {
     const wrapper = mountHome();
     const cards = wrapper.findAllComponents(LinkCard);
-    expect(cards[0].props("name")).toContain("ACCESS");
-    expect(cards[1].props("name")).toContain("DWER");
+    expect(cards[0]?.props("name")).toContain("ACCESS");
+    expect(cards[1]?.props("name")).toContain("DWER");
   });
 
   it("renders the Acknowledgements section", () => {
