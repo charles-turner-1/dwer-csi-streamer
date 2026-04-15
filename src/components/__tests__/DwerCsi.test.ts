@@ -84,23 +84,23 @@ describe("DwerCsi", () => {
     });
   });
 
-  it("tasmax stub has clim [280, 325]", () => {
+  it("tasmax stub has clim [6.85, 51.85] (°C)", () => {
     const wrapper = mountDwerCsi();
     const maps = wrapper.findAll("zarr-direct-map-stub");
     const tasmax = maps.find(
       (m) => (m.attributes("varname") ?? m.attributes("var-name")) === "tasmax",
     )!;
     // clim is serialised as a JSON-like attribute; check both parts are present
-    expect(tasmax.attributes("clim") ?? tasmax.html()).toMatch(/280/);
-    expect(tasmax.attributes("clim") ?? tasmax.html()).toMatch(/325/);
+    expect(tasmax.attributes("clim") ?? tasmax.html()).toMatch(/6\.85/);
+    expect(tasmax.attributes("clim") ?? tasmax.html()).toMatch(/51\.85/);
   });
 
-  it("pr stub has clim containing 0.0001", () => {
+  it("pr stub has clim containing 8.64 mm/day", () => {
     const wrapper = mountDwerCsi();
     const maps = wrapper.findAll("zarr-direct-map-stub");
     const pr = maps.find(
       (m) => (m.attributes("varname") ?? m.attributes("var-name")) === "pr",
     )!;
-    expect(pr.attributes("clim") ?? pr.html()).toMatch(/0.0001/);
+    expect(pr.attributes("clim") ?? pr.html()).toMatch(/8\.64/);
   });
 });

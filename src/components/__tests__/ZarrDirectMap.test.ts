@@ -2,6 +2,8 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
 import { ref } from "vue";
 import ZarrDirectMap from "@/components/ZarrDirectMap.vue";
+import { kelvinToCelsius } from "@/utils/unitConversion";
+import { useZarrDirectMap } from "@/composables/useZarrDirectMap";
 
 // ---------------------------------------------------------------------------
 // Mock composable — we test ZarrDirectMap's UI logic in isolation
@@ -213,6 +215,20 @@ describe("ZarrDirectMap", () => {
       const slider = wrapper.find("input[type='range']");
       await slider.trigger("input");
       expect(mockOnTimeChange).toHaveBeenCalled();
+    });
+  });
+
+  describe("unitConverter prop wiring", () => {
+    it("passes unitConverter prop as 10th arg to useZarrDirectMap", () => {
+      mountComponent({ unitConverter: kelvinToCelsius });
+      const lastArg = vi.mocked(useZarrDirectMap).mock.calls[0]?.[9];
+      expect(lastArg).toStrictEqual(kelvinToCelsius);
+    });
+
+    it("passes undefined as 10th arg when no unitConverter provided", () => {
+      mountComponent();
+      const lastArg = vi.mocked(useZarrDirectMap).mock.calls[0]?.[9];
+      expect(lastArg).toBeUndefined();
     });
   });
 });
