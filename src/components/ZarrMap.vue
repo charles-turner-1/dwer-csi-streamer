@@ -6,7 +6,7 @@
         <label
           class="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap"
         >
-          Time step:
+          Date:
           <span class="font-mono text-blue-600 dark:text-blue-400"
             >{{ timeIndex + 1 }} / {{ timeSteps }}</span
           >
