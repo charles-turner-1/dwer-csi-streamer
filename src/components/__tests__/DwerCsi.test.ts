@@ -33,13 +33,14 @@ function mountDwerCsi() {
   });
 }
 
-const STORE_URL =
-  "https://projects.pawsey.org.au/dwer-zarr-store/data.zarr";
+const STORE_URL = "https://projects.pawsey.org.au/dwer-zarr-store/data.zarr";
 
 describe("DwerCsi", () => {
   it("renders the page heading", () => {
     const wrapper = mountDwerCsi();
-    expect(wrapper.find("h1").text()).toContain("DWER Climate Science Initiative");
+    expect(wrapper.find("h1").text()).toContain(
+      "DWER Climate Science Initiative",
+    );
   });
 
   it("mentions Pawsey Acacia in the description", () => {
@@ -57,7 +58,9 @@ describe("DwerCsi", () => {
   it("ZarrDirectMap stubs have varNames tasmax, tasmin, pr", () => {
     const wrapper = mountDwerCsi();
     const maps = wrapper.findAll("zarr-direct-map-stub");
-    const varNames = maps.map((m) => m.attributes("varname") ?? m.attributes("var-name"));
+    const varNames = maps.map(
+      (m) => m.attributes("varname") ?? m.attributes("var-name"),
+    );
     expect(varNames).toContain("tasmax");
     expect(varNames).toContain("tasmin");
     expect(varNames).toContain("pr");
@@ -75,7 +78,9 @@ describe("DwerCsi", () => {
     const wrapper = mountDwerCsi();
     const maps = wrapper.findAll("zarr-direct-map-stub");
     maps.forEach((m) => {
-      expect(m.attributes("timesteps") ?? m.attributes("time-steps")).toBe("492");
+      expect(m.attributes("timesteps") ?? m.attributes("time-steps")).toBe(
+        "492",
+      );
     });
   });
 

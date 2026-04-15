@@ -17,7 +17,12 @@ const mockState = {
   timeSteps: 5,
   timeDates: ref<string[] | null>(null),
   opacity: ref(85),
-  loadingState: ref({ loading: false, metadata: false, chunks: false, error: null as Error | null }),
+  loadingState: ref({
+    loading: false,
+    metadata: false,
+    chunks: false,
+    error: null as Error | null,
+  }),
   colourbarStyle: ref({ background: "linear-gradient(to right, #000, #fff)" }),
   onTimeChange: mockOnTimeChange,
   onOpacityChange: mockOnOpacityChange,
@@ -67,7 +72,12 @@ beforeEach(() => {
   mockState.timeIndex.value = 0;
   mockState.opacity.value = 85;
   mockState.timeDates.value = null;
-  mockState.loadingState.value = { loading: false, metadata: false, chunks: false, error: null };
+  mockState.loadingState.value = {
+    loading: false,
+    metadata: false,
+    chunks: false,
+    error: null,
+  };
 });
 
 // ---------------------------------------------------------------------------
@@ -104,14 +114,26 @@ describe("ZarrDirectMap", () => {
     });
 
     it("shows the real date string when timeDates is loaded", () => {
-      mockState.timeDates.value = ["Jan 1980", "Feb 1980", "Mar 1980", "Apr 1980", "May 1980"];
+      mockState.timeDates.value = [
+        "Jan 1980",
+        "Feb 1980",
+        "Mar 1980",
+        "Apr 1980",
+        "May 1980",
+      ];
       mockState.timeIndex.value = 0;
       const wrapper = mountComponent();
       expect(wrapper.text()).toContain("Jan 1980");
     });
 
     it("shows the correct date for the current timeIndex", () => {
-      mockState.timeDates.value = ["Jan 1980", "Feb 1980", "Mar 1980", "Apr 1980", "May 1980"];
+      mockState.timeDates.value = [
+        "Jan 1980",
+        "Feb 1980",
+        "Mar 1980",
+        "Apr 1980",
+        "May 1980",
+      ];
       mockState.timeIndex.value = 3;
       const wrapper = mountComponent();
       expect(wrapper.text()).toContain("Apr 1980");
@@ -126,13 +148,23 @@ describe("ZarrDirectMap", () => {
     });
 
     it("shows 'Fetching chunks…' when loading=true and chunks=true", () => {
-      mockState.loadingState.value = { loading: true, metadata: true, chunks: true, error: null };
+      mockState.loadingState.value = {
+        loading: true,
+        metadata: true,
+        chunks: true,
+        error: null,
+      };
       const wrapper = mountComponent();
       expect(wrapper.text()).toContain("Fetching chunks");
     });
 
     it("shows 'Loading metadata…' when loading=true and chunks=false", () => {
-      mockState.loadingState.value = { loading: true, metadata: true, chunks: false, error: null };
+      mockState.loadingState.value = {
+        loading: true,
+        metadata: true,
+        chunks: false,
+        error: null,
+      };
       const wrapper = mountComponent();
       expect(wrapper.text()).toContain("Loading metadata");
     });
@@ -167,7 +199,9 @@ describe("ZarrDirectMap", () => {
   describe("reset button", () => {
     it("calls setClim with original props.clim values", async () => {
       const wrapper = mountComponent({ clim: [280, 325] as [number, number] });
-      const resetBtn = wrapper.findAll("button").find((b) => b.text() === "Reset")!;
+      const resetBtn = wrapper
+        .findAll("button")
+        .find((b) => b.text() === "Reset")!;
       await resetBtn.trigger("click");
       expect(mockSetClim).toHaveBeenCalledWith([280, 325]);
     });
