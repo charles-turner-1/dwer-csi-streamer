@@ -111,7 +111,10 @@ export function useZarrDirectMap(
       if (!map) return;
 
       const rawInitialClim: [number, number] = unitConverter
-        ? [unitConverter.toRaw(initialClim[0]), unitConverter.toRaw(initialClim[1])]
+        ? [
+            unitConverter.toRaw(initialClim[0]),
+            unitConverter.toRaw(initialClim[1]),
+          ]
         : initialClim;
 
       zarrLayer = new ZarrLayer({
