@@ -127,6 +127,19 @@ export function useZarrDirectMap(
       });
 
       map.addLayer(zarrLayer as unknown as maplibregl.CustomLayerInterface);
+
+      // Coast outlines on top of the data layer — stroke the water polygons
+      // already loaded by the Positron style's "carto" vector tile source.
+      map.addLayer({
+        id: "coast-outline",
+        type: "line",
+        source: "carto",
+        "source-layer": "water",
+        paint: {
+          "line-color": "#686868",
+          "line-width": 1.5,
+        },
+      });
     });
   });
 
