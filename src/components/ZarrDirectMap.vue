@@ -126,6 +126,7 @@
 import { reactive, computed, watch } from "vue";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useZarrDirectMap } from "@/composables/useZarrDirectMap";
+import type { UnitConverter } from "@/utils/unitConversion";
 import InputNumber from "primevue/inputnumber";
 import { usePosthog } from "@/composables/usePosthog";
 
@@ -142,6 +143,7 @@ const props = defineProps<{
   fillValue?: number;
   proj4?: string;
   bounds?: [number, number, number, number];
+  unitConverter?: UnitConverter;
 }>();
 
 const climState = reactive({
@@ -170,6 +172,7 @@ const zarrMap = useZarrDirectMap(
   props.fillValue,
   props.proj4,
   props.bounds,
+  props.unitConverter,
 );
 const {
   timeIndex,

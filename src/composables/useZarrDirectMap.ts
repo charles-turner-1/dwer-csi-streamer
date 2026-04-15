@@ -2,6 +2,7 @@ import { ref, computed, onMounted, onUnmounted } from "vue";
 import maplibregl from "maplibre-gl";
 import { ZarrLayer, type LoadingState } from "@carbonplan/zarr-layer";
 import { FetchStore, root, open, get } from "zarrita";
+import type { UnitConverter } from "@/utils/unitConversion";
 
 export const COLORMAP_TEMP = [
   "#440154",
@@ -70,6 +71,7 @@ export function useZarrDirectMap(
   fillValue?: number,
   proj4?: string,
   bounds?: [number, number, number, number],
+  unitConverter?: UnitConverter,
 ) {
   const mapContainer = ref<HTMLDivElement | null>(null);
   const timeIndex = ref(0);
@@ -108,13 +110,20 @@ export function useZarrDirectMap(
     map.on("load", () => {
       if (!map) return;
 
+      const rawInitialClim: [number, number] = unitConverter
+        ? [
+            unitConverter.toRaw(initialClim[0]),
+            unitConverter.toRaw(initialClim[1]),
+          ]
+        : initialClim;
+
       zarrLayer = new ZarrLayer({
         id: varName,
         source,
         variable: varName,
         selector: { time: 0 },
         colormap,
-        clim: initialClim,
+        clim: rawInitialClim,
         opacity: opacity.value / 100,
         zarrVersion: 3,
         spatialDimensions: spatialDims,
@@ -158,7 +167,10 @@ export function useZarrDirectMap(
   }
 
   function setClim(clim: [number, number]) {
-    zarrLayer?.setClim(clim);
+    const rawClim: [number, number] = unitConverter
+      ? [unitConverter.toRaw(clim[0]), unitConverter.toRaw(clim[1])]
+      : clim;
+    zarrLayer?.setClim(rawClim);
   }
 
   return {

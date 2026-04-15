@@ -45,6 +45,7 @@ import {
   SWWA_SPATIAL_DIMS,
   SWWA_BOUNDS,
 } from "@/composables/useZarrDirectMap";
+import { kelvinToCelsius, precipToMmPerDay } from "@/utils/unitConversion";
 
 // ---------------------------------------------------------------------------
 // Exported constants
@@ -168,5 +169,108 @@ describe("useZarrDirectMap initial state", () => {
     expect(style.background).toContain("linear-gradient");
     expect(style.background).toContain(COLORMAP_TEMP[0]);
     expect(style.background).toContain(COLORMAP_TEMP[7]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Unit converters — helper functions
+// ---------------------------------------------------------------------------
+
+describe("kelvinToCelsius", () => {
+  it("toDisplay converts 273.15 K → 0 °C", () => {
+    expect(kelvinToCelsius.toDisplay(273.15)).toBeCloseTo(0);
+  });
+
+  it("toDisplay converts 373.15 K → 100 °C", () => {
+    expect(kelvinToCelsius.toDisplay(373.15)).toBeCloseTo(100);
+  });
+
+  it("toRaw converts 0 °C → 273.15 K", () => {
+    expect(kelvinToCelsius.toRaw(0)).toBeCloseTo(273.15);
+  });
+
+  it("round-trips: toDisplay(toRaw(x)) === x", () => {
+    const x = 25;
+    expect(kelvinToCelsius.toDisplay(kelvinToCelsius.toRaw(x))).toBeCloseTo(x);
+  });
+});
+
+describe("precipToMmPerDay", () => {
+  it("toDisplay converts 1e-5 kg/m²/s → 0.864 mm/day", () => {
+    expect(precipToMmPerDay.toDisplay(1e-5)).toBeCloseTo(0.864);
+  });
+
+  it("toRaw converts 8.64 mm/day → 0.0001 kg/m²/s", () => {
+    expect(precipToMmPerDay.toRaw(8.64)).toBeCloseTo(0.0001);
+  });
+
+  it("round-trips: toRaw(toDisplay(x)) === x", () => {
+    const x = 5e-5;
+    expect(precipToMmPerDay.toRaw(precipToMmPerDay.toDisplay(x))).toBeCloseTo(
+      x,
+    );
+  });
+});
+
+// ---------------------------------------------------------------------------
+// useZarrDirectMap — unit converter integration
+// ---------------------------------------------------------------------------
+// Note: ZarrLayer is only constructed inside onMounted when mapContainer.value
+// is non-null (requires a real DOM element). These tests verify the converter
+// is invoked correctly by setClim — the toRaw call is unconditional and
+// happens before the null-guarded zarrLayer?.setClim().
+
+describe("useZarrDirectMap with unitConverter", () => {
+  it("setClim calls converter.toRaw on both values", () => {
+    const converter = {
+      toDisplay: vi.fn((k: number) => k - 273.15),
+      toRaw: vi.fn((c: number) => c + 273.15),
+    };
+
+    const { setClim } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      "tasmax",
+      492,
+      [6.85, 51.85],
+      { lat: "rlat", lon: "rlon" },
+      COLORMAP_TEMP,
+      undefined,
+      undefined,
+      undefined,
+      converter,
+    );
+
+    setClim([10, 40]);
+
+    expect(converter.toRaw).toHaveBeenCalledWith(10);
+    expect(converter.toRaw).toHaveBeenCalledWith(40);
+  });
+
+  it("setClim does NOT call toRaw when no converter provided", () => {
+    // Use a spy to confirm the plain path — no crash, no conversion applied.
+    // The values reach zarrLayer?.setClim unchanged (zarrLayer is null in this
+    // test environment, but the code path is exercised without throwing).
+    const { setClim } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      "tasmax",
+      492,
+      [280, 325],
+      { lat: "rlat", lon: "rlon" },
+      COLORMAP_TEMP,
+    );
+
+    expect(() => setClim([285, 320])).not.toThrow();
+  });
+
+  it("kelvinToCelsius.toRaw produces correct K values for typical °C inputs", () => {
+    expect(kelvinToCelsius.toRaw(10)).toBeCloseTo(283.15, 2);
+    expect(kelvinToCelsius.toRaw(40)).toBeCloseTo(313.15, 2);
+    expect(kelvinToCelsius.toRaw(6.85)).toBeCloseTo(280, 1);
+    expect(kelvinToCelsius.toRaw(51.85)).toBeCloseTo(325, 1);
+  });
+
+  it("precipToMmPerDay.toRaw converts mm/day display values back to kg/m²/s", () => {
+    expect(precipToMmPerDay.toRaw(0)).toBeCloseTo(0);
+    expect(precipToMmPerDay.toRaw(8.64)).toBeCloseTo(0.0001, 6);
   });
 });

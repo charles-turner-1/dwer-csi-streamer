@@ -49,13 +49,14 @@
             :source="STORE_URL"
             varName="tasmax"
             :timeSteps="492"
-            :clim="[280, 325]"
+            :clim="[6.85, 51.85]"
             :spatialDims="SWWA_SPATIAL_DIMS"
             :colormap="COLORMAP_TEMP"
-            climUnit=" K"
+            climUnit=" °C"
             :fillValue="1e20"
             :proj4="SWWA_PROJ4"
             :bounds="SWWA_BOUNDS"
+            :unitConverter="kelvinToCelsius"
           />
         </TabPanel>
         <TabPanel value="tasmin">
@@ -63,13 +64,14 @@
             :source="STORE_URL"
             varName="tasmin"
             :timeSteps="492"
-            :clim="[270, 310]"
+            :clim="[-3.15, 36.85]"
             :spatialDims="SWWA_SPATIAL_DIMS"
             :colormap="COLORMAP_TEMP"
-            climUnit=" K"
+            climUnit=" °C"
             :fillValue="1e20"
             :proj4="SWWA_PROJ4"
             :bounds="SWWA_BOUNDS"
+            :unitConverter="kelvinToCelsius"
           />
         </TabPanel>
         <TabPanel value="pr">
@@ -77,13 +79,14 @@
             :source="STORE_URL"
             varName="pr"
             :timeSteps="492"
-            :clim="[0, 0.0001]"
+            :clim="[0, 8.64]"
             :spatialDims="SWWA_SPATIAL_DIMS"
             :colormap="COLORMAP_PRECIP"
-            climUnit=" kg/m²/s"
+            climUnit=" mm/day"
             :fillValue="1e20"
             :proj4="SWWA_PROJ4"
             :bounds="SWWA_BOUNDS"
+            :unitConverter="precipToMmPerDay"
           />
         </TabPanel>
       </TabPanels>
@@ -106,6 +109,7 @@ import {
   COLORMAP_TEMP,
   COLORMAP_PRECIP,
 } from "@/composables/useZarrDirectMap";
+import { kelvinToCelsius, precipToMmPerDay } from "@/utils/unitConversion";
 
 const STORE_URL = "https://projects.pawsey.org.au/dwer-zarr-store/data.zarr";
 </script>
