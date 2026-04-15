@@ -55,7 +55,9 @@ async function reverseGeocode(lat: number, lon: number): Promise<string> {
     });
     if (!res.ok) return `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
     const data = await res.json();
-    return (data.display_name as string) ?? `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
+    return (
+      (data.display_name as string) ?? `${lat.toFixed(4)}, ${lon.toFixed(4)}`
+    );
   } catch {
     return `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
   }
@@ -163,9 +165,7 @@ function centeredRollingAvg(values: number[]): (number | null)[] {
 // Ordinary least-squares linear regression, ignoring NaN values.
 // Returns trend line values at every input index.
 function linearTrend(values: number[]): number[] {
-  const pts = values
-    .map((y, x) => ({ x, y }))
-    .filter((p) => !isNaN(p.y));
+  const pts = values.map((y, x) => ({ x, y })).filter((p) => !isNaN(p.y));
 
   const n = pts.length;
   if (n < 2) return values.map(() => NaN);
@@ -245,7 +245,10 @@ export function useWhatAboutMe(source: string) {
       const yearOf = (label: string) => label.split(" ").at(-1) ?? "";
 
       // 3. Open the tasmax array
-      const arr = await open(root(store).resolve("tasmax"), { kind: "array", zarr_format: 3 });
+      const arr = await open(root(store).resolve("tasmax"), {
+        kind: "array",
+        zarr_format: 3,
+      });
 
       // 4. Single fetch: the store is chunked [492, ~31, ~28] so slicing to
       //    one spatial point pulls the entire time axis in one HTTP request.
@@ -281,7 +284,11 @@ export function useWhatAboutMe(source: string) {
       const firstLabel = yearOf(dates[0] ?? "Start");
       const lastLabel = yearOf(dates[dates.length - 1] ?? "End");
       const firstMean = meanSlice(converted, 0, 120); // first 10 years (120 months)
-      const lastMean = meanSlice(converted, TOTAL_TIME_STEPS - 120, TOTAL_TIME_STEPS);
+      const lastMean = meanSlice(
+        converted,
+        TOTAL_TIME_STEPS - 120,
+        TOTAL_TIME_STEPS,
+      );
 
       timeSeries.value = converted;
       rollingAvg.value = rolling;

@@ -114,6 +114,8 @@ import {
 } from "@/composables/useZarrDirectMap";
 import { kelvinToCelsius, precipToMmPerDay } from "@/utils/unitConversion";
 
-const STORE_URL_TILES = "https://projects.pawsey.org.au/dwer-zarr-store/data.zarr";
-const STORE_URL_TIMES = "https://projects.pawsey.org.au/dwer-zarr-store-rechunked/data.zarr";
+const STORE_URL_TILES =
+  "https://projects.pawsey.org.au/dwer-zarr-store/data.zarr";
+const STORE_URL_TIMES =
+  "https://projects.pawsey.org.au/dwer-zarr-store-rechunked/data.zarr";
 </script>

@@ -48,11 +48,15 @@
 
     <!-- Progress bar -->
     <div v-if="wam.loading.value" class="mb-4">
-      <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
+      <div
+        class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1"
+      >
         <span>Loading climate data…</span>
         <span>{{ wam.progress.value }}%</span>
       </div>
-      <div class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+      <div
+        class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden"
+      >
         <div
           class="h-full bg-blue-500 rounded-full transition-all duration-200"
           :style="{ width: `${wam.progress.value}%` }"
@@ -167,9 +171,7 @@ const lastDecadeLabel = computed(() => {
   if (!wam.headline.value) return "";
   return `${wam.headline.value.lastLabel}s`;
 });
-const deltaPositive = computed(
-  () => (wam.headline.value?.delta ?? 0) >= 0,
-);
+const deltaPositive = computed(() => (wam.headline.value?.delta ?? 0) >= 0);
 
 // Show only one label per year on the x-axis (first month of each year)
 const sparseLabels = computed(() => {
@@ -178,7 +180,7 @@ const sparseLabels = computed(() => {
   return labels.map((label, i) => {
     // Label format is "D Mon YYYY" — show year string every 12 months
     const isJanuary = i % 12 === 0;
-    return isJanuary ? label.split(" ").at(-1) ?? "" : "";
+    return isJanuary ? (label.split(" ").at(-1) ?? "") : "";
   });
 });
 
@@ -223,7 +225,10 @@ const chartOptions = {
     legend: { position: "top" as const },
     tooltip: {
       callbacks: {
-        label: (ctx: { dataset: { label: string }; parsed: { y: number | null } }) =>
+        label: (ctx: {
+          dataset: { label: string };
+          parsed: { y: number | null };
+        }) =>
           ctx.parsed.y !== null
             ? `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)} °C`
             : "",
