@@ -91,6 +91,8 @@
         </TabPanel>
       </TabPanels>
     </Tabs>
+
+    <WhatAboutMe :source="STORE_URL" />
   </div>
 </template>
 
@@ -102,6 +104,7 @@ import Tab from "primevue/tab";
 import TabPanels from "primevue/tabpanels";
 import TabPanel from "primevue/tabpanel";
 import ZarrDirectMap from "@/components/ZarrDirectMap.vue";
+import WhatAboutMe from "@/components/WhatAboutMe.vue";
 import {
   SWWA_SPATIAL_DIMS,
   SWWA_PROJ4,
