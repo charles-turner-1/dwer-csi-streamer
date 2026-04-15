@@ -37,6 +37,7 @@ export default defineConfig({
       reporter: ["text", "json", "html"],
       exclude: [
         "node_modules/",
+        "python/",
         "src/test/",
         "**/*.spec.ts",
         "**/*.d.ts",
