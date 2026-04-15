@@ -28,15 +28,13 @@ vi.mock("zarrita", () => ({
   FetchStore: vi.fn().mockImplementation(() => ({})),
   root: vi.fn().mockReturnValue({ resolve: vi.fn().mockReturnValue({}) }),
   open: vi.fn().mockResolvedValue({}),
-  get: vi
-    .fn()
-    .mockImplementation(() =>
-      Promise.resolve({
-        data: mockGetResult,
-        shape: [mockGetResult.length],
-        stride: [1],
-      }),
-    ),
+  get: vi.fn().mockImplementation(() =>
+    Promise.resolve({
+      data: mockGetResult,
+      shape: [mockGetResult.length],
+      stride: [1],
+    }),
+  ),
 }));
 
 import {
