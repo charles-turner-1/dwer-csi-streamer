@@ -96,17 +96,8 @@ export function useZarrDirectMap(
 
     map = new maplibregl.Map({
       container: mapContainer.value,
-      style: {
-        version: 8,
-        sources: {},
-        layers: [
-          {
-            id: "background",
-            type: "background",
-            paint: { "background-color": "#1a1a2e" },
-          },
-        ],
-      },
+      style:
+        "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
       // Centre on the rlat/rlon coordinate space (rotated-pole degrees).
       // rlat ≈ -11 to -1.5, rlon ≈ 147.6 to 160.4 — data appears here
       // without proj4 reprojection. Once reprojection is working this
