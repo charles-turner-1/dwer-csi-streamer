@@ -8,14 +8,12 @@ import { kelvinToCelsius } from "@/utils/unitConversion";
 const NOMINATIM_BASE = "https://nominatim.openstreetmap.org";
 
 const RLON_N = 364;
-const RLAT_N = 279;
 
 // Maximum distance (degrees, great-circle approximation) before we consider
 // a point outside the model domain.
 const MAX_DOMAIN_DISTANCE_DEG = 2.0;
 
 const TOTAL_TIME_STEPS = 492;
-const FETCH_BATCH_SIZE = 50;
 
 // Missing-value threshold — the store uses 1e20 for land-mask fill
 const FILL_THRESHOLD = 1e19;
@@ -97,8 +95,8 @@ async function fetchLatLonGrid(
     return { latGrid: latGridCache, lonGrid: lonGridCache };
   }
   const [latArr, lonArr] = await Promise.all([
-    open(root(store).resolve("lat"), { kind: "array" }),
-    open(root(store).resolve("lon"), { kind: "array" }),
+    open(root(store).resolve("lat"), { kind: "array", zarr_format: 3 }),
+    open(root(store).resolve("lon"), { kind: "array", zarr_format: 3 }),
   ]);
   const [latChunk, lonChunk] = await Promise.all([get(latArr), get(lonArr)]);
   latGridCache = latChunk.data as Float32Array;
@@ -247,37 +245,20 @@ export function useWhatAboutMe(source: string) {
       const yearOf = (label: string) => label.split(" ").at(-1) ?? "";
 
       // 3. Open the tasmax array
-      const arr = await open(root(store).resolve("tasmax"), { kind: "array" });
+      const arr = await open(root(store).resolve("tasmax"), { kind: "array", zarr_format: 3 });
 
-      // 4. Fetch all 492 time steps in throttled batches of 50
-      const values = new Array<number>(TOTAL_TIME_STEPS);
+      // 4. Single fetch: the store is chunked [492, ~31, ~28] so slicing to
+      //    one spatial point pulls the entire time axis in one HTTP request.
+      progress.value = 50;
+      const pointChunk = await get(arr, [
+        null,
+        slice(gridPoint.rlatIdx, gridPoint.rlatIdx + 1),
+        slice(gridPoint.rlonIdx, gridPoint.rlonIdx + 1),
+      ]);
+      progress.value = 100;
 
-      for (
-        let batchStart = 0;
-        batchStart < TOTAL_TIME_STEPS;
-        batchStart += FETCH_BATCH_SIZE
-      ) {
-        const batchEnd = Math.min(batchStart + FETCH_BATCH_SIZE, TOTAL_TIME_STEPS);
-
-        const batchResults = await Promise.all(
-          Array.from({ length: batchEnd - batchStart }, async (_, i) => {
-            const t = batchStart + i;
-            // Fetch the full time slab at t, extract the point
-            const chunk = await get(arr, [
-              slice(t, t + 1),
-              null,
-              null,
-            ]);
-            const data = chunk.data as Float32Array;
-            return data[gridPoint.rlatIdx * RLON_N + gridPoint.rlonIdx];
-          }),
-        );
-
-        batchResults.forEach((v, i) => {
-          values[batchStart + i] = v;
-        });
-        progress.value = Math.round((batchEnd / TOTAL_TIME_STEPS) * 100);
-      }
+      const raw = pointChunk.data as Float32Array;
+      const values = Array.from({ length: TOTAL_TIME_STEPS }, (_, i) => raw[i]);
 
       // 5. Apply unit conversion (K → °C); treat fill values and NaN as NaN
       const converted = values.map((v) =>

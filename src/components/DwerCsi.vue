@@ -46,7 +46,7 @@
       <TabPanels>
         <TabPanel value="tasmax">
           <ZarrDirectMap
-            :source="STORE_URL"
+            :source="STORE_URL_TILES"
             varName="tasmax"
             :timeSteps="492"
             :clim="[6.85, 51.85]"
@@ -61,7 +61,7 @@
         </TabPanel>
         <TabPanel value="tasmin">
           <ZarrDirectMap
-            :source="STORE_URL"
+            :source="STORE_URL_TILES"
             varName="tasmin"
             :timeSteps="492"
             :clim="[-3.15, 36.85]"
@@ -76,7 +76,7 @@
         </TabPanel>
         <TabPanel value="pr">
           <ZarrDirectMap
-            :source="STORE_URL"
+            :source="STORE_URL_TILES"
             varName="pr"
             :timeSteps="492"
             :clim="[0, 8.64]"
@@ -92,7 +92,7 @@
       </TabPanels>
     </Tabs>
 
-    <WhatAboutMe :source="STORE_URL" />
+    <WhatAboutMe :source="STORE_URL_TIMES" />
   </div>
 </template>
 
@@ -114,5 +114,6 @@ import {
 } from "@/composables/useZarrDirectMap";
 import { kelvinToCelsius, precipToMmPerDay } from "@/utils/unitConversion";
 
-const STORE_URL = "https://projects.pawsey.org.au/dwer-zarr-store/data.zarr";
+const STORE_URL_TILES = "https://projects.pawsey.org.au/dwer-zarr-store/data.zarr";
+const STORE_URL_TIMES = "https://projects.pawsey.org.au/dwer-zarr-store-rechunked/data.zarr";
 </script>
