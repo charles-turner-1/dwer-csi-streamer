@@ -50,7 +50,7 @@ describe("DwerCsi", () => {
 
   it("renders three ZarrDirectMap stubs", () => {
     const wrapper = mountDwerCsi();
-    // shallowMount replaces ZarrDirectMap with a stub element named 'zarr-direct-map-stub'
+    // mount() uses the explicit global stub for ZarrDirectMap, which renders as 'zarr-direct-map-stub'
     const maps = wrapper.findAll("zarr-direct-map-stub");
     expect(maps).toHaveLength(3);
   });
