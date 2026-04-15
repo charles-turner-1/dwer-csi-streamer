@@ -97,8 +97,8 @@ async function fetchLatLonGrid(
     return { latGrid: latGridCache, lonGrid: lonGridCache };
   }
   const [latArr, lonArr] = await Promise.all([
-    open(root(store).resolve("lat"), { kind: "array", zarr_format: 3 }),
-    open(root(store).resolve("lon"), { kind: "array", zarr_format: 3 }),
+    open(root(store).resolve("lat"), { kind: "array" }),
+    open(root(store).resolve("lon"), { kind: "array" }),
   ]);
   const [latChunk, lonChunk] = await Promise.all([get(latArr), get(lonArr)]);
   latGridCache = latChunk.data as Float32Array;
@@ -119,8 +119,8 @@ async function findNearestGridPoint(
   let bestDist = Infinity;
 
   for (let i = 0; i < latGrid.length; i++) {
-    const dlat = latGrid[i] - targetLat;
-    const dlon = lonGrid[i] - targetLon;
+    const dlat = (latGrid[i] ?? 0) - targetLat;
+    const dlon = (lonGrid[i] ?? 0) - targetLon;
     const dist = dlat * dlat + dlon * dlon;
     if (dist < bestDist) {
       bestDist = dist;
@@ -137,8 +137,8 @@ async function findNearestGridPoint(
   return {
     rlatIdx,
     rlonIdx,
-    nearestLat: latGrid[bestIdx],
-    nearestLon: lonGrid[bestIdx],
+    nearestLat: latGrid[bestIdx] ?? 0,
+    nearestLon: lonGrid[bestIdx] ?? 0,
   };
 }
 
@@ -245,10 +245,7 @@ export function useWhatAboutMe(source: string) {
       const yearOf = (label: string) => label.split(" ").at(-1) ?? "";
 
       // 3. Open the tasmax array
-      const arr = await open(root(store).resolve("tasmax"), {
-        kind: "array",
-        zarr_format: 3,
-      });
+      const arr = await open(root(store).resolve("tasmax"), { kind: "array" });
 
       // 4. Single fetch: the store is chunked [492, ~31, ~28] so slicing to
       //    one spatial point pulls the entire time axis in one HTTP request.
@@ -261,7 +258,7 @@ export function useWhatAboutMe(source: string) {
       progress.value = 100;
 
       const raw = pointChunk.data as Float32Array;
-      const values = Array.from({ length: TOTAL_TIME_STEPS }, (_, i) => raw[i]);
+      const values = Array.from({ length: TOTAL_TIME_STEPS }, (_, i) => raw[i] ?? NaN);
 
       // 5. Apply unit conversion (K → °C); treat fill values and NaN as NaN
       const converted = values.map((v) =>

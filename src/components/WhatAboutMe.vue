@@ -132,6 +132,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  type TooltipItem,
 } from "chart.js";
 import { Line } from "vue-chartjs";
 import { useWhatAboutMe } from "@/composables/useWhatAboutMe";
@@ -225,12 +226,9 @@ const chartOptions = {
     legend: { position: "top" as const },
     tooltip: {
       callbacks: {
-        label: (ctx: {
-          dataset: { label: string };
-          parsed: { y: number | null };
-        }) =>
+        label: (ctx: TooltipItem<"line">) =>
           ctx.parsed.y !== null
-            ? `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)} °C`
+            ? `${ctx.dataset.label ?? ""}: ${ctx.parsed.y.toFixed(1)} °C`
             : "",
       },
     },
