@@ -1,0 +1,75 @@
+import { describe, it, expect, vi } from "vitest";
+import { mount } from "@vue/test-utils";
+import { createRouter, createMemoryHistory } from "vue-router";
+import Home from "@/components/Home.vue";
+import LinkCard from "@/components/LinkCard.vue";
+
+const router = createRouter({
+  history: createMemoryHistory(),
+  routes: [
+    { path: "/", component: Home },
+    { path: "/access-model", component: { template: "<div />" } },
+    { path: "/dwer-csi", component: { template: "<div />" } },
+  ],
+});
+
+function mountHome() {
+  return mount(Home, {
+    global: {
+      plugins: [router],
+      stubs: {
+        // oh-vue-icons — not relevant to logic
+        "v-icon": true,
+      },
+    },
+  });
+}
+
+describe("Home", () => {
+  it("renders the main heading", () => {
+    const wrapper = mountHome();
+    expect(wrapper.find("h1").text()).toContain(
+      "DWER Climate Science Initiative Zarr Data Streamer",
+    );
+  });
+
+  it("renders two LinkCard components", () => {
+    const wrapper = mountHome();
+    const cards = wrapper.findAllComponents(LinkCard);
+    expect(cards).toHaveLength(2);
+  });
+
+  it("first LinkCard links to /access-model", () => {
+    const wrapper = mountHome();
+    const cards = wrapper.findAllComponents(LinkCard);
+    expect(cards[0].props("href")).toBe("/access-model");
+  });
+
+  it("second LinkCard links to /dwer-csi", () => {
+    const wrapper = mountHome();
+    const cards = wrapper.findAllComponents(LinkCard);
+    expect(cards[1].props("href")).toBe("/dwer-csi");
+  });
+
+  it("LinkCard names are descriptive", () => {
+    const wrapper = mountHome();
+    const cards = wrapper.findAllComponents(LinkCard);
+    expect(cards[0].props("name")).toContain("ACCESS");
+    expect(cards[1].props("name")).toContain("DWER");
+  });
+
+  it("renders the Acknowledgements section", () => {
+    const wrapper = mountHome();
+    expect(wrapper.text()).toContain("Acknowledgements");
+  });
+
+  it("mentions Murdoch University in acknowledgements", () => {
+    const wrapper = mountHome();
+    expect(wrapper.text()).toContain("Murdoch University");
+  });
+
+  it("mentions Pawsey in acknowledgements", () => {
+    const wrapper = mountHome();
+    expect(wrapper.text()).toContain("Pawsey");
+  });
+});

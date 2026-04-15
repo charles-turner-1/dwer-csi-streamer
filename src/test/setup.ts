@@ -9,6 +9,16 @@ config.global.stubs = {
   // Example: 'RouterLink': true
 };
 
+// ResizeObserver is used by maplibre-gl and PrimeVue; happy-dom doesn't include it
+global.ResizeObserver = class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
+
+// HTMLCanvasElement.getContext is needed by maplibre-gl
+HTMLCanvasElement.prototype.getContext = () => null;
+
 // Add any global mocks or configuration here
 // Example: mock window.matchMedia for responsive tests
 Object.defineProperty(window, "matchMedia", {
