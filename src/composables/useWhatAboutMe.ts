@@ -258,7 +258,10 @@ export function useWhatAboutMe(source: string) {
       progress.value = 100;
 
       const raw = pointChunk.data as Float32Array;
-      const values = Array.from({ length: TOTAL_TIME_STEPS }, (_, i) => raw[i] ?? NaN);
+      const values = Array.from(
+        { length: TOTAL_TIME_STEPS },
+        (_, i) => raw[i] ?? NaN,
+      );
 
       // 5. Apply unit conversion (K → °C); treat fill values and NaN as NaN
       const converted = values.map((v) =>
