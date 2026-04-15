@@ -41,9 +41,7 @@ export interface NominatimSuggestion {
  * Intended to feed an autocomplete dropdown — results are pre-scoped to Australia
  * via `countrycodes=au` to avoid ambiguous matches (e.g. Albany, WA vs Albany, NY).
  */
-async function suggestAddresses(
-  query: string,
-): Promise<NominatimSuggestion[]> {
+async function suggestAddresses(query: string): Promise<NominatimSuggestion[]> {
   if (query.trim().length < 2) return [];
   const url = new URL(`${NOMINATIM_BASE}/search`);
   url.searchParams.set("q", query);
@@ -439,11 +437,7 @@ export function useWhatAboutMe(source: string) {
    * coordinates. Use this when the user selects a suggestion from the autocomplete
    * dropdown — the coordinates are already known from the Nominatim response.
    */
-  async function searchByCoords(
-    lat: number,
-    lon: number,
-    displayName: string,
-  ) {
+  async function searchByCoords(lat: number, lon: number, displayName: string) {
     await fetchTimeSeries(lat, lon, displayName);
   }
 

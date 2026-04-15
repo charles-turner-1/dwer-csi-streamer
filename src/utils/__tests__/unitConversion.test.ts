@@ -54,6 +54,8 @@ describe("precipToMmPerDay", () => {
 
   it("round-trips: toRaw(toDisplay(x)) === x", () => {
     const x = 5e-5;
-    expect(precipToMmPerDay.toRaw(precipToMmPerDay.toDisplay(x))).toBeCloseTo(x);
+    expect(precipToMmPerDay.toRaw(precipToMmPerDay.toDisplay(x))).toBeCloseTo(
+      x,
+    );
   });
 });

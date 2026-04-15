@@ -43,8 +43,18 @@ vi.mock("@/composables/useZarrDirectMap", () => ({
       const year = 1980 + Math.floor(i / 12);
       const month = i % 12;
       const monthName = [
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
       ][month];
       return `1 ${monthName} ${year}`;
     }),
@@ -66,7 +76,9 @@ function nominatimHit(
   displayName = "Perth, Western Australia, Australia",
 ): Response {
   return new Response(
-    JSON.stringify([{ lat: String(lat), lon: String(lon), display_name: displayName }]),
+    JSON.stringify([
+      { lat: String(lat), lon: String(lon), display_name: displayName },
+    ]),
     { status: 200, headers: { "Content-Type": "application/json" } },
   );
 }
@@ -93,7 +105,9 @@ describe("suggestAddresses (via composable return)", () => {
   });
 
   it("returns empty array for query shorter than 2 chars", async () => {
-    const { suggestAddresses } = useWhatAboutMe("https://example.com/store.zarr");
+    const { suggestAddresses } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     const results = await suggestAddresses("P");
     expect(results).toEqual([]);
     // fetch should NOT have been called
@@ -102,14 +116,18 @@ describe("suggestAddresses (via composable return)", () => {
 
   it("returns empty array on network failure", async () => {
     mockFetchImpl = () => Promise.reject(new Error("network down"));
-    const { suggestAddresses } = useWhatAboutMe("https://example.com/store.zarr");
+    const { suggestAddresses } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     const results = await suggestAddresses("Perth");
     expect(results).toEqual([]);
   });
 
   it("returns empty array on non-OK response", async () => {
     mockFetchImpl = () => Promise.resolve(new Response("", { status: 500 }));
-    const { suggestAddresses } = useWhatAboutMe("https://example.com/store.zarr");
+    const { suggestAddresses } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     const results = await suggestAddresses("Perth");
     expect(results).toEqual([]);
   });
@@ -128,7 +146,9 @@ describe("suggestAddresses (via composable return)", () => {
           { status: 200 },
         ),
       );
-    const { suggestAddresses } = useWhatAboutMe("https://example.com/store.zarr");
+    const { suggestAddresses } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     const results: NominatimSuggestion[] = await suggestAddresses("Perth");
     expect(results).toHaveLength(1);
     expect(results[0]!.lat).toBeCloseTo(-31.9505);
@@ -143,7 +163,9 @@ describe("suggestAddresses (via composable return)", () => {
       capturedUrl = url;
       return Promise.resolve(new Response(JSON.stringify([]), { status: 200 }));
     };
-    const { suggestAddresses } = useWhatAboutMe("https://example.com/store.zarr");
+    const { suggestAddresses } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     await suggestAddresses("Albany");
     expect(capturedUrl).toContain("countrycodes=au");
   });
@@ -162,23 +184,27 @@ describe("searchByAddress", () => {
   it("sets error when geocoding returns no results", async () => {
     mockFetchImpl = () =>
       Promise.resolve(new Response(JSON.stringify([]), { status: 200 }));
-    const { searchByAddress, error } = useWhatAboutMe("https://example.com/store.zarr");
+    const { searchByAddress, error } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     await searchByAddress("Nowhere");
     expect(error.value).toContain("No results found");
   });
 
   it("sets error when geocoding request fails (non-OK)", async () => {
-    mockFetchImpl = () =>
-      Promise.resolve(new Response("", { status: 503 }));
-    const { searchByAddress, error } = useWhatAboutMe("https://example.com/store.zarr");
+    mockFetchImpl = () => Promise.resolve(new Response("", { status: 503 }));
+    const { searchByAddress, error } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     await searchByAddress("Perth");
     expect(error.value).toContain("Geocoding");
   });
 
   it("populates headline and time series on success", async () => {
     mockFetchImpl = () => Promise.resolve(nominatimHit(PERTH_LAT, PERTH_LON));
-    const { searchByAddress, headline, timeSeries, loading } =
-      useWhatAboutMe("https://example.com/store.zarr");
+    const { searchByAddress, headline, timeSeries, loading } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
 
     await searchByAddress("Perth");
 
@@ -190,9 +216,15 @@ describe("searchByAddress", () => {
   it("sets placeName from the geocoded display name", async () => {
     mockFetchImpl = () =>
       Promise.resolve(
-        nominatimHit(PERTH_LAT, PERTH_LON, "Perth, Western Australia, Australia"),
+        nominatimHit(
+          PERTH_LAT,
+          PERTH_LON,
+          "Perth, Western Australia, Australia",
+        ),
       );
-    const { searchByAddress, placeName } = useWhatAboutMe("https://example.com/store.zarr");
+    const { searchByAddress, placeName } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     await searchByAddress("Perth");
     // Should be the first 2 comma-parts
     expect(placeName.value).toBe("Perth, Western Australia");
@@ -200,7 +232,9 @@ describe("searchByAddress", () => {
 
   it("loading is false after completion", async () => {
     mockFetchImpl = () => Promise.resolve(nominatimHit(PERTH_LAT, PERTH_LON));
-    const { searchByAddress, loading } = useWhatAboutMe("https://example.com/store.zarr");
+    const { searchByAddress, loading } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     expect(loading.value).toBe(false);
     const p = searchByAddress("Perth");
     // loading turns true while running — we can't observe mid-flight in this sync-mock setup,
@@ -231,7 +265,9 @@ describe("searchByCoords", () => {
 
   it("sets an out-of-domain error when coords are far from the grid", async () => {
     // The lat/lon grid cache holds (-32, 116). Search a point 22° away — > MAX_DOMAIN_DISTANCE_DEG.
-    const { searchByCoords, error } = useWhatAboutMe("https://example.com/store.zarr");
+    const { searchByCoords, error } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     await searchByCoords(-10.0, 116.0, "Test");
     expect(error.value).toContain("outside the SWWA model domain");
   });
@@ -241,7 +277,9 @@ describe("searchByCoords", () => {
     mockLatData = new Float32Array([PERTH_LAT]);
     mockLonData = new Float32Array([PERTH_LON]);
     mockTasmaxData = new Float32Array(492).fill(2e20);
-    const { searchByCoords, error } = useWhatAboutMe("https://example.com/store.zarr");
+    const { searchByCoords, error } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     await searchByCoords(PERTH_LAT, PERTH_LON, "Ocean point");
     expect(error.value).toContain("land-surface data");
   });
@@ -258,12 +296,16 @@ describe("firstDecadeLabel / lastDecadeLabel / deltaPositive", () => {
   });
 
   it("firstDecadeLabel is empty string before any search", () => {
-    const { firstDecadeLabel } = useWhatAboutMe("https://example.com/store.zarr");
+    const { firstDecadeLabel } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     expect(firstDecadeLabel.value).toBe("");
   });
 
   it("lastDecadeLabel is empty string before any search", () => {
-    const { lastDecadeLabel } = useWhatAboutMe("https://example.com/store.zarr");
+    const { lastDecadeLabel } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     expect(lastDecadeLabel.value).toBe("");
   });
 
@@ -318,7 +360,9 @@ describe("headline statistics", () => {
 
   it("firstMean rounded to 1 decimal place", async () => {
     mockTasmaxData = validTasmaxData(); // all 300 K → 26.85 °C before rounding → 26.8 after Math.round
-    const { searchByCoords, headline } = useWhatAboutMe("https://example.com/store.zarr");
+    const { searchByCoords, headline } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     await searchByCoords(PERTH_LAT, PERTH_LON, "Perth");
     // 300 − 273.15 = 26.849999… in IEEE 754, Math.round(268.499…)/10 = 26.8
     expect(headline.value!.firstMean).toBe(26.8);
@@ -326,7 +370,9 @@ describe("headline statistics", () => {
 
   it("delta is lastMean - firstMean, rounded to 1 dp", async () => {
     mockTasmaxData = validTasmaxData();
-    const { searchByCoords, headline } = useWhatAboutMe("https://example.com/store.zarr");
+    const { searchByCoords, headline } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     await searchByCoords(PERTH_LAT, PERTH_LON, "Perth");
     const { firstMean, lastMean, delta } = headline.value!;
     expect(delta).toBeCloseTo(Math.round((lastMean - firstMean) * 10) / 10, 5);
@@ -334,7 +380,9 @@ describe("headline statistics", () => {
 
   it("firstLabel is the year of the first time step", async () => {
     mockTasmaxData = validTasmaxData();
-    const { searchByCoords, headline } = useWhatAboutMe("https://example.com/store.zarr");
+    const { searchByCoords, headline } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     await searchByCoords(PERTH_LAT, PERTH_LON, "Perth");
     expect(headline.value!.firstLabel).toBe("1980");
   });
@@ -342,7 +390,9 @@ describe("headline statistics", () => {
   it("lastLabel is the year of the last time step (1980 + 40 = 2020)", async () => {
     // 492 months from Jan 1980 → ends Dec 2020 (index 491 → year 1980 + floor(491/12) = 2020)
     mockTasmaxData = validTasmaxData();
-    const { searchByCoords, headline } = useWhatAboutMe("https://example.com/store.zarr");
+    const { searchByCoords, headline } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     await searchByCoords(PERTH_LAT, PERTH_LON, "Perth");
     expect(headline.value!.lastLabel).toBe("2020");
   });
@@ -364,7 +414,9 @@ describe("searchByLocation", () => {
       value: undefined,
       configurable: true,
     });
-    const { searchByLocation, error } = useWhatAboutMe("https://example.com/store.zarr");
+    const { searchByLocation, error } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     await searchByLocation();
     expect(error.value).toContain("Geolocation");
   });
@@ -375,11 +427,17 @@ describe("searchByLocation", () => {
         getCurrentPosition: (
           _success: PositionCallback,
           error: PositionErrorCallback,
-        ) => error({ code: 1, message: "User denied Geolocation" } as GeolocationPositionError),
+        ) =>
+          error({
+            code: 1,
+            message: "User denied Geolocation",
+          } as GeolocationPositionError),
       },
       configurable: true,
     });
-    const { searchByLocation, error } = useWhatAboutMe("https://example.com/store.zarr");
+    const { searchByLocation, error } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     await searchByLocation();
     expect(error.value).toContain("User denied");
   });
@@ -398,11 +456,15 @@ describe("searchByLocation", () => {
     mockFetchImpl = () =>
       Promise.resolve(
         new Response(
-          JSON.stringify({ display_name: "Perth, Western Australia, Australia" }),
+          JSON.stringify({
+            display_name: "Perth, Western Australia, Australia",
+          }),
           { status: 200 },
         ),
       );
-    const { searchByLocation, headline } = useWhatAboutMe("https://example.com/store.zarr");
+    const { searchByLocation, headline } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     await searchByLocation();
     expect(headline.value).not.toBeNull();
   });
@@ -419,7 +481,9 @@ describe("searchByLocation", () => {
     });
     // reverse geocode fetch throws — should fall back to "lat, lon" string and still complete
     mockFetchImpl = () => Promise.reject(new Error("network error"));
-    const { searchByLocation, placeName } = useWhatAboutMe("https://example.com/store.zarr");
+    const { searchByLocation, placeName } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     await searchByLocation();
     // placeName will be the coordinate fallback truncated to 2 parts
     expect(placeName.value).toMatch(/-?\d+\.\d+/);
@@ -438,7 +502,9 @@ describe("fetchTimeSeries generic error branch", () => {
     const { open } = await import("zarrita");
     vi.mocked(open).mockRejectedValueOnce("something went wrong");
 
-    const { searchByCoords, error } = useWhatAboutMe("https://example.com/store.zarr");
+    const { searchByCoords, error } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+    );
     await searchByCoords(PERTH_LAT, PERTH_LON, "Perth");
     expect(error.value).toBe("An unexpected error occurred.");
   });
