@@ -54,6 +54,8 @@
             :colormap="COLORMAP_TEMP"
             climUnit=" K"
             :fillValue="1e20"
+            :proj4="SWWA_PROJ4"
+            :bounds="SWWA_BOUNDS"
           />
         </TabPanel>
         <TabPanel value="tasmin">
@@ -66,6 +68,8 @@
             :colormap="COLORMAP_TEMP"
             climUnit=" K"
             :fillValue="1e20"
+            :proj4="SWWA_PROJ4"
+            :bounds="SWWA_BOUNDS"
           />
         </TabPanel>
         <TabPanel value="pr">
@@ -78,6 +82,8 @@
             :colormap="COLORMAP_PRECIP"
             climUnit=" kg/m²/s"
             :fillValue="1e20"
+            :proj4="SWWA_PROJ4"
+            :bounds="SWWA_BOUNDS"
           />
         </TabPanel>
       </TabPanels>
@@ -95,6 +101,8 @@ import TabPanel from "primevue/tabpanel";
 import ZarrDirectMap from "@/components/ZarrDirectMap.vue";
 import {
   SWWA_SPATIAL_DIMS,
+  SWWA_PROJ4,
+  SWWA_BOUNDS,
   COLORMAP_TEMP,
   COLORMAP_PRECIP,
 } from "@/composables/useZarrDirectMap";

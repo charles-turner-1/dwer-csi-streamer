@@ -26,12 +26,11 @@ export const COLORMAP_PRECIP = [
 ];
 
 // SWWA CORDEX rotated-pole proj4 string.
-// Derived from rotated_pole metadata:
-//   grid_north_pole_latitude  = 60.31
-//   grid_north_pole_longitude = 147.63
-// o_lon_p = grid_north_pole_longitude - 180 = -32.37
+// Derived from rotated_pole metadata via pyproj:
+//   grid_north_pole_latitude  = 60.31  → o_lat_p = 60.31
+//   grid_north_pole_longitude = 147.63 → lon_0 = 147.63 + 180 = 327.63, o_lon_p = 0
 export const SWWA_PROJ4 =
-  "+proj=ob_tran +o_proj=longlat +o_lon_p=-32.37 +o_lat_p=60.31 +a=6371229 +no_defs";
+  "+proj=ob_tran +o_proj=longlat +o_lon_p=0 +o_lat_p=60.31 +lon_0=327.63 +a=6371229 +no_defs";
 
 // Edge bounds [xMin, yMin, xMax, yMax] in rotated-pole degrees.
 // Derived from rlat (min=-11.3428, max=-1.5572) and rlon (min=147.6512, max=160.4288).
@@ -69,6 +68,8 @@ export function useZarrDirectMap(
   spatialDims: { lat: string; lon: string },
   colormap: string[],
   fillValue?: number,
+  proj4?: string,
+  bounds?: [number, number, number, number],
 ) {
   const mapContainer = ref<HTMLDivElement | null>(null);
   const timeIndex = ref(0);
@@ -96,23 +97,10 @@ export function useZarrDirectMap(
 
     map = new maplibregl.Map({
       container: mapContainer.value,
-      style: {
-        version: 8,
-        sources: {},
-        layers: [
-          {
-            id: "background",
-            type: "background",
-            paint: { "background-color": "#1a1a2e" },
-          },
-        ],
-      },
-      // Centre on the rlat/rlon coordinate space (rotated-pole degrees).
-      // rlat ≈ -11 to -1.5, rlon ≈ 147.6 to 160.4 — data appears here
-      // without proj4 reprojection. Once reprojection is working this
-      // can be changed to the geographic SW WA centre [116.5, -31].
-      center: [154, -6],
-      zoom: 3,
+      style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+      // Centre on geographic SW WA [116°E, -32°S]
+      center: [116, -32],
+      zoom: 4,
     });
 
     map.addControl(new maplibregl.NavigationControl(), "top-right");
@@ -130,10 +118,8 @@ export function useZarrDirectMap(
         opacity: opacity.value / 100,
         zarrVersion: 3,
         spatialDimensions: spatialDims,
-        // proj4 and bounds deliberately omitted for now so zarr-layer
-        // treats rlat/rlon as plain geographic lat/lon. Data will render
-        // in the wrong position (~NE of Australia) but confirms the
-        // fetch pipeline works before adding reprojection.
+        ...(proj4 !== undefined && { proj4 }),
+        ...(bounds !== undefined && { bounds }),
         ...(fillValue !== undefined && { fillValue }),
         onLoadingStateChange: (state) => {
           loadingState.value = state;
