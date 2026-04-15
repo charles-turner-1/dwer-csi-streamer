@@ -16,14 +16,14 @@ export const COLORMAP_TEMP = [
 ];
 
 export const COLORMAP_PRECIP = [
-  "#f7fbff",
-  "#deebf7",
-  "#c6dbef",
-  "#9ecae1",
-  "#6baed6",
-  "#4292c6",
-  "#2171b5",
-  "#084594",
+  "#440154",
+  "#472d7b",
+  "#3b528b",
+  "#2c728e",
+  "#21918c",
+  "#28ae80",
+  "#5ec962",
+  "#fde725",
 ];
 
 // SWWA CORDEX rotated-pole proj4 string.
