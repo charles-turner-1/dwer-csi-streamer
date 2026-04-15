@@ -1,6 +1,7 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import maplibregl from "maplibre-gl";
 import { ZarrLayer, type LoadingState } from "@carbonplan/zarr-layer";
+import { FetchStore, root, open, get } from "zarrita";
 
 export const COLORMAP_TEMP = [
   "#440154",
@@ -40,6 +41,26 @@ export const SWWA_BOUNDS: [number, number, number, number] = [
 
 export const SWWA_SPATIAL_DIMS = { lat: "rlat", lon: "rlon" };
 
+async function fetchTimeDates(source: string): Promise<string[]> {
+  const store = new FetchStore(source);
+  const arr = await open(root(store).resolve("time"), { kind: "array" });
+  const chunk = await get(arr);
+  const data = chunk.data as Float64Array;
+  const base = Date.UTC(1949, 11, 1); // days since 1949-12-01
+  return Array.from(data, (v) =>
+    new Date(base + v * 86400000).toLocaleString("en-AU", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      // Disable hour/day/minute for now.
+      // hour: "2-digit",
+      // minute: "2-digit",
+      // hour12: false,
+      timeZone: "UTC",
+    }),
+  );
+}
+
 export function useZarrDirectMap(
   source: string,
   varName: string,
@@ -52,6 +73,7 @@ export function useZarrDirectMap(
   const mapContainer = ref<HTMLDivElement | null>(null);
   const timeIndex = ref(0);
   const opacity = ref(85);
+  const timeDates = ref<string[] | null>(null);
   const loadingState = ref<LoadingState>({
     loading: false,
     metadata: false,
@@ -67,6 +89,9 @@ export function useZarrDirectMap(
   }));
 
   onMounted(() => {
+    fetchTimeDates(source).then((dates) => {
+      timeDates.value = dates;
+    });
     if (!mapContainer.value) return;
 
     map = new maplibregl.Map({
@@ -141,6 +166,7 @@ export function useZarrDirectMap(
     mapContainer,
     timeIndex,
     timeSteps,
+    timeDates,
     opacity,
     loadingState,
     colourbarStyle,

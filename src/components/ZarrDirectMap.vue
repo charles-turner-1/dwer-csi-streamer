@@ -7,9 +7,10 @@
           class="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap"
         >
           Time step:
-          <span class="font-mono text-blue-600 dark:text-blue-400"
-            >{{ timeIndex + 1 }} / {{ timeSteps }}</span
-          >
+          <span class="font-mono text-blue-600 dark:text-blue-400">
+            <template v-if="timeDates">{{ timeDates[timeIndex] }}</template>
+            <template v-else>{{ timeIndex + 1 }} / {{ timeSteps }}</template>
+          </span>
         </label>
         <input
           type="range"
@@ -169,6 +170,7 @@ const zarrMap = useZarrDirectMap(
 const {
   timeIndex,
   timeSteps,
+  timeDates,
   opacity,
   loadingState,
   colourbarStyle,
