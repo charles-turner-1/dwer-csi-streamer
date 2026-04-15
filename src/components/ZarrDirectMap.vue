@@ -140,6 +140,8 @@ const props = defineProps<{
   colormap: string[];
   climUnit?: string;
   fillValue?: number;
+  proj4?: string;
+  bounds?: [number, number, number, number];
 }>();
 
 const climState = reactive({
@@ -166,6 +168,8 @@ const zarrMap = useZarrDirectMap(
   props.spatialDims,
   props.colormap,
   props.fillValue,
+  props.proj4,
+  props.bounds,
 );
 const {
   timeIndex,
