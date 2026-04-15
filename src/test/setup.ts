@@ -16,10 +16,14 @@ class ResizeObserverMock implements ResizeObserver {
   unobserve(_target: Element): void {}
   disconnect(): void {}
 }
-globalThis.ResizeObserver = ResizeObserverMock as unknown as typeof ResizeObserver;
+globalThis.ResizeObserver =
+  ResizeObserverMock as unknown as typeof ResizeObserver;
 
 // HTMLCanvasElement.getContext is needed by maplibre-gl
-HTMLCanvasElement.prototype.getContext = (_contextId: string, _options?: unknown) => null;
+HTMLCanvasElement.prototype.getContext = (
+  _contextId: string,
+  _options?: unknown,
+) => null;
 
 // Add any global mocks or configuration here
 // Example: mock window.matchMedia for responsive tests
