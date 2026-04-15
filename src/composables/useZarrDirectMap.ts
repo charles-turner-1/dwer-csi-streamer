@@ -97,8 +97,7 @@ export function useZarrDirectMap(
 
     map = new maplibregl.Map({
       container: mapContainer.value,
-      style:
-        "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+      style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
       // Centre on geographic SW WA [116°E, -32°S]
       center: [116, -32],
       zoom: 4,
