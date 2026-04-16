@@ -72,6 +72,7 @@ export function useZarrDirectMap(
   proj4?: string,
   bounds?: [number, number, number, number],
   unitConverter?: UnitConverter,
+  mapProjection?: maplibregl.ProjectionSpecification,
 ) {
   const mapContainer = ref<HTMLDivElement | null>(null);
   const timeIndex = ref(0);
@@ -134,6 +135,8 @@ export function useZarrDirectMap(
           loadingState.value = state;
         },
       });
+
+      map.setProjection({ type: 'globe'})
 
       map.addLayer(zarrLayer as unknown as maplibregl.CustomLayerInterface);
 
