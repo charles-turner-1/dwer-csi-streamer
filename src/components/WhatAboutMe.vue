@@ -43,26 +43,13 @@
       <span>{{ wam.error.value }}</span>
     </div>
 
-    <!-- Progress bar -->
-    <div v-if="wam.loading.value" class="mb-4">
-      <div
-        class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1"
-      >
-        <span>Loading climate data…</span>
-        <span>{{ wam.progress.value }}%</span>
-      </div>
-      <div
-        class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden"
-      >
-        <div
-          class="h-full bg-blue-500 rounded-full transition-all duration-200"
-          :style="{ width: `${wam.progress.value}%` }"
-        ></div>
-      </div>
-      <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">
-        Fetching {{ TOTAL_STEPS }} monthly chunks — this takes 15–30 seconds on
-        first load.
-      </p>
+    <!-- Loading spinner -->
+    <div
+      v-if="wam.loading.value"
+      class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4"
+    >
+      <i class="pi pi-spin pi-spinner"></i>
+      <span>Loading climate data…</span>
     </div>
 
     <!-- Results -->
@@ -77,28 +64,28 @@
             wam.placeName.value
           }}</strong
           >, the average daily maximum temperature in the
-          <strong>{{ lastDecadeLabel }}</strong> was
+          <strong>{{ wam.lastDecadeLabel.value }}</strong> was
           <span
             class="font-bold text-lg"
             :class="
-              deltaPositive
+              wam.deltaPositive.value
                 ? 'text-orange-600 dark:text-orange-400'
                 : 'text-blue-600 dark:text-blue-400'
             "
             >{{ wam.headline.value.lastMean }} °C</span
           >, compared to
           <strong>{{ wam.headline.value.firstMean }} °C</strong> in the
-          <strong>{{ firstDecadeLabel }}</strong
+          <strong>{{ wam.firstDecadeLabel.value }}</strong
           >.
           <span
             class="font-semibold"
             :class="
-              deltaPositive
+              wam.deltaPositive.value
                 ? 'text-orange-600 dark:text-orange-400'
                 : 'text-blue-600 dark:text-blue-400'
             "
           >
-            That's {{ deltaPositive ? "+" : ""
+            That's {{ wam.deltaPositive.value ? "+" : ""
             }}{{ wam.headline.value.delta }} °C over the period.
           </span>
         </p>
@@ -132,7 +119,7 @@ import {
   type TooltipItem,
 } from "chart.js";
 import { Line } from "vue-chartjs";
-import { useWhatAboutMe } from "@/composables/useWhatAboutMe";
+import { useWhatAboutMe, type NominatimSuggestion } from "@/composables/useWhatAboutMe";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 
@@ -146,44 +133,55 @@ ChartJS.register(
   Legend,
 );
 
-const TOTAL_STEPS = 492;
-
 const props = defineProps<{ source: string }>();
 
 const wam = useWhatAboutMe(props.source);
+
+/** Bound to the text input. */
 const addressQuery = ref("");
 
-function onSearch() {
-  if (!addressQuery.value.trim()) return;
-  wam.searchByAddress(addressQuery.value.trim());
+
+/**
+ * Called when the user picks an item from the dropdown.
+ * Passes pre-resolved coordinates directly to the composable — no second geocode round-trip.
+ */
+function onSelect(event: { value: NominatimSuggestion }) {
+  wam.searchByCoords(event.value.lat, event.value.lon, event.value.label);
 }
 
+/**
+ * Called when the user presses Enter or clicks the Search button.
+ * Only fires a free-text geocode if the user hasn’t already selected a suggestion
+ * (in which case {@link onSelect} already handled the search).
+ */
+function onSearch() {
+  if (typeof addressQuery.value !== "string") return;
+  const q = addressQuery.value.trim();
+  if (!q) return;
+  wam.searchByAddress(q);
+}
+
+
+/** Triggers a browser geolocation lookup via the composable. */
 function onLocate() {
   wam.searchByLocation();
 }
 
-// Decade labels: pull years from the first/last items of timeLabels
-const firstDecadeLabel = computed(() => {
-  if (!wam.headline.value) return "";
-  return `${wam.headline.value.firstLabel}s`;
-});
-const lastDecadeLabel = computed(() => {
-  if (!wam.headline.value) return "";
-  return `${wam.headline.value.lastLabel}s`;
-});
-const deltaPositive = computed(() => (wam.headline.value?.delta ?? 0) >= 0);
-
-// Show only one label per year on the x-axis (first month of each year)
+/**
+ * Generates sparse x-axis tick labels: only shows the year every 24 months
+ * (i.e. every 2 years) to avoid overcrowding the chart axis.
+ * Empty strings are intentional — Chart.js renders no tick for them.
+ */
 const sparseLabels = computed(() => {
   const labels = wam.timeLabels.value;
   if (!labels) return [];
   return labels.map((label, i) => {
-    // Label format is "D Mon YYYY" — show year string every 12 months
-    const isJanuary = i % 12 === 0;
-    return isJanuary ? (label.split(" ").at(-1) ?? "") : "";
+    const isEvenYearJanuary = i % 24 === 0;
+    return isEvenYearJanuary ? (label.split(" ").at(-1) ?? "") : "";
   });
 });
 
+/** Chart.js dataset config derived from the composable’s reactive time series refs. */
 const chartData = computed(() => ({
   labels: sparseLabels.value,
   datasets: [
@@ -217,6 +215,7 @@ const chartData = computed(() => ({
   ],
 }));
 
+/** Static Chart.js options shared across all renders of this component. */
 const chartOptions = {
   responsive: true,
   animation: false as const,

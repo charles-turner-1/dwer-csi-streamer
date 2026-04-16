@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { FetchStore, root, open, get, slice } from "zarrita";
 import { fetchTimeDates } from "./useZarrDirectMap";
 import { kelvinToCelsius } from "@/utils/unitConversion";
@@ -7,19 +7,71 @@ import { kelvinToCelsius } from "@/utils/unitConversion";
 
 const NOMINATIM_BASE = "https://nominatim.openstreetmap.org";
 
+/** Number of longitude grid columns in the WRF domain (used to convert a flat index to [rlat, rlon]). */
 const RLON_N = 364;
 
-// Maximum distance (degrees, great-circle approximation) before we consider
-// a point outside the model domain.
+/**
+ * Maximum great-circle distance (degrees) between a target coordinate and the
+ * nearest grid point before the point is considered outside the model domain.
+ */
 const MAX_DOMAIN_DISTANCE_DEG = 2.0;
 
+/** Total number of monthly time steps in the dataset (41 years × 12 months). */
 const TOTAL_TIME_STEPS = 492;
 
-// Missing-value threshold — the store uses 1e20 for land-mask fill
+/** Values above this threshold are treated as fill/missing (the store uses 1e20 for its land-mask). */
 const FILL_THRESHOLD = 1e19;
 
 // ─── Geocoding helpers ────────────────────────────────────────────────────────
 
+/**
+ * A single address suggestion returned by the Nominatim autocomplete search.
+ * The `label` is a human-readable short form (first 3 comma-parts of
+ * `display_name`) suitable for display in a dropdown.
+ */
+export interface NominatimSuggestion {
+  label: string;
+  lat: number;
+  lon: number;
+}
+
+/**
+ * Queries Nominatim for up to 5 Australian address suggestions matching `query`.
+ * Returns an empty array on network failure or if the query is too short (<2 chars).
+ * Intended to feed an autocomplete dropdown — results are pre-scoped to Australia
+ * via `countrycodes=au` to avoid ambiguous matches (e.g. Albany, WA vs Albany, NY).
+ */
+async function suggestAddresses(query: string): Promise<NominatimSuggestion[]> {
+  if (query.trim().length < 2) return [];
+  const url = new URL(`${NOMINATIM_BASE}/search`);
+  url.searchParams.set("q", query);
+  url.searchParams.set("format", "json");
+  url.searchParams.set("limit", "5");
+  url.searchParams.set("countrycodes", "au");
+
+  try {
+    const res = await fetch(url.toString(), {
+      headers: { "Accept-Language": "en" },
+    });
+    if (!res.ok) return [];
+    const data: Array<{ lat: string; lon: string; display_name: string }> =
+      await res.json();
+    return data.map((item) => ({
+      label: item.display_name.split(",").slice(0, 3).join(",").trim(),
+      lat: parseFloat(item.lat),
+      lon: parseFloat(item.lon),
+    }));
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Geocodes a free-text address string to coordinates using Nominatim.
+ * Scoped to Australia (`countrycodes=au`). Throws if no result is found.
+ * Prefer {@link suggestAddresses} + coordinate selection where possible to
+ * avoid a second round-trip after the user has already chosen a suggestion.
+ */
 async function geocodeAddress(
   query: string,
 ): Promise<{ lat: number; lon: number; displayName: string }> {
@@ -27,6 +79,7 @@ async function geocodeAddress(
   url.searchParams.set("q", query);
   url.searchParams.set("format", "json");
   url.searchParams.set("limit", "1");
+  url.searchParams.set("countrycodes", "au");
 
   const res = await fetch(url.toString(), {
     headers: { "Accept-Language": "en" },
@@ -43,6 +96,10 @@ async function geocodeAddress(
   };
 }
 
+/**
+ * Reverse-geocodes a coordinate pair to a human-readable address string using
+ * Nominatim. Falls back to a decimal coordinate string on any failure.
+ */
 async function reverseGeocode(lat: number, lon: number): Promise<string> {
   const url = new URL(`${NOMINATIM_BASE}/reverse`);
   url.searchParams.set("lat", lat.toString());
@@ -63,6 +120,10 @@ async function reverseGeocode(lat: number, lon: number): Promise<string> {
   }
 }
 
+/**
+ * Wraps the browser Geolocation API in a Promise. Rejects if geolocation is
+ * unavailable or the user denies permission.
+ */
 async function getBrowserLocation(): Promise<{ lat: number; lon: number }> {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
@@ -79,6 +140,12 @@ async function getBrowserLocation(): Promise<{ lat: number; lon: number }> {
 
 // ─── Grid helpers ─────────────────────────────────────────────────────────────
 
+/**
+ * The result of snapping a target coordinate to the nearest WRF grid cell.
+ * `rlatIdx` / `rlonIdx` are the row/column indices into the (rlat, rlon)
+ * dimensions of the Zarr array; `nearestLat` / `nearestLon` are the actual
+ * coordinates of that cell (useful for distance sanity-checks).
+ */
 interface GridPoint {
   rlatIdx: number;
   rlonIdx: number;
@@ -90,6 +157,11 @@ interface GridPoint {
 let latGridCache: Float32Array | null = null;
 let lonGridCache: Float32Array | null = null;
 
+/**
+ * Fetches the flat 2-D geographic coordinate arrays (`lat`, `lon`) from the
+ * Zarr store and caches them in module-level variables so subsequent calls
+ * are free. The arrays are stored in row-major order with `RLON_N` columns.
+ */
 async function fetchLatLonGrid(
   store: FetchStore,
 ): Promise<{ latGrid: Float32Array; lonGrid: Float32Array }> {
@@ -108,6 +180,12 @@ async function fetchLatLonGrid(
 
 // Find the nearest grid point by minimising squared Euclidean distance over
 // the real 2-D lat/lon arrays stored in the Zarr — no projection maths needed.
+/**
+ * Finds the WRF grid cell closest to (`targetLat`, `targetLon`) by minimising
+ * squared Euclidean distance over the real geographic coordinate arrays.
+ * Returns `null` if the nearest cell is farther than {@link MAX_DOMAIN_DISTANCE_DEG},
+ * indicating the point is outside the model domain.
+ */
 async function findNearestGridPoint(
   store: FetchStore,
   targetLat: number,
@@ -144,7 +222,11 @@ async function findNearestGridPoint(
 
 // ─── Statistics ───────────────────────────────────────────────────────────────
 
-// Centred 12-month rolling average. Null where the window is incomplete.
+/**
+ * Computes a centred 12-month rolling average over a monthly time series.
+ * Output values within 6 months of either end are `null` because the window
+ * is incomplete — this is intentional so the chart line doesn't taper.
+ */
 function centeredRollingAvg(values: number[]): (number | null)[] {
   const HALF = 6; // 6 months each side = 12-month window
   const result: (number | null)[] = new Array(values.length).fill(null);
@@ -162,8 +244,12 @@ function centeredRollingAvg(values: number[]): (number | null)[] {
   return result;
 }
 
-// Ordinary least-squares linear regression, ignoring NaN values.
-// Returns trend line values at every input index.
+/**
+ * Fits an ordinary least-squares linear regression to `values`, ignoring NaN
+ * entries. Returns the predicted value at every index (i.e. the trend line
+ * evaluated over the full time axis), or an array of NaN if fewer than 2
+ * valid points exist.
+ */
 function linearTrend(values: number[]): number[] {
   const pts = values.map((y, x) => ({ x, y })).filter((p) => !isNaN(p.y));
 
@@ -186,7 +272,10 @@ function linearTrend(values: number[]): number[] {
   return values.map((_, i) => slope * i + intercept);
 }
 
-// Average over a slice of the series, skipping NaN.
+/**
+ * Returns the arithmetic mean of `values[start..end)`, skipping NaN.
+ * Returns NaN if the slice contains no valid values.
+ */
 function meanSlice(values: number[], start: number, end: number): number {
   const slice = values.slice(start, end).filter((v) => !isNaN(v));
   if (!slice.length) return NaN;
@@ -195,6 +284,12 @@ function meanSlice(values: number[], start: number, end: number): number {
 
 // ─── Composable ───────────────────────────────────────────────────────────────
 
+/**
+ * Summary statistics comparing the first and last decade of the time series.
+ * `firstMean` / `lastMean` are decadal averages in °C; `delta` is the
+ * difference (`lastMean − firstMean`). `firstLabel` / `lastLabel` are the
+ * starting years of those decades (e.g. `"1980"`, `"2030"`) used in the UI copy.
+ */
 export interface HeadlineStat {
   firstMean: number;
   lastMean: number;
@@ -203,9 +298,21 @@ export interface HeadlineStat {
   lastLabel: string;
 }
 
+/**
+ * Composable that drives the "What about me?" feature.
+ *
+ * Given a Zarr store URL (`source`), it exposes reactive state and three ways
+ * to trigger a lookup:
+ * - {@link searchByAddress} — geocodes a free-text string then fetches data
+ * - {@link searchByCoords} — skips geocoding when coords are already known (e.g. from autocomplete)
+ * - {@link searchByLocation} — uses the browser Geolocation API
+ *
+ * On success, `timeSeries`, `rollingAvg`, `trendLine`, `headline`, and
+ * `timeLabels` are all populated. On failure, `error` is set and data refs
+ * remain null.
+ */
 export function useWhatAboutMe(source: string) {
   const loading = ref(false);
-  const progress = ref(0);
   const error = ref<string | null>(null);
   const placeName = ref<string | null>(null);
   const timeSeries = ref<number[] | null>(null);
@@ -214,9 +321,14 @@ export function useWhatAboutMe(source: string) {
   const headline = ref<HeadlineStat | null>(null);
   const timeLabels = ref<string[] | null>(null);
 
+  /**
+   * Core data-fetching routine. Opens the Zarr store, snaps the coordinate to
+   * the nearest grid cell, fetches the full `tasmax` time axis for that cell in
+   * a single HTTP request, converts K→°C, and computes derived statistics.
+   * All reactive state is reset at the start of each call.
+   */
   async function fetchTimeSeries(lat: number, lon: number, name: string) {
     loading.value = true;
-    progress.value = 0;
     error.value = null;
     timeSeries.value = null;
     rollingAvg.value = null;
@@ -249,13 +361,11 @@ export function useWhatAboutMe(source: string) {
 
       // 4. Single fetch: the store is chunked [492, ~31, ~28] so slicing to
       //    one spatial point pulls the entire time axis in one HTTP request.
-      progress.value = 50;
       const pointChunk = await get(arr, [
         null,
         slice(gridPoint.rlatIdx, gridPoint.rlatIdx + 1),
         slice(gridPoint.rlonIdx, gridPoint.rlonIdx + 1),
       ]);
-      progress.value = 100;
 
       const raw = pointChunk.data as Float32Array;
       const values = Array.from(
@@ -308,6 +418,7 @@ export function useWhatAboutMe(source: string) {
     }
   }
 
+  /** Geocodes `query` (AU-scoped) then delegates to {@link fetchTimeSeries}. */
   async function searchByAddress(query: string) {
     error.value = null;
     try {
@@ -321,6 +432,16 @@ export function useWhatAboutMe(source: string) {
     }
   }
 
+  /**
+   * Skips geocoding and calls {@link fetchTimeSeries} directly with pre-resolved
+   * coordinates. Use this when the user selects a suggestion from the autocomplete
+   * dropdown — the coordinates are already known from the Nominatim response.
+   */
+  async function searchByCoords(lat: number, lon: number, displayName: string) {
+    await fetchTimeSeries(lat, lon, displayName);
+  }
+
+  /** Requests the browser's current position, reverse-geocodes it, then delegates to {@link fetchTimeSeries}. */
   async function searchByLocation() {
     error.value = null;
     try {
@@ -334,9 +455,21 @@ export function useWhatAboutMe(source: string) {
     }
   }
 
+  /** `"1980s"` etc — the decade label for the first 10 years of the series. */
+  const firstDecadeLabel = computed(() =>
+    headline.value ? `${headline.value.firstLabel}s` : "",
+  );
+
+  /** `"2020s"` etc — the decade label for the last 10 years of the series. */
+  const lastDecadeLabel = computed(() =>
+    headline.value ? `${headline.value.lastLabel}s` : "",
+  );
+
+  /** `true` when the temperature delta is zero or positive (warming). */
+  const deltaPositive = computed(() => (headline.value?.delta ?? 0) >= 0);
+
   return {
     loading,
-    progress,
     error,
     placeName,
     timeSeries,
@@ -344,7 +477,12 @@ export function useWhatAboutMe(source: string) {
     trendLine,
     headline,
     timeLabels,
+    firstDecadeLabel,
+    lastDecadeLabel,
+    deltaPositive,
     searchByAddress,
+    searchByCoords,
     searchByLocation,
+    suggestAddresses,
   };
 }

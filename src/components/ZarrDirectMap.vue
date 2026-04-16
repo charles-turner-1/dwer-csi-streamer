@@ -29,7 +29,7 @@
           :min="0"
           :max="100"
           @update:modelValue="onOpacityChange"
-          class="flex-1"
+          class="flex-1 sm:min-w-24 sm:ml-2"
         />
       </div>
     </div>

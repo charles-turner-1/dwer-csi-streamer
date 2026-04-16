@@ -1,5 +1,6 @@
 <template>
   <div class="container mx-auto mt-10 p-3 sm:p-6">
+    <div class="hidden sm:block">
     <RouterLink
       to="/"
       class="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors my-4"
@@ -7,11 +8,12 @@
       <v-icon name="hi-arrow-left" scale="0.9" />
       Back to Home
     </RouterLink>
+    </div>
 
-    <h1 class="text-2xl font-bold text-gray-900 dark:text-white mt-2 mb-2">
+    <h1 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mt-2 mb-2 text-center sm:text-left">
       DWER Climate Science Initiative
     </h1>
-    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 text-center sm:text-left">
       WRF-based regional climate model output (ERA5-driven, CORDEX SWWA domain)
       streamed directly from
       <a
@@ -26,76 +28,41 @@
     </p>
 
     <Tabs v-model:value="activeTab" class="mt-4">
-      <Select
-        v-model="activeTab"
-        :options="tabOptions"
-        optionLabel="label"
-        optionValue="value"
-        class="sm:hidden mb-3 w-full"
-      />
+      <div class="sm:hidden mb-3">
+        <Select
+          v-model="activeTab"
+          :options="tabOptions"
+          optionLabel="label"
+          optionValue="value"
+          class="w-full"
+        />
+      </div>
       <div class="hidden sm:block">
         <TabList>
           <Tab
-            value="tasmax"
+            v-for="v in variables"
+            :key="v.varName"
+            :value="v.varName"
             class="px-5 py-2.5 data-[p-active=false]:bg-slate-50 dark:data-[p-active=false]:bg-slate-700"
-            >Max Temperature</Tab
-          >
-          <Tab
-            value="tasmin"
-            class="px-5 py-2.5 data-[p-active=false]:bg-slate-50 dark:data-[p-active=false]:bg-slate-700"
-            >Min Temperature</Tab
-          >
-          <Tab
-            value="pr"
-            class="px-5 py-2.5 data-[p-active=false]:bg-slate-50 dark:data-[p-active=false]:bg-slate-700"
-            >Precipitation</Tab
+            >{{ v.label }}</Tab
           >
         </TabList>
       </div>
+
       <TabPanels>
-        <TabPanel value="tasmax">
+        <TabPanel v-for="v in variables" :key="v.varName" :value="v.varName">
           <ZarrDirectMap
             :source="STORE_URL_TILES"
-            varName="tasmax"
+            :varName="v.varName"
             :timeSteps="492"
-            :clim="[6.85, 51.85]"
+            :clim="v.clim"
             :spatialDims="SWWA_SPATIAL_DIMS"
-            :colormap="COLORMAP_TEMP"
-            climUnit=" °C"
+            :colormap="v.colormap"
+            :climUnit="v.climUnit"
             :fillValue="1e20"
             :proj4="SWWA_PROJ4"
             :bounds="SWWA_BOUNDS"
-            :unitConverter="kelvinToCelsius"
-          />
-        </TabPanel>
-        <TabPanel value="tasmin">
-          <ZarrDirectMap
-            :source="STORE_URL_TILES"
-            varName="tasmin"
-            :timeSteps="492"
-            :clim="[-3.15, 36.85]"
-            :spatialDims="SWWA_SPATIAL_DIMS"
-            :colormap="COLORMAP_TEMP"
-            climUnit=" °C"
-            :fillValue="1e20"
-            :proj4="SWWA_PROJ4"
-            :bounds="SWWA_BOUNDS"
-            :unitConverter="kelvinToCelsius"
-          />
-        </TabPanel>
-        <TabPanel value="pr">
-          <ZarrDirectMap
-            :source="STORE_URL_TILES"
-            varName="pr"
-            :timeSteps="492"
-            :clim="[0, 8.64]"
-            :spatialDims="SWWA_SPATIAL_DIMS"
-            :colormap="COLORMAP_PRECIP"
-            climUnit=" mm/day"
-            :fillValue="1e20"
-            :proj4="SWWA_PROJ4"
-            :bounds="SWWA_BOUNDS"
-            :unitConverter="precipToMmPerDay"
+            :unitConverter="v.unitConverter"
           />
         </TabPanel>
       </TabPanels>
@@ -126,11 +93,38 @@ import {
 import { kelvinToCelsius, precipToMmPerDay } from "@/utils/unitConversion";
 
 const activeTab = ref("tasmax");
-const tabOptions = [
-  { label: "Max Temperature", value: "tasmax" },
-  { label: "Min Temperature", value: "tasmin" },
-  { label: "Precipitation", value: "pr" },
+
+const variables = [
+  {
+    varName: "tasmax",
+    label: "Max Temperature",
+    clim: [6.85, 51.85] as [number, number],
+    colormap: COLORMAP_TEMP,
+    climUnit: " °C",
+    unitConverter: kelvinToCelsius,
+  },
+  {
+    varName: "tasmin",
+    label: "Min Temperature",
+    clim: [-3.15, 36.85] as [number, number],
+    colormap: COLORMAP_TEMP,
+    climUnit: " °C",
+    unitConverter: kelvinToCelsius,
+  },
+  {
+    varName: "pr",
+    label: "Precipitation",
+    clim: [0, 8.64] as [number, number],
+    colormap: COLORMAP_PRECIP,
+    climUnit: " mm/day",
+    unitConverter: precipToMmPerDay,
+  },
 ];
+
+const tabOptions = variables.map(({ varName, label }) => ({
+  value: varName,
+  label,
+}));
 
 const STORE_URL_TILES =
   "https://projects.pawsey.org.au/dwer-zarr-store/data.zarr";
