@@ -10,16 +10,21 @@
 
     <!-- Input row -->
     <div class="flex flex-wrap gap-2 mb-4">
-      <InputText
+      <AutoComplete
         v-model="addressQuery"
+        :suggestions="suggestions"
+        optionLabel="label"
         placeholder="e.g. Perth CBD, Fremantle, Margaret River…"
         class="flex-1 min-w-48"
+        @complete="onComplete"
+        @option-select="onSelect"
         @keydown.enter="onSearch"
         :disabled="wam.loading.value"
+        fluid
       />
       <Button
         @click="onSearch"
-        :disabled="wam.loading.value || !addressQuery.trim()"
+        :disabled="wam.loading.value || !queryString.trim()"
         icon="pi pi-search"
         label="Search"
       />
@@ -123,7 +128,7 @@ import {
   useWhatAboutMe,
   type NominatimSuggestion,
 } from "@/composables/useWhatAboutMe";
-import InputText from "primevue/inputtext";
+import AutoComplete from "primevue/autocomplete";
 import Button from "primevue/button";
 
 ChartJS.register(
@@ -141,7 +146,20 @@ const props = defineProps<{ source: string }>();
 const wam = useWhatAboutMe(props.source);
 
 /** Bound to the text input. */
-const addressQuery = ref("");
+const addressQuery = ref<string | NominatimSuggestion>("");
+
+const queryString = computed(() =>
+  typeof addressQuery.value === "string"
+    ? addressQuery.value
+    : addressQuery.value.label,
+);
+
+/** Populated by Nominatim as the user types. */
+const suggestions = ref<NominatimSuggestion[]>([]);
+
+async function onComplete(event: { query: string }) {
+  suggestions.value = await wam.suggestAddresses(event.query);
+}
 
 /**
  * Called when the user picks an item from the dropdown.
