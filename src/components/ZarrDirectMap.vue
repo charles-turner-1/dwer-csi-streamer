@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- Controls -->
-    <div class="flex flex-wrap items-center gap-4 mb-4">
-      <div class="flex items-center gap-3 flex-1 min-w-[220px]">
+    <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
+      <div class="flex items-center gap-3 flex-1">
         <label
           class="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap"
         >
@@ -12,26 +12,24 @@
             <template v-else>{{ timeIndex + 1 }} / {{ timeSteps }}</template>
           </span>
         </label>
-        <input
-          type="range"
-          min="0"
+        <Slider
+          v-model="timeIndex"
+          :min="0"
           :max="timeSteps - 1"
-          v-model.number="timeIndex"
-          @input="onTimeChange"
-          class="flex-1 accent-blue-600"
+          @update:modelValue="onTimeChange"
+          class="flex-1"
         />
       </div>
       <div class="flex items-center gap-2">
         <label class="text-sm font-medium text-gray-700 dark:text-gray-300"
           >Opacity:</label
         >
-        <input
-          type="range"
-          min="0"
-          max="100"
-          v-model.number="opacity"
-          @input="onOpacityChange"
-          class="w-24 accent-blue-600"
+        <Slider
+          v-model="opacity"
+          :min="0"
+          :max="100"
+          @update:modelValue="onOpacityChange"
+          class="flex-1"
         />
       </div>
     </div>
@@ -40,8 +38,7 @@
     <div class="relative">
       <div
         :ref="zarrMap.mapContainer"
-        class="w-full rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700"
-        style="height: 480px"
+        class="w-full rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 h-[300px] sm:h-[480px]"
       ></div>
       <div
         v-if="loadingState.loading"
@@ -72,7 +69,7 @@
         <div class="flex-1 h-3 rounded" :style="colourbarStyle"></div>
         <span class="w-16 font-mono">{{ climState.upper }}{{ climUnit }}</span>
       </div>
-      <div class="flex items-center gap-4">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
         <div class="flex items-center gap-2 flex-1">
           <label
             class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap"
@@ -128,6 +125,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { useZarrDirectMap } from "@/composables/useZarrDirectMap";
 import type { UnitConverter } from "@/utils/unitConversion";
 import InputNumber from "primevue/inputnumber";
+import Slider from "primevue/slider";
 import { usePosthog } from "@/composables/usePosthog";
 
 const { capture } = usePosthog();

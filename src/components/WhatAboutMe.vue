@@ -10,31 +10,28 @@
 
     <!-- Input row -->
     <div class="flex flex-wrap gap-2 mb-4">
-      <input
+      <InputText
         v-model="addressQuery"
-        type="text"
         placeholder="e.g. Perth CBD, Fremantle, Margaret River…"
-        class="flex-1 min-w-48 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        class="flex-1 min-w-48"
         @keydown.enter="onSearch"
         :disabled="wam.loading.value"
       />
-      <button
+      <Button
         @click="onSearch"
         :disabled="wam.loading.value || !addressQuery.trim()"
-        class="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium transition-colors"
-      >
-        <i class="pi pi-search text-xs"></i>
-        Search
-      </button>
-      <button
+        icon="pi pi-search"
+        label="Search"
+      />
+      <Button
         @click="onLocate"
         :disabled="wam.loading.value"
-        title="Use my current location"
-        class="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed text-gray-700 dark:text-gray-300 text-sm font-medium transition-colors"
-      >
-        <i class="pi pi-map-marker text-xs"></i>
-        Use my location
-      </button>
+        icon="pi pi-map-marker"
+        label="Use my location"
+        severity="secondary"
+        outlined
+        class="w-full sm:w-auto"
+      />
     </div>
 
     <!-- Error banner -->
@@ -136,6 +133,8 @@ import {
 } from "chart.js";
 import { Line } from "vue-chartjs";
 import { useWhatAboutMe } from "@/composables/useWhatAboutMe";
+import InputText from "primevue/inputtext";
+import Button from "primevue/button";
 
 ChartJS.register(
   CategoryScale,

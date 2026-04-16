@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto mt-10 p-6">
+  <div class="container mx-auto mt-10 p-3 sm:p-6">
     <RouterLink
       to="/"
       class="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors my-4"
@@ -25,24 +25,33 @@
       monthly frequency, 492 time steps (1980–2021).
     </p>
 
-    <Tabs value="tasmax" class="mt-4">
-      <TabList>
-        <Tab
-          value="tasmax"
-          class="px-5 py-2.5 data-[p-active=false]:bg-slate-50 dark:data-[p-active=false]:bg-slate-700"
-          >Max Temperature</Tab
-        >
-        <Tab
-          value="tasmin"
-          class="px-5 py-2.5 data-[p-active=false]:bg-slate-50 dark:data-[p-active=false]:bg-slate-700"
-          >Min Temperature</Tab
-        >
-        <Tab
-          value="pr"
-          class="px-5 py-2.5 data-[p-active=false]:bg-slate-50 dark:data-[p-active=false]:bg-slate-700"
-          >Precipitation</Tab
-        >
-      </TabList>
+    <Tabs v-model:value="activeTab" class="mt-4">
+      <Select
+        v-model="activeTab"
+        :options="tabOptions"
+        optionLabel="label"
+        optionValue="value"
+        class="sm:hidden mb-3 w-full"
+      />
+      <div class="hidden sm:block">
+        <TabList>
+          <Tab
+            value="tasmax"
+            class="px-5 py-2.5 data-[p-active=false]:bg-slate-50 dark:data-[p-active=false]:bg-slate-700"
+            >Max Temperature</Tab
+          >
+          <Tab
+            value="tasmin"
+            class="px-5 py-2.5 data-[p-active=false]:bg-slate-50 dark:data-[p-active=false]:bg-slate-700"
+            >Min Temperature</Tab
+          >
+          <Tab
+            value="pr"
+            class="px-5 py-2.5 data-[p-active=false]:bg-slate-50 dark:data-[p-active=false]:bg-slate-700"
+            >Precipitation</Tab
+          >
+        </TabList>
+      </div>
       <TabPanels>
         <TabPanel value="tasmax">
           <ZarrDirectMap
@@ -97,12 +106,14 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import Tabs from "primevue/tabs";
 import TabList from "primevue/tablist";
 import Tab from "primevue/tab";
 import TabPanels from "primevue/tabpanels";
 import TabPanel from "primevue/tabpanel";
+import Select from "primevue/select";
 import ZarrDirectMap from "@/components/ZarrDirectMap.vue";
 import WhatAboutMe from "@/components/WhatAboutMe.vue";
 import {
@@ -113,6 +124,13 @@ import {
   COLORMAP_PRECIP,
 } from "@/composables/useZarrDirectMap";
 import { kelvinToCelsius, precipToMmPerDay } from "@/utils/unitConversion";
+
+const activeTab = ref("tasmax");
+const tabOptions = [
+  { label: "Max Temperature", value: "tasmax" },
+  { label: "Min Temperature", value: "tasmin" },
+  { label: "Precipitation", value: "pr" },
+];
 
 const STORE_URL_TILES =
   "https://projects.pawsey.org.au/dwer-zarr-store/data.zarr";

@@ -27,7 +27,9 @@ function mountDwerCsi() {
         Tab: { template: "<div><slot /></div>", props: ["value"] },
         TabPanels: tabPassThrough,
         TabPanel: { template: "<div><slot /></div>", props: ["value"] },
+        Select: true,
         ZarrDirectMap: true,
+        WhatAboutMe: true,
       },
     },
   });
