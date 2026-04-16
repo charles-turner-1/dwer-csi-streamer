@@ -10,36 +10,28 @@
 
     <!-- Input row -->
     <div class="flex flex-wrap gap-2 mb-4">
-      <div class="flex-1 min-w-48">
-        <AutoComplete
-          v-model="addressQuery"
-          :suggestions="suggestions"
-          option-label="label"
-          :disabled="wam.loading.value"
-          placeholder="e.g. Perth CBD, Fremantle, Margaret River…"
-          fluid
-          @complete="onComplete"
-          @option-select="onSelect"
-          @keydown.enter="onSearch"
-        />
-      </div>
-      <button
+      <InputText
+        v-model="addressQuery"
+        placeholder="e.g. Perth CBD, Fremantle, Margaret River…"
+        class="flex-1 min-w-48"
+        @keydown.enter="onSearch"
+        :disabled="wam.loading.value"
+      />
+      <Button
         @click="onSearch"
-        :disabled="!canSearch"
-        class="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium transition-colors"
-      >
-        <i class="pi pi-search text-xs"></i>
-        Search
-      </button>
-      <button
+        :disabled="wam.loading.value || !addressQuery.trim()"
+        icon="pi pi-search"
+        label="Search"
+      />
+      <Button
         @click="onLocate"
         :disabled="wam.loading.value"
-        title="Use my current location"
-        class="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed text-gray-700 dark:text-gray-300 text-sm font-medium transition-colors"
-      >
-        <i class="pi pi-map-marker text-xs"></i>
-        Use my location
-      </button>
+        icon="pi pi-map-marker"
+        label="Use my location"
+        severity="secondary"
+        outlined
+        class="w-full sm:w-auto"
+      />
     </div>
 
     <!-- Error banner -->
@@ -127,11 +119,12 @@ import {
   type TooltipItem,
 } from "chart.js";
 import { Line } from "vue-chartjs";
-import AutoComplete from "primevue/autocomplete";
 import {
   useWhatAboutMe,
   type NominatimSuggestion,
 } from "@/composables/useWhatAboutMe";
+import InputText from "primevue/inputtext";
+import Button from "primevue/button";
 
 ChartJS.register(
   CategoryScale,
@@ -147,22 +140,8 @@ const props = defineProps<{ source: string }>();
 
 const wam = useWhatAboutMe(props.source);
 
-/** Bound to the AutoComplete input; holds either a typed string or a selected suggestion object. */
-const addressQuery = ref<string | NominatimSuggestion>("");
-/** Suggestion list populated by {@link onComplete}. */
-const suggestions = ref<NominatimSuggestion[]>([]);
-let debounceTimer: ReturnType<typeof setTimeout> | null = null;
-
-/**
- * Called by AutoComplete on every keystroke. Debounced 150 ms to avoid
- * hammering the Nominatim API on every keypress.
- */
-async function onComplete(event: { query: string }) {
-  if (debounceTimer) clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(async () => {
-    suggestions.value = await wam.suggestAddresses(event.query);
-  }, 150);
-}
+/** Bound to the text input. */
+const addressQuery = ref("");
 
 /**
  * Called when the user picks an item from the dropdown.
@@ -183,13 +162,6 @@ function onSearch() {
   if (!q) return;
   wam.searchByAddress(q);
 }
-
-/** Disables the Search button while loading or when the input is empty. */
-const canSearch = computed(() => {
-  if (wam.loading.value) return false;
-  if (typeof addressQuery.value === "object") return true;
-  return !!addressQuery.value.trim();
-});
 
 /** Triggers a browser geolocation lookup via the composable. */
 function onLocate() {

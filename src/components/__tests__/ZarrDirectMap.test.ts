@@ -58,6 +58,12 @@ function mountComponent(propsOverride = {}) {
     props: { ...defaultProps, ...propsOverride },
     global: {
       stubs: {
+        // Stub PrimeVue Slider to a plain range input so existing queries work
+        Slider: {
+          template: `<input type="range" :value="modelValue" @input="$emit('update:modelValue', +$event.target.value)" />`,
+          props: ["modelValue"],
+          emits: ["update:modelValue"],
+        },
         // Stub PrimeVue InputNumber to a plain input so we can trigger events
         InputNumber: {
           template: `<input data-testid="input-number" :value="modelValue" @input="$emit('update:modelValue', +$event.target.value)" />`,
