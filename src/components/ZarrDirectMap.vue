@@ -32,6 +32,20 @@
           class="flex-1 sm:min-w-24 sm:ml-2"
         />
       </div>
+      <div class="flex items-center gap-2">
+        <label
+          class="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap"
+          >Projection:</label
+        >
+        <Select
+          v-model="projection"
+          :options="PROJECTION_OPTIONS"
+          optionLabel="label"
+          optionValue="value"
+          size="small"
+          @update:modelValue="onProjectionChange"
+        />
+      </div>
     </div>
 
     <!-- Map -->
@@ -120,12 +134,13 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed, watch } from "vue";
+import { reactive, computed, watch, ref } from "vue";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useZarrDirectMap } from "@/composables/useZarrDirectMap";
 import type { UnitConverter } from "@/utils/unitConversion";
 import InputNumber from "primevue/inputnumber";
 import Slider from "primevue/slider";
+import Select from "primevue/select";
 import { usePosthog } from "@/composables/usePosthog";
 
 const { capture } = usePosthog();
@@ -143,6 +158,13 @@ const props = defineProps<{
   bounds?: [number, number, number, number];
   unitConverter?: UnitConverter;
 }>();
+
+const PROJECTION_OPTIONS = [
+  { label: "Globe", value: "globe" },
+  { label: "Mercator", value: "mercator" },
+];
+
+const projection = ref("globe");
 
 const climState = reactive({
   lower: props.clim[0],
@@ -171,6 +193,7 @@ const zarrMap = useZarrDirectMap(
   props.proj4,
   props.bounds,
   props.unitConverter,
+  projection.value,
 );
 const {
   timeIndex,
@@ -181,6 +204,7 @@ const {
   colourbarStyle,
   onTimeChange: _onTimeChange,
   onOpacityChange: _onOpacityChange,
+  setProjection: _setProjection,
 } = zarrMap;
 
 // Track map load and errors
@@ -238,5 +262,13 @@ function resetClim() {
   climState.upper = props.clim[1];
   zarrMap.setClim([climState.lower, climState.upper]);
   capture("zarr_map_clim_reset", { var_name: props.varName });
+}
+
+function onProjectionChange() {
+  _setProjection(projection.value);
+  capture("zarr_map_projection_changed", {
+    var_name: props.varName,
+    projection: projection.value,
+  });
 }
 </script>

@@ -72,6 +72,7 @@ export function useZarrDirectMap(
   proj4?: string,
   bounds?: [number, number, number, number],
   unitConverter?: UnitConverter,
+  initialProjection = "globe",
 ) {
   const mapContainer = ref<HTMLDivElement | null>(null);
   const timeIndex = ref(0);
@@ -135,6 +136,10 @@ export function useZarrDirectMap(
         },
       });
 
+      map.setProjection({
+        type: initialProjection,
+      } as maplibregl.ProjectionSpecification);
+
       map.addLayer(zarrLayer as unknown as maplibregl.CustomLayerInterface);
 
       // Coast outlines on top of the data layer — stroke the water polygons
@@ -173,6 +178,10 @@ export function useZarrDirectMap(
     zarrLayer?.setClim(rawClim);
   }
 
+  function setProjection(type: string) {
+    map?.setProjection({ type } as maplibregl.ProjectionSpecification);
+  }
+
   return {
     mapContainer,
     timeIndex,
@@ -184,5 +193,6 @@ export function useZarrDirectMap(
     onTimeChange,
     onOpacityChange,
     setClim,
+    setProjection,
   };
 }

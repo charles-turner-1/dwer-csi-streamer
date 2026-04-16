@@ -12,6 +12,7 @@ import { useZarrDirectMap } from "@/composables/useZarrDirectMap";
 const mockSetClim = vi.fn();
 const mockOnTimeChange = vi.fn();
 const mockOnOpacityChange = vi.fn();
+const mockSetProjection = vi.fn();
 
 const mockState = {
   mapContainer: ref<HTMLDivElement | null>(null),
@@ -29,6 +30,7 @@ const mockState = {
   onTimeChange: mockOnTimeChange,
   onOpacityChange: mockOnOpacityChange,
   setClim: mockSetClim,
+  setProjection: mockSetProjection,
 };
 
 vi.mock("@/composables/useZarrDirectMap", () => ({
@@ -68,6 +70,12 @@ function mountComponent(propsOverride = {}) {
         InputNumber: {
           template: `<input data-testid="input-number" :value="modelValue" @input="$emit('update:modelValue', +$event.target.value)" />`,
           props: ["modelValue"],
+          emits: ["update:modelValue"],
+        },
+        // Stub PrimeVue Select to avoid full component rendering
+        Select: {
+          template: `<select :value="modelValue" @change="$emit('update:modelValue', $event.target.value)"><slot /></select>`,
+          props: ["modelValue", "options", "optionLabel", "optionValue"],
           emits: ["update:modelValue"],
         },
       },
