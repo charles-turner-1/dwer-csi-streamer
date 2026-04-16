@@ -24,7 +24,7 @@
       />
       <Button
         @click="onSearch"
-        :disabled="wam.loading.value || !addressQuery.trim()"
+        :disabled="wam.loading.value || !queryString.trim()"
         icon="pi pi-search"
         label="Search"
       />
@@ -147,6 +147,12 @@ const wam = useWhatAboutMe(props.source);
 
 /** Bound to the text input. */
 const addressQuery = ref<string | NominatimSuggestion>("");
+
+const queryString = computed(() =>
+  typeof addressQuery.value === "string"
+    ? addressQuery.value
+    : addressQuery.value.label,
+);
 
 /** Populated by Nominatim as the user types. */
 const suggestions = ref<NominatimSuggestion[]>([]);
