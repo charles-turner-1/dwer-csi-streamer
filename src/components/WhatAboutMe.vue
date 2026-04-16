@@ -119,7 +119,10 @@ import {
   type TooltipItem,
 } from "chart.js";
 import { Line } from "vue-chartjs";
-import { useWhatAboutMe, type NominatimSuggestion } from "@/composables/useWhatAboutMe";
+import {
+  useWhatAboutMe,
+  type NominatimSuggestion,
+} from "@/composables/useWhatAboutMe";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 
@@ -140,7 +143,6 @@ const wam = useWhatAboutMe(props.source);
 /** Bound to the text input. */
 const addressQuery = ref("");
 
-
 /**
  * Called when the user picks an item from the dropdown.
  * Passes pre-resolved coordinates directly to the composable — no second geocode round-trip.
@@ -160,7 +162,6 @@ function onSearch() {
   if (!q) return;
   wam.searchByAddress(q);
 }
-
 
 /** Triggers a browser geolocation lookup via the composable. */
 function onLocate() {

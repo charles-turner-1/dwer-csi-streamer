@@ -1,19 +1,23 @@
 <template>
   <div class="container mx-auto mt-10 p-3 sm:p-6">
     <div class="hidden sm:block">
-    <RouterLink
-      to="/"
-      class="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors my-4"
-    >
-      <v-icon name="hi-arrow-left" scale="0.9" />
-      Back to Home
-    </RouterLink>
+      <RouterLink
+        to="/"
+        class="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors my-4"
+      >
+        <v-icon name="hi-arrow-left" scale="0.9" />
+        Back to Home
+      </RouterLink>
     </div>
 
-    <h1 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mt-2 mb-2 text-center sm:text-left">
+    <h1
+      class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mt-2 mb-2 text-center sm:text-left"
+    >
       DWER Climate Science Initiative
     </h1>
-    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 text-center sm:text-left">
+    <p
+      class="text-sm text-gray-500 dark:text-gray-400 mb-6 text-center sm:text-left"
+    >
       WRF-based regional climate model output (ERA5-driven, CORDEX SWWA domain)
       streamed directly from
       <a
