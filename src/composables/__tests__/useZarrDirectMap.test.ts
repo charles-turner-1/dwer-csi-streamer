@@ -45,7 +45,6 @@ import {
   SWWA_SPATIAL_DIMS,
   SWWA_BOUNDS,
 } from "@/composables/useZarrDirectMap";
-import { kelvinToCelsius, precipToMmPerDay } from "@/utils/unitConversion";
 
 // ---------------------------------------------------------------------------
 // Exported constants
