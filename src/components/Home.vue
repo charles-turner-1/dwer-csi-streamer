@@ -2,7 +2,7 @@
   <div class="container mx-auto px-6 pt-6">
     <div
       id="hero"
-      class="max-w-4xl mx-auto mt-12 mb-10 p-6 rounded-2xl bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+      class="max-w-2xl mx-auto mt-12 mb-10 p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
     >
       <div
         class="text-3xl sm:text-5xl font-bold text-gray-800 dark:text-white mb-2"
@@ -122,7 +122,7 @@
       </div>
     </div>
 
-    <div class="flex justify-center gap-4 flex-wrap">
+    <div class="max-w-2xl mx-auto flex flex-col gap-4">
       <LinkCard
         v-for="card in linkCards"
         :key="card.href"
@@ -133,7 +133,7 @@
       />
     </div>
 
-    <div class="max-w-2xl mx-auto mt-12 space-y-6 pb-12">
+    <div class="max-w-2xl mx-auto mt-4 space-y-6 pb-12">
       <!-- What it can do -->
       <div
         class="p-5 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-300 space-y-3 leading-relaxed"
@@ -252,9 +252,9 @@ const linkCards = [
   },
   {
     href: "/access-model",
-    name: "PoC: ACCESS Model Datasets",
+    name: "Proof of Concept: ACCESS Model Datasets",
     description:
-      "Interactively explore climate model output streamed directly from Pawsey Acacia object storage.",
+      "Interactively explore climate model output streamed directly from Pawsey Acacia object storage. Same architecture, bigger datasets, less polish.",
     icons: ["vi-file-type-python", "vi-file-type-vue"],
   },
 ];
