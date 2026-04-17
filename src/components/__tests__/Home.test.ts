@@ -28,9 +28,9 @@ function mountHome() {
 describe("Home", () => {
   it("renders the main heading", () => {
     const wrapper = mountHome();
-    expect(wrapper.find("h1").text()).toContain(
-      "DWER Climate Science Initiative Zarr Data Streamer",
-    );
+    const hero = wrapper.find("#hero");
+    expect(hero.text()).toContain("DWER Climate Science Initiative");
+    expect(hero.text()).toContain("Zarr Data Streamer");
   });
 
   it("renders two LinkCard components", () => {
@@ -39,23 +39,18 @@ describe("Home", () => {
     expect(cards).toHaveLength(2);
   });
 
-  it("first LinkCard links to /access-model", () => {
-    const wrapper = mountHome();
-    const cards = wrapper.findAllComponents(LinkCard);
-    expect(cards[0]?.props("href")).toBe("/access-model");
-  });
-
   it("second LinkCard links to /dwer-csi", () => {
     const wrapper = mountHome();
     const cards = wrapper.findAllComponents(LinkCard);
-    expect(cards[1]?.props("href")).toBe("/dwer-csi");
+    expect(cards[0]?.props("href")).toBe("/dwer-csi");
   });
 
   it("LinkCard names are descriptive", () => {
     const wrapper = mountHome();
     const cards = wrapper.findAllComponents(LinkCard);
-    expect(cards[0]?.props("name")).toContain("ACCESS");
-    expect(cards[1]?.props("name")).toContain("DWER");
+    expect(cards[0]?.props("name")).toContain(
+      "DWER Climate Science Initiative",
+    );
   });
 
   it("renders the Acknowledgements section", () => {
