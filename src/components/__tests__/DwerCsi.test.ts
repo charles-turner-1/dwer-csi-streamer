@@ -40,7 +40,7 @@ const STORE_URL = "https://projects.pawsey.org.au/dwer-zarr-store/data.zarr";
 describe("DwerCsi", () => {
   it("renders the page heading", () => {
     const wrapper = mountDwerCsi();
-    expect(wrapper.find("h1").text()).toContain(
+    expect(wrapper.find("#header").text()).toContain(
       "DWER Climate Science Initiative",
     );
   });

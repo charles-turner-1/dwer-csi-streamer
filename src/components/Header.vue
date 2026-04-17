@@ -5,7 +5,9 @@
     >
       <div class="flex items-center justify-around gap-4">
         <!-- Active page label (mobile only) -->
-        <span class="sm:hidden text-sm font-bold text-gray-900 dark:text-white truncate">
+        <span
+          class="sm:hidden text-sm font-bold text-gray-900 dark:text-white truncate"
+        >
           {{ links.find((l) => l.to === route.path)?.label }}
         </span>
 

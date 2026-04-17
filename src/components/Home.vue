@@ -1,20 +1,20 @@
 <template>
   <div class="container mx-auto px-6 pt-6">
     <div
+      id="hero"
       class="max-w-4xl mx-auto mt-12 mb-10 p-6 rounded-2xl bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
     >
-      <div class="text-5xl font-bold text-gray-800 dark:text-white mb-2">
-        DWER Climate Science Initiative 
+      <div class="text-3xl sm:text-5xl font-bold text-gray-800 dark:text-white mb-2">
+        DWER Climate Science Initiative
       </div>
-      <div class="text-2xl font-semibold text-gray-600 dark:text-white mb-2">
+      <div class="text-xl sm:text-2xl font-semibold text-gray-600 dark:text-white mb-2">
         Zarr Data Streamer
       </div>
       <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-        A serverless tool for streaming scientific datasets directly 
-        from the cloud, for exploration and engagement.
-     </p>
+        A serverless tool for streaming scientific datasets directly from the
+        cloud, for exploration and engagement.
+      </p>
     </div>
-
 
     <div
       class="max-w-2xl mx-auto my-10 p-5 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-300 space-y-2"
@@ -102,8 +102,8 @@
         class="border-t border-gray-200 dark:border-gray-600 pt-3 mt-1 flex flex-wrap items-center gap-3"
       >
         <span class="text-xs text-gray-400 dark:text-gray-500"
-          >Visualisation tooling developed in collaboration with ACCESS-NRI </span
-        >
+          >Visualisation tooling developed in collaboration with ACCESS-NRI
+        </span>
         <a
           href="https://www.access-nri.org.au"
           target="_blank"
@@ -148,17 +148,18 @@
           like, or what the results mean for them.
         </p>
         <p>
-          This tool lets you explore climate datasets <strong>directly in
-          the browser</strong> — no download, no login, no Python environment to
-          configure. Select a variable, scroll through 40+ years of monthly
-          output, and the relevant data streams on demand from Pawsey's object
-          storage. You never pull more than the slice you're actually looking at,
-          making real time exploration viable for the first time ever.
+          This tool lets you explore climate datasets
+          <strong>directly in the browser</strong> — no download, no login, no
+          Python environment to configure. Select a variable, scroll through 40+
+          years of monthly output, and the relevant data streams on demand from
+          Pawsey's object storage. You never pull more than the slice you're
+          actually looking at, making real time exploration viable for the first
+          time ever.
         </p>
         <p>
           The goal is to lower the barrier to engagement with research outputs:
-          making it easier for collaborators to sanity-check model runs,
-          for stakeholders to explore projections, and for the public to connect
+          making it easier for collaborators to sanity-check model runs, for
+          stakeholders to explore projections, and for the public to connect
           with the science — without needing to involve software/data engineers,
           learn to code, or get access to special infrastructure.
         </p>
@@ -220,15 +221,15 @@
           of HTTP <code>Range</code> requests to the object storage endpoint,
           decompresses the data in-browser using a WASM codec, and passes the
           result to the map renderer. A single monthly field for the SWWA domain
-          requires only a few hundred kilobytes of compressed data — fetched
-          on demand from an archive that is orders of magnitude larger.
+          requires only a few hundred kilobytes of compressed data — fetched on
+          demand from an archive that is orders of magnitude larger.
         </p>
         <p>
           The architecture is completely <strong>serverless</strong>: there is
-          no backend, no tiling service, and no bespoke data pipeline running
-          on a VM. The only infrastructure is the object storage bucket (which
-          already exists for model output) and this static site. 
-       </p>
+          no backend, no tiling service, and no bespoke data pipeline running on
+          a VM. The only infrastructure is the object storage bucket (which
+          already exists for model output) and this static site.
+        </p>
       </div>
     </div>
   </div>

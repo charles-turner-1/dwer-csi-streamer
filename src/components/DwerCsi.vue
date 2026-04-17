@@ -11,14 +11,17 @@
     </div>
 
     <div
+      id="header"
       class="rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 mb-6"
     >
-      <div class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">
+      <div
+        class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2"
+      >
         DWER Climate Science Initiative
       </div>
       <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-        WRF-based regional climate model output (ERA5-driven, CORDEX SWWA domain)
-        streamed directly from
+        WRF-based regional climate model output (ERA5-driven, CORDEX SWWA
+        domain) streamed directly from
         <a
           href="https://pawsey.org.au/systems/acacia/"
           target="_blank"
