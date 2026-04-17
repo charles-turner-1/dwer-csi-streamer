@@ -39,7 +39,6 @@ describe("Home", () => {
     expect(cards).toHaveLength(2);
   });
 
-
   it("second LinkCard links to /dwer-csi", () => {
     const wrapper = mountHome();
     const cards = wrapper.findAllComponents(LinkCard);
@@ -49,7 +48,9 @@ describe("Home", () => {
   it("LinkCard names are descriptive", () => {
     const wrapper = mountHome();
     const cards = wrapper.findAllComponents(LinkCard);
-    expect(cards[0]?.props("name")).toContain("DWER Climate Science Initiative");
+    expect(cards[0]?.props("name")).toContain(
+      "DWER Climate Science Initiative",
+    );
   });
 
   it("renders the Acknowledgements section", () => {

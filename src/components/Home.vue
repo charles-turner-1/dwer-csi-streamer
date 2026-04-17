@@ -4,10 +4,14 @@
       id="hero"
       class="max-w-4xl mx-auto mt-12 mb-10 p-6 rounded-2xl bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
     >
-      <div class="text-3xl sm:text-5xl font-bold text-gray-800 dark:text-white mb-2">
+      <div
+        class="text-3xl sm:text-5xl font-bold text-gray-800 dark:text-white mb-2"
+      >
         DWER Climate Science Initiative
       </div>
-      <div class="text-xl sm:text-2xl font-semibold text-gray-600 dark:text-white mb-2">
+      <div
+        class="text-xl sm:text-2xl font-semibold text-gray-600 dark:text-white mb-2"
+      >
         Zarr Data Streamer
       </div>
       <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
