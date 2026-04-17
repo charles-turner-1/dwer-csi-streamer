@@ -10,26 +10,65 @@
       </RouterLink>
     </div>
 
-    <h1
-      class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mt-2 mb-2 text-center sm:text-left"
+    <div
+      class="rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 mb-6"
     >
-      DWER Climate Science Initiative
-    </h1>
-    <p
-      class="text-sm text-gray-500 dark:text-gray-400 mb-6 text-center sm:text-left"
-    >
-      WRF-based regional climate model output (ERA5-driven, CORDEX SWWA domain)
-      streamed directly from
-      <a
-        href="https://pawsey.org.au/systems/acacia/"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-blue-600 dark:text-blue-400 hover:underline"
-        >Pawsey Acacia</a
-      >
-      object storage. Variables are on a rotated-pole grid (279 × 364) at
-      monthly frequency, 492 time steps (1980–2021).
-    </p>
+      <div class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">
+        DWER Climate Science Initiative
+      </div>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+        WRF-based regional climate model output (ERA5-driven, CORDEX SWWA domain)
+        streamed directly from
+        <a
+          href="https://pawsey.org.au/systems/acacia/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-blue-600 dark:text-blue-400 hover:underline"
+          >Pawsey Acacia</a
+        >
+        object storage. Variables are on a rotated-pole grid (279 × 364) at
+        monthly frequency, 492 time steps (1980–2021).
+      </p>
+
+      <div class="flex flex-wrap justify-center items-center gap-6 pt-2">
+        <a
+          href="https://www.der.wa.gov.au"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex items-center"
+        >
+          <img
+            src="@/assets/logos/DWER-Logo.png"
+            alt="Department of Water and Environmental Regulation"
+            class="h-10 object-contain dark:bg-white dark:rounded dark:p-1"
+          />
+        </a>
+        <a
+          href="https://www.murdoch.edu.au"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex items-center"
+        >
+          <img
+            src="@/assets/logos/Murdoch_University_extended_logo.png"
+            alt="Murdoch University"
+            class="h-10 object-contain dark:bg-white dark:rounded dark:p-1"
+          />
+        </a>
+        <a
+          href="https://pawsey.org.au"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex items-center"
+        >
+          <img
+            src="@/assets/logos/pawsey_logo1.png"
+            alt="Pawsey Supercomputing Research Centre"
+            class="h-10 object-contain dark:bg-white dark:rounded dark:p-1"
+          />
+        </a>
+      </div>
+    </div>
 
     <Tabs v-model:value="activeTab" class="mt-4">
       <div class="sm:hidden mb-3">

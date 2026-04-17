@@ -6,7 +6,7 @@
         ? { href, target: '_blank', rel: 'noopener noreferrer' }
         : { to: href }
     "
-    class="flex flex-col gap-3 px-6 py-5 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group"
+    class="flex flex-col gap-3 px-6 py-5 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group max-w-2xl mx-auto"
   >
     <div class="flex items-center gap-2">
       <v-icon v-for="icon in icons" :key="icon" :name="icon" scale="1.2" />

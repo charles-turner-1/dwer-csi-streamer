@@ -1,32 +1,20 @@
 <template>
-  <div class="container mx-auto px-6 py-12">
-    <div class="text-center mb-12 mt-12">
-      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-        DWER Climate Science Initiative Zarr Data Streamer
-      </h1>
-      <p
-        class="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed"
-      >
-        A serverless tool for streaming scientific datasets directly to the
-        browser from cloud object storage, using Zarr and virtual reference
-        filesystems.
-      </p>
+  <div class="container mx-auto px-6 pt-6">
+    <div
+      class="max-w-4xl mx-auto mt-12 mb-10 p-6 rounded-2xl bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+    >
+      <div class="text-5xl font-bold text-gray-800 dark:text-white mb-2">
+        DWER Climate Science Initiative 
+      </div>
+      <div class="text-2xl font-semibold text-gray-600 dark:text-white mb-2">
+        Zarr Data Streamer
+      </div>
+      <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+        A serverless tool for streaming scientific datasets directly 
+        from the cloud, for exploration and engagement.
+     </p>
     </div>
 
-    <div class="flex justify-center gap-4 flex-wrap">
-      <LinkCard
-        href="/access-model"
-        name="PoC: ACCESS Model Datasets"
-        description="Interactively explore climate model output streamed directly from Pawsey Acacia object storage."
-        :icons="['vi-file-type-python', 'vi-file-type-vue']"
-      />
-      <LinkCard
-        href="/dwer-csi"
-        name="DWER Climate Science Initiative"
-        description="Explore WRF regional climate model output (tasmax, tasmin, precipitation) streamed directly from Pawsey Acacia — no download required."
-        :icons="['vi-file-type-python', 'vi-file-type-vue']"
-      />
-    </div>
 
     <div
       class="max-w-2xl mx-auto my-10 p-5 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-300 space-y-2"
@@ -36,8 +24,48 @@
       >
         Acknowledgements
       </h2>
+
+      <div class="flex flex-wrap justify-center items-center gap-6 py-4">
+        <a
+          href="https://www.der.wa.gov.au"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex items-center"
+        >
+          <img
+            src="@/assets/logos/DWER-Logo.png"
+            alt="Department of Water and Environmental Regulation"
+            class="h-12 object-contain dark:bg-white dark:rounded dark:p-1"
+          />
+        </a>
+        <a
+          href="https://www.murdoch.edu.au"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex items-center"
+        >
+          <img
+            src="@/assets/logos/Murdoch_University_extended_logo.png"
+            alt="Murdoch University"
+            class="h-12 object-contain dark:bg-white dark:rounded dark:p-1"
+          />
+        </a>
+        <a
+          href="https://pawsey.org.au"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex items-center"
+        >
+          <img
+            src="@/assets/logos/pawsey_logo1.png"
+            alt="Pawsey Supercomputing Research Centre"
+            class="h-12 object-contain dark:bg-white dark:rounded dark:p-1"
+          />
+        </a>
+      </div>
+
       <p>
-        The dataset is a collaboration between
+        This dataset is a collaboration between
         <a
           href="https://www.murdoch.edu.au"
           target="_blank"
@@ -64,121 +92,165 @@
           >Pawsey Supercomputing Research Centre</a
         >.
       </p>
-      <p>
-        The browser streaming tooling is being developed and trialed in
-        collaboration with
-        <a
-          href="https://www.access-nri.org.au"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-blue-600 dark:text-blue-400 hover:underline"
-          >ACCESS-NRI</a
-        >.
-      </p>
       <p class="font-semibold">
         Note: this is not yet an official product of any of these organisations,
         simply a proof of concept, demonstrating the potential of these
         approaches for data sharing and exploration.
       </p>
+
+      <div
+        class="border-t border-gray-200 dark:border-gray-600 pt-3 mt-1 flex flex-wrap items-center gap-3"
+      >
+        <span class="text-xs text-gray-400 dark:text-gray-500"
+          >Visualisation tooling developed in collaboration with ACCESS-NRI </span
+        >
+        <a
+          href="https://www.access-nri.org.au"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="@/assets/logos/ACCESS-logo.svg"
+            alt="ACCESS-NRI"
+            class="h-6 object-contain opacity-60"
+          />
+        </a>
+      </div>
     </div>
 
-    <div
-      class="max-w-2xl mx-auto mt-12 text-sm text-gray-600 dark:text-gray-300 space-y-3 leading-relaxed"
-    >
-      <h2
-        class="text-lg font-semibold text-gray-800 dark:text-gray-100 flex items-center gap-2"
-      >
-        <i class="pi pi-info-circle text-blue-500"></i>
-        About this tool
-      </h2>
-      <p
-        class="flex items-center gap-2 font-semibold text-gray-500 dark:text-gray-400"
-      >
-        <i class="pi pi-info-circle text-blue-500"></i>
-        Disclaimer: This info was written by Claude Sonnet 4.6. It's mostly
-        right (especially the generic technical bits), but may be subtly
-        misleading. At some point, I will aim to come back and rewrite it.
-      </p>
+    <div class="flex justify-center gap-4 flex-wrap">
+      <LinkCard
+        v-for="card in linkCards"
+        :key="card.href"
+        :href="card.href"
+        :name="card.name"
+        :description="card.description"
+        :icons="card.icons"
+      />
+    </div>
 
-      <p>
-        Climate and environmental datasets are large. Reanalysis products like
-        ERA5 can run to several petabytes in total, and even a single model run
-        is typically spread across hundreds to thousands of large NetCDF files
-        on storage systems such as
-        <a
-          href="https://pawsey.org.au/systems/acacia/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-blue-600 dark:text-blue-400 hover:underline"
-          >Acacia</a
+    <div class="max-w-2xl mx-auto mt-12 space-y-6 pb-12">
+      <!-- What it can do -->
+      <div
+        class="p-5 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-300 space-y-3 leading-relaxed"
+      >
+        <h2
+          class="text-sm font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wide mb-3"
         >
-        - Pawsey Supercomputing Centre's object storage. Traditionally, doing
-        anything with that data means either being on the HPC cluster yourself,
-        or downloading a substantial chunk of it first. Neither option is great
-        if you just want to take a quick look.
-      </p>
-      <p>
-        The first step in the pipeline is virtualisation with
-        <a
-          href="https://virtualizarr.readthedocs.io/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-blue-600 dark:text-blue-400 hover:underline"
-          >VirtualiZarr</a
-        >. Rather than copying or converting the data, VirtualiZarr reads the
-        internal structure of each NetCDF file - where each variable's chunks
-        live on disk, their byte offsets and lengths - and builds a lightweight
-        <em>virtual</em> Zarr store. Nothing is moved; you end up with a
-        reference catalogue that says "chunk <code>[0,0,0]</code> of
-        <code>sst_m</code> is bytes 171,279,300–172,408,502 of this file on S3".
-        The whole catalogue for 42 months of the global 0.1° CICE sea ice run
-        shown here fits in a few-hundred-kilobyte JSON file.
-      </p>
-      <p>
-        That JSON is written out in
-        <a
-          href="https://fsspec.github.io/kerchunk/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-blue-600 dark:text-blue-400 hover:underline"
-          >Kerchunk</a
+          What it can do
+        </h2>
+        <p>
+          Climate model output is large, and traditionally doing anything useful
+          with it has meant either getting an account on an HPC system, or
+          sitting through a multi-gigabyte download — before writing a single
+          line of code. Neither is great if a scientist, policy analyst, or
+          curious member of the public just wants to see what the data looks
+          like, or what the results mean for them.
+        </p>
+        <p>
+          This tool lets you explore climate datasets <strong>directly in
+          the browser</strong> — no download, no login, no Python environment to
+          configure. Select a variable, scroll through 40+ years of monthly
+          output, and the relevant data streams on demand from Pawsey's object
+          storage. You never pull more than the slice you're actually looking at,
+          making real time exploration viable for the first time ever.
+        </p>
+        <p>
+          The goal is to lower the barrier to engagement with research outputs:
+          making it easier for collaborators to sanity-check model runs,
+          for stakeholders to explore projections, and for the public to connect
+          with the science — without needing to involve software/data engineers,
+          learn to code, or get access to special infrastructure.
+        </p>
+      </div>
+
+      <!-- Technical details -->
+      <div
+        class="p-5 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-300 space-y-3 leading-relaxed"
+      >
+        <h2
+          class="text-sm font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wide mb-3"
         >
-        reference format - a simple spec that maps Zarr chunk keys to
-        <code>[url, offset, length]</code> triples. Any Zarr-aware client that
-        knows how to issue HTTP range requests can consume it directly, without
-        any special server software. The files themselves never move; you're
-        just handing the client a roadmap.
-      </p>
-      <p>
-        In the browser, the reference JSON is loaded and passed to
-        <a
-          href="https://github.com/manzt/zarrita.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-blue-600 dark:text-blue-400 hover:underline"
-          >zarrita.js</a
-        >
-        (a TypeScript Zarr implementation) backed by a range-request store. When
-        you select a time step, the client works out which chunks are needed for
-        that slice, fires off a handful of HTTP
-        <code>Range</code> requests to the object storage endpoint, decompresses
-        the chunks in-browser using a WASM codec, and renders the result. You
-        never download the full dataset - for a single monthly SST field at
-        0.1°, that's pulling around 4–8 MB of compressed chunks out of a ~200 GB
-        archive.
-      </p>
-      <p>
-        The result is completely <strong>serverless</strong>: no backend, no
-        tiling service, no data pipeline running on a VM somewhere. The only
-        infrastructure is the object storage bucket (already there for model
-        output) and the static site you're reading this on. The main catch is
-        that the S3 bucket needs permissive CORS headers - which, at a
-        supercomputing centre, is sometimes easier said than done.
-      </p>
+          Technical details
+        </h2>
+        <p>
+          The key insight is that the original NetCDF files never need to move
+          or be converted. Instead,
+          <a
+            href="https://virtualizarr.readthedocs.io/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-blue-600 dark:text-blue-400 hover:underline"
+            >VirtualiZarr</a
+          >
+          reads the internal structure of each file — where each variable's
+          chunks live on disk, their byte offsets and lengths — and builds a
+          lightweight <em>virtual</em> Zarr store. Nothing is copied or
+          duplicated; you end up with a reference catalogue that says "chunk
+          <code>[t,y,x]</code> of <code>tasmax</code> is bytes
+          171,279,300–172,408,502 of this file on S3". The catalogue for the
+          entire SWWA dataset fits in a small JSON file — a trivial overhead
+          compared to the data itself.
+        </p>
+        <p>
+          That JSON is written in
+          <a
+            href="https://fsspec.github.io/kerchunk/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-blue-600 dark:text-blue-400 hover:underline"
+            >Kerchunk</a
+          >
+          reference format, a simple spec that maps Zarr chunk keys to
+          <code>[url, offset, length]</code> triples. Any Zarr-aware client that
+          can issue HTTP range requests can consume it directly — no special
+          server required.
+        </p>
+        <p>
+          In the browser,
+          <a
+            href="https://github.com/manzt/zarrita.js"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-blue-600 dark:text-blue-400 hover:underline"
+            >zarrita.js</a
+          >
+          handles Zarr I/O backed by a range-request store. When you move the
+          time slider, it resolves which chunks are needed, fires off a handful
+          of HTTP <code>Range</code> requests to the object storage endpoint,
+          decompresses the data in-browser using a WASM codec, and passes the
+          result to the map renderer. A single monthly field for the SWWA domain
+          requires only a few hundred kilobytes of compressed data — fetched
+          on demand from an archive that is orders of magnitude larger.
+        </p>
+        <p>
+          The architecture is completely <strong>serverless</strong>: there is
+          no backend, no tiling service, and no bespoke data pipeline running
+          on a VM. The only infrastructure is the object storage bucket (which
+          already exists for model output) and this static site. 
+       </p>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import LinkCard from "./LinkCard.vue";
+
+const linkCards = [
+  {
+    href: "/dwer-csi",
+    name: "DWER Climate Science Initiative",
+    description:
+      "Explore WRF regional climate model output (tasmax, tasmin, precipitation) streamed directly from Pawsey Acacia — no download required.",
+    icons: ["vi-file-type-python", "vi-file-type-vue"],
+  },
+  {
+    href: "/access-model",
+    name: "PoC: ACCESS Model Datasets",
+    description:
+      "Interactively explore climate model output streamed directly from Pawsey Acacia object storage.",
+    icons: ["vi-file-type-python", "vi-file-type-vue"],
+  },
+];
 </script>
