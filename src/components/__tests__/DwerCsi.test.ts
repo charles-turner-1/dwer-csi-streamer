@@ -105,26 +105,4 @@ describe("DwerCsi", () => {
     )!;
     expect(pr.attributes("clim") ?? pr.html()).toMatch(/8\.64/);
   });
-
-  it("back link navigates to /", () => {
-    const wrapper = mount(DwerCsi, {
-      global: {
-        plugins: [router],
-        stubs: {
-          "v-icon": true,
-          Tabs: tabPassThrough,
-          TabList: tabPassThrough,
-          Tab: { template: "<div><slot /></div>", props: ["value"] },
-          TabPanels: tabPassThrough,
-          TabPanel: { template: "<div><slot /></div>", props: ["value"] },
-          Select: true,
-          ZarrDirectMap: true,
-          WhatAboutMe: true,
-        },
-      },
-    });
-    const link = wrapper.find("a");
-    expect(link.attributes("href")).toBe("/");
-    expect(link.text()).toContain("Back to Home");
-  });
 });

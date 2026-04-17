@@ -5,8 +5,6 @@
         to="/"
         class="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors my-4"
       >
-        <v-icon name="hi-arrow-left" scale="0.9" />
-        Back to Home
       </RouterLink>
     </div>
 
