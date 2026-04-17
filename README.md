@@ -86,13 +86,13 @@ pixi run jupyter lab
 
 ## Deployment
 
-The site is a fully static SPA. Set the `base` path in `vite.config.ts` to match your hosting path (currently `/personal-homepage/` for GitHub Pages). Deploy the contents of `dist/` to any static host or CDN.
+The site is a fully static SPA. Set the `base` path in `vite.config.ts` to match your hosting path (currently `/dwer-csi-streamer/` for GitHub Pages). Deploy the contents of `dist/` to any static host or CDN.
 
 The S3 bucket hosting the NetCDF files must have permissive CORS headers to allow range requests from the browser.
 
 ---
 
-## Acknowledgements
+  "name": "dwer-csi-streamer",
 
 - Dataset: [Murdoch University](https://www.murdoch.edu.au) × [WA DWER](https://www.der.wa.gov.au)
 - Infrastructure: [Pawsey Supercomputing Research Centre](https://pawsey.org.au)
