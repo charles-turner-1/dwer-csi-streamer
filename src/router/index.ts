@@ -20,7 +20,7 @@ const routes = [
     },
   },
   {
-    path: "/dwer-csi",
+    path: "/view-data",
     name: "DwerCsi",
     component: () => import("../components/DwerCsi.vue"),
     meta: {

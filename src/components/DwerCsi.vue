@@ -12,11 +12,20 @@
       id="header"
       class="rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 mb-6"
     >
-      <div
-        class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2"
-      >
-        DWER Climate Science Initiative
+      <div class="flex justify-center mb-5">
+        <a
+          href="https://www.wa.gov.au/organisation/department-of-water-and-environmental-regulation/climate-science-initiative-and-wa-climate-projections"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="@/assets/logos/csi_logo.png"
+            alt="Climate Science Initiative WA"
+            class="h-32 object-contain dark:bg-white dark:rounded dark:p-1"
+          />
+        </a>
       </div>
+
       <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
         WRF-based regional climate model output (ERA5-driven, CORDEX SWWA
         domain) streamed directly from
@@ -27,7 +36,7 @@
           class="text-blue-600 dark:text-blue-400 hover:underline"
           >Pawsey Acacia</a
         >
-        object storage. Variables are on a rotated-pole grid (279 × 364) at
+        object storage. Variables are on a rotated-pole 4km grid (279 × 364) at
         monthly frequency, 492 time steps (1980–2021).
       </p>
 

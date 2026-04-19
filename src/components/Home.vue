@@ -4,10 +4,18 @@
       id="hero"
       class="max-w-2xl mx-auto mt-12 mb-10 p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
     >
-      <div
-        class="text-3xl sm:text-5xl font-bold text-gray-800 dark:text-white mb-2"
-      >
-        DWER Climate Science Initiative
+      <div class="flex justify-center mb-5">
+        <a
+          href="https://www.wa.gov.au/organisation/department-of-water-and-environmental-regulation/climate-science-initiative-and-wa-climate-projections"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="@/assets/logos/csi_logo.png"
+            alt="Climate Science Initiative WA"
+            class="h-40 object-contain dark:bg-white dark:rounded dark:p-1"
+          />
+        </a>
       </div>
       <div
         class="text-xl sm:text-2xl font-semibold text-gray-600 dark:text-white mb-2"
@@ -116,7 +124,7 @@
           <img
             src="@/assets/logos/ACCESS-logo.svg"
             alt="ACCESS-NRI"
-            class="h-6 object-contain opacity-60"
+            class="h-10 object-contain opacity-80"
           />
         </a>
       </div>
