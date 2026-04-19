@@ -81,7 +81,7 @@ const menuOpen = ref(false);
 const links = [
   { to: "/", label: "About this project" },
   // { to: "/access-model", label: "PoC: ACCESS Model Datasets" },
-  { to: "/dwer-csi", label: "View the Data" },
+  { to: "/view-data", label: "View the Data" },
 ];
 </script>
 

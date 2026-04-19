@@ -29,7 +29,6 @@ describe("Home", () => {
   it("renders the main heading", () => {
     const wrapper = mountHome();
     const hero = wrapper.find("#hero");
-    expect(hero.text()).toContain("DWER Climate Science Initiative");
     expect(hero.text()).toContain("Zarr Data Streamer");
   });
 

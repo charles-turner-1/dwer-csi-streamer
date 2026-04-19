@@ -41,7 +41,7 @@ describe("DwerCsi", () => {
   it("renders the page heading", () => {
     const wrapper = mountDwerCsi();
     expect(wrapper.find("#header").text()).toContain(
-      "DWER Climate Science Initiative",
+      "WRF-based regional climate model output",
     );
   });
 
