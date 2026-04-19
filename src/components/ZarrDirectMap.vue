@@ -157,7 +157,22 @@ const props = defineProps<{
   proj4?: string;
   bounds?: [number, number, number, number];
   unitConverter?: UnitConverter;
+  initZoom?: number;
 }>();
+
+// Utility: detect if device is mobile (screen width <= 768px)
+function isMobileDevice() {
+  if (typeof window !== 'undefined') {
+    return window.matchMedia('(max-width: 768px)').matches;
+  }
+  return false;
+}
+
+// Compute effective zoom: use prop if set, else 2 for mobile, 4 for desktop
+const effectiveInitZoom = computed(() => {
+  if (props.initZoom !== undefined) return props.initZoom;
+  return isMobileDevice() ? 2 : 3;
+});
 
 const PROJECTION_OPTIONS = [
   { label: "Globe", value: "globe" },
@@ -194,6 +209,7 @@ const zarrMap = useZarrDirectMap(
   props.bounds,
   props.unitConverter,
   projection.value,
+  effectiveInitZoom.value,
 );
 const {
   timeIndex,

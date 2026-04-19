@@ -73,6 +73,7 @@ export function useZarrDirectMap(
   bounds?: [number, number, number, number],
   unitConverter?: UnitConverter,
   initialProjection = "globe",
+  initZoom = 4,
 ) {
   const mapContainer = ref<HTMLDivElement | null>(null);
   const timeIndex = ref(0);
@@ -103,7 +104,7 @@ export function useZarrDirectMap(
       style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
       // Centre on geographic SW WA [116°E, -32°S]
       center: [116, -32],
-      zoom: 4,
+      zoom: initZoom,
     });
 
     map.addControl(new maplibregl.NavigationControl(), "top-right");
