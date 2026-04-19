@@ -162,8 +162,8 @@ const props = defineProps<{
 
 // Utility: detect if device is mobile (screen width <= 768px)
 function isMobileDevice() {
-  if (typeof window !== 'undefined') {
-    return window.matchMedia('(max-width: 768px)').matches;
+  if (typeof window !== "undefined") {
+    return window.matchMedia("(max-width: 768px)").matches;
   }
   return false;
 }
