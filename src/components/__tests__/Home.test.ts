@@ -9,7 +9,7 @@ const router = createRouter({
   routes: [
     { path: "/", component: Home },
     { path: "/access-model", component: { template: "<div />" } },
-    { path: "/dwer-csi", component: { template: "<div />" } },
+    { path: "/view-data", component: { template: "<div />" } },
   ],
 });
 
