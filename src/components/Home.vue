@@ -255,7 +255,7 @@ const linkCards = [
     href: "/view-data",
     name: "DWER Climate Science Initiative",
     description:
-      "Explore WRF regional climate model output (maximum and minimun temperatures, rainfall) streamed directly from Pawsey Acacia — no download required.",
+      "Explore WRF regional climate model output (maximum and minimum temperatures, rainfall) streamed directly from Pawsey Acacia — no download required.",
     icons: ["vi-file-type-python", "vi-file-type-vue"],
   },
   {
