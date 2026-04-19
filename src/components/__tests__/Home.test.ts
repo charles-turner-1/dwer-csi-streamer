@@ -38,10 +38,10 @@ describe("Home", () => {
     expect(cards).toHaveLength(2);
   });
 
-  it("second LinkCard links to /dwer-csi", () => {
+  it("second LinkCard links to /view-data", () => {
     const wrapper = mountHome();
     const cards = wrapper.findAllComponents(LinkCard);
-    expect(cards[0]?.props("href")).toBe("/dwer-csi");
+    expect(cards[0]?.props("href")).toBe("/view-data");
   });
 
   it("LinkCard names are descriptive", () => {
