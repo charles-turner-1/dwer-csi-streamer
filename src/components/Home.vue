@@ -252,7 +252,7 @@ import LinkCard from "./LinkCard.vue";
 
 const linkCards = [
   {
-    href: "/dwer-csi",
+    href: "/view-data",
     name: "DWER Climate Science Initiative",
     description:
       "Explore WRF regional climate model output (tasmax, tasmin, precipitation) streamed directly from Pawsey Acacia — no download required.",
