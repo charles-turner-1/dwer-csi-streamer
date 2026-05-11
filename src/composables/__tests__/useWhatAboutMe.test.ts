@@ -18,7 +18,7 @@ let mockTasmaxData = new Float32Array(492).fill(300); // 300 K = ~26.85 °C
 
 vi.mock("zarrita", () => ({
   FetchStore: vi.fn().mockImplementation(() => ({})),
-  root: vi.fn().mockReturnValue({ resolve: vi.fn().mockReturnValue({}) }),
+  root: vi.fn().mockReturnValue({ resolve: vi.fn((name: string) => name) }),
   open: vi.fn().mockResolvedValue({}),
   get: vi.fn().mockImplementation((_arr: unknown, sel?: unknown) => {
     // fetchLatLonGrid calls get twice (no selector); fetchTimeSeries slice call has a selector
@@ -61,11 +61,12 @@ vi.mock("@/composables/useZarrDirectMap", () => ({
   ),
 }));
 
-import { get } from "zarrita";
+import { get, open } from "zarrita";
 import {
   useWhatAboutMe,
   type NominatimSuggestion,
 } from "@/composables/useWhatAboutMe";
+import { precipToMmPerDay } from "@/utils/unitConversion";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -507,5 +508,43 @@ describe("fetchTimeSeries generic error branch", () => {
     );
     await searchByCoords(PERTH_LAT, PERTH_LON, "Perth");
     expect(error.value).toBe("An unexpected error occurred.");
+  });
+});
+
+// ─── Variable selection and refresh behavior ─────────────────────────────────
+
+describe("variable selection", () => {
+  beforeEach(() => {
+    resetLatLonCache();
+    mockLatData = new Float32Array([PERTH_LAT]);
+    mockLonData = new Float32Array([PERTH_LON]);
+    mockTasmaxData = validTasmaxData();
+    vi.mocked(open).mockClear();
+  });
+
+  it("fetches the selected variable instead of hardcoded tasmax", async () => {
+    const { searchByCoords } = useWhatAboutMe(
+      "https://example.com/store.zarr",
+      "pr",
+      precipToMmPerDay,
+    );
+    await searchByCoords(PERTH_LAT, PERTH_LON, "Perth");
+
+    expect(
+      vi.mocked(open).mock.calls.some(([path]) => String(path) === "pr"),
+    ).toBe(true);
+  });
+
+  it("updates variable/converter and refreshes at the same location", async () => {
+    const wam = useWhatAboutMe("https://example.com/store.zarr");
+    await wam.searchByCoords(PERTH_LAT, PERTH_LON, "Perth");
+
+    wam.setVariable("pr", precipToMmPerDay);
+    await wam.refreshForCurrentLocation();
+
+    expect(
+      vi.mocked(open).mock.calls.some(([path]) => String(path) === "pr"),
+    ).toBe(true);
+    expect(wam.timeSeries.value?.[0]).toBe(25920000);
   });
 });

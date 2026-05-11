@@ -1,11 +1,12 @@
 <template>
-  <div class="mt-10">
+  <div>
     <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-1">
       What about me?
     </h2>
-    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-      Enter your address to see how maximum temperatures near you have changed
-      over the past four decades, based on the WRF regional climate model.
+    <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
+      Enter your address to see how {{ props.variable.whatAboutMe.introMetric }}
+      near you have changed over the past four decades, based on the WRF
+      regional climate model.
     </p>
 
     <!-- Input row -->
@@ -68,7 +69,7 @@
           <strong class="text-gray-900 dark:text-white">{{
             wam.placeName.value
           }}</strong
-          >, the average daily maximum temperature in the
+          >, the {{ props.variable.whatAboutMe.headlineMetric }} in the
           <strong>{{ wam.lastDecadeLabel.value }}</strong> was
           <span
             class="font-bold text-lg"
@@ -77,9 +78,14 @@
                 ? 'text-orange-600 dark:text-orange-400'
                 : 'text-blue-600 dark:text-blue-400'
             "
-            >{{ wam.headline.value.lastMean }} °C</span
+            >{{ wam.headline.value.lastMean }}
+            {{ props.variable.whatAboutMe.unitLabel }}</span
           >, compared to
-          <strong>{{ wam.headline.value.firstMean }} °C</strong> in the
+          <strong
+            >{{ wam.headline.value.firstMean }}
+            {{ props.variable.whatAboutMe.unitLabel }}</strong
+          >
+          in the
           <strong>{{ wam.firstDecadeLabel.value }}</strong
           >.
           <span
@@ -91,7 +97,8 @@
             "
           >
             That's {{ wam.deltaPositive.value ? "+" : ""
-            }}{{ wam.headline.value.delta }} °C over the period.
+            }}{{ wam.headline.value.delta }}
+            {{ props.variable.whatAboutMe.unitLabel }} over the period.
           </span>
         </p>
       </div>
@@ -99,7 +106,7 @@
       <!-- Chart -->
       <div class="relative">
         <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Maximum temperature near
+          {{ props.variable.whatAboutMe.chartTitleMetric }} near
           <span class="text-blue-600 dark:text-blue-400">{{
             wam.placeName.value
           }}</span>
@@ -111,7 +118,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -128,6 +135,7 @@ import {
   useWhatAboutMe,
   type NominatimSuggestion,
 } from "@/composables/useWhatAboutMe";
+import type { ClimateVariableConfig } from "@/config/climateVariables";
 import AutoComplete from "primevue/autocomplete";
 import Button from "primevue/button";
 
@@ -141,9 +149,25 @@ ChartJS.register(
   Legend,
 );
 
-const props = defineProps<{ source: string }>();
+const props = defineProps<{
+  source: string;
+  variable: ClimateVariableConfig;
+}>();
 
-const wam = useWhatAboutMe(props.source);
+const wam = useWhatAboutMe(
+  props.source,
+  props.variable.varName,
+  props.variable.unitConverter,
+);
+
+watch(
+  () => props.variable,
+  async (variable, previous) => {
+    if (variable.varName === previous?.varName) return;
+    wam.setVariable(variable.varName, variable.unitConverter);
+    await wam.refreshForCurrentLocation();
+  },
+);
 
 /** Bound to the text input. */
 const addressQuery = ref<string | NominatimSuggestion>("");
@@ -235,34 +259,36 @@ const chartData = computed(() => ({
 }));
 
 /** Static Chart.js options shared across all renders of this component. */
-const chartOptions = {
-  responsive: true,
-  animation: false as const,
-  interaction: { mode: "index" as const, intersect: false },
-  plugins: {
-    legend: { position: "top" as const },
-    tooltip: {
-      callbacks: {
-        label: (ctx: TooltipItem<"line">) =>
-          ctx.parsed.y !== null
-            ? `${ctx.dataset.label ?? ""}: ${ctx.parsed.y.toFixed(1)} °C`
-            : "",
+const chartOptions = computed(() => {
+  return {
+    responsive: true,
+    animation: false as const,
+    interaction: { mode: "index" as const, intersect: false },
+    plugins: {
+      legend: { position: "top" as const },
+      tooltip: {
+        callbacks: {
+          label: (ctx: TooltipItem<"line">) =>
+            ctx.parsed.y !== null
+              ? `${ctx.dataset.label ?? ""}: ${ctx.parsed.y.toFixed(1)} ${props.variable.whatAboutMe.unitLabel}`
+              : "",
+        },
       },
     },
-  },
-  scales: {
-    x: {
-      ticks: {
-        maxRotation: 0,
-        autoSkip: false,
+    scales: {
+      x: {
+        ticks: {
+          maxRotation: 0,
+          autoSkip: false,
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: props.variable.whatAboutMe.axisLabel,
+        },
       },
     },
-    y: {
-      title: {
-        display: true,
-        text: "Temperature (°C)",
-      },
-    },
-  },
-} as const;
+  } as const;
+});
 </script>
