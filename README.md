@@ -77,6 +77,8 @@ npm run test:coverage # unit tests with coverage output
 npm run format        # Prettier
 ```
 
+Codecov uploads run on `main` pushes and same-repo pull requests. Fork-based PRs still generate coverage in CI, but skip the upload step because GitHub does not expose the same auth context there.
+
 The Python environment (for generating Kerchunk reference files) uses [Pixi](https://pixi.sh):
 
 ```bash
