@@ -81,21 +81,8 @@
     </div>
 
     <div
-      class="mt-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden relative"
+      class="mt-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden"
     >
-      <Transition
-        enter-active-class="transition-opacity duration-150"
-        enter-from-class="opacity-0"
-        enter-to-class="opacity-100"
-        leave-active-class="transition-opacity duration-300"
-        leave-from-class="opacity-100"
-        leave-to-class="opacity-0"
-      >
-        <div
-          v-if="isTransitioning"
-          class="absolute inset-0 z-10 pointer-events-none animate-pulse bg-white/40 dark:bg-gray-800/40"
-        />
-      </Transition>
       <Tabs v-model:value="activeTab">
         <div class="sm:hidden px-4 pt-4 mb-3">
           <Select
@@ -145,7 +132,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import { RouterLink } from "vue-router";
 import Tabs from "primevue/tabs";
 import TabList from "primevue/tablist";
@@ -168,16 +155,6 @@ import {
 } from "@/config/climateVariables";
 
 const activeTab = ref<ClimateVariableName>("tasmax");
-const isTransitioning = ref(false);
-let transitionTimer: ReturnType<typeof setTimeout> | null = null;
-
-watch(activeTab, () => {
-  if (transitionTimer) clearTimeout(transitionTimer);
-  isTransitioning.value = true;
-  transitionTimer = setTimeout(() => {
-    isTransitioning.value = false;
-  }, 700);
-});
 
 const variables = CLIMATE_VARIABLES;
 
