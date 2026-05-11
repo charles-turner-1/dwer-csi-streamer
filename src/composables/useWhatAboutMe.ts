@@ -1,7 +1,8 @@
 import { ref, computed } from "vue";
 import { FetchStore, root, open, get, slice } from "zarrita";
 import { fetchTimeDates } from "./useZarrDirectMap";
-import { kelvinToCelsius } from "@/utils/unitConversion";
+import { kelvinToCelsius, type UnitConverter } from "@/utils/unitConversion";
+import type { ClimateVariableName } from "@/config/climateVariables";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -311,7 +312,11 @@ export interface HeadlineStat {
  * `timeLabels` are all populated. On failure, `error` is set and data refs
  * remain null.
  */
-export function useWhatAboutMe(source: string) {
+export function useWhatAboutMe(
+  source: string,
+  initialVariableName: ClimateVariableName = "tasmax",
+  initialUnitConverter: UnitConverter = kelvinToCelsius,
+) {
   const loading = ref(false);
   const error = ref<string | null>(null);
   const placeName = ref<string | null>(null);
@@ -320,6 +325,13 @@ export function useWhatAboutMe(source: string) {
   const trendLine = ref<number[] | null>(null);
   const headline = ref<HeadlineStat | null>(null);
   const timeLabels = ref<string[] | null>(null);
+  const variableName = ref<ClimateVariableName>(initialVariableName);
+  const unitConverter = ref<UnitConverter>(initialUnitConverter);
+  const lastLookup = ref<{ lat: number; lon: number; name: string } | null>(
+    null,
+  );
+
+  let activeRequestId = 0;
 
   /**
    * Core data-fetching routine. Opens the Zarr store, snaps the coordinate to
@@ -328,6 +340,10 @@ export function useWhatAboutMe(source: string) {
    * All reactive state is reset at the start of each call.
    */
   async function fetchTimeSeries(lat: number, lon: number, name: string) {
+    const requestId = ++activeRequestId;
+    const selectedVariable = variableName.value;
+    const converter = unitConverter.value;
+
     loading.value = true;
     error.value = null;
     timeSeries.value = null;
@@ -345,10 +361,14 @@ export function useWhatAboutMe(source: string) {
       ]);
 
       if (!gridPoint) {
-        error.value =
-          "Your location appears to be outside the SWWA model domain — try an address in South-West Western Australia.";
+        if (requestId === activeRequestId) {
+          error.value =
+            "Your location appears to be outside the SWWA model domain — try an address in South-West Western Australia.";
+        }
         return;
       }
+
+      if (requestId !== activeRequestId) return;
 
       timeLabels.value = dates;
 
@@ -356,8 +376,10 @@ export function useWhatAboutMe(source: string) {
       // The date strings are locale-formatted "D Mon YYYY"
       const yearOf = (label: string) => label.split(" ").at(-1) ?? "";
 
-      // 3. Open the tasmax array
-      const arr = await open(root(store).resolve("tasmax"), { kind: "array" });
+      // 3. Open the selected climate variable array.
+      const arr = await open(root(store).resolve(selectedVariable), {
+        kind: "array",
+      });
 
       // 4. Single fetch: the store is chunked [492, ~31, ~28] so slicing to
       //    one spatial point pulls the entire time axis in one HTTP request.
@@ -375,16 +397,20 @@ export function useWhatAboutMe(source: string) {
 
       // 5. Apply unit conversion (K → °C); treat fill values and NaN as NaN
       const converted = values.map((v) =>
-        isNaN(v) || v > FILL_THRESHOLD ? NaN : kelvinToCelsius.toDisplay(v),
+        isNaN(v) || v > FILL_THRESHOLD ? NaN : converter.toDisplay(v),
       );
 
       // 6. Check that we actually have valid data (land-mask check)
       const validCount = converted.filter((v) => !isNaN(v)).length;
       if (validCount < TOTAL_TIME_STEPS * 0.5) {
-        error.value =
-          "No land-surface data at this location — it may be over the ocean or outside the model's land mask. Try a nearby inland address.";
+        if (requestId === activeRequestId) {
+          error.value =
+            "No land-surface data at this location — it may be over the ocean or outside the model's land mask. Try a nearby inland address.";
+        }
         return;
       }
+
+      if (requestId !== activeRequestId) return;
 
       // 7. Compute statistics
       const rolling = centeredRollingAvg(converted);
@@ -410,12 +436,31 @@ export function useWhatAboutMe(source: string) {
         firstLabel,
         lastLabel,
       };
+      lastLookup.value = { lat, lon, name };
     } catch (e: unknown) {
-      error.value =
-        e instanceof Error ? e.message : "An unexpected error occurred.";
+      if (requestId === activeRequestId) {
+        error.value =
+          e instanceof Error ? e.message : "An unexpected error occurred.";
+      }
     } finally {
-      loading.value = false;
+      if (requestId === activeRequestId) {
+        loading.value = false;
+      }
     }
+  }
+
+  function setVariable(name: ClimateVariableName, converter: UnitConverter) {
+    variableName.value = name;
+    unitConverter.value = converter;
+  }
+
+  async function refreshForCurrentLocation() {
+    if (!lastLookup.value) return;
+    await fetchTimeSeries(
+      lastLookup.value.lat,
+      lastLookup.value.lon,
+      lastLookup.value.name,
+    );
   }
 
   /** Geocodes `query` (AU-scoped) then delegates to {@link fetchTimeSeries}. */
@@ -425,6 +470,7 @@ export function useWhatAboutMe(source: string) {
       const { lat, lon, displayName } = await geocodeAddress(query);
       // Take the first 2 comma-separated parts for a concise label
       const shortName = displayName.split(",").slice(0, 2).join(",").trim();
+      lastLookup.value = { lat, lon, name: shortName };
       await fetchTimeSeries(lat, lon, shortName);
     } catch (e: unknown) {
       error.value = e instanceof Error ? e.message : "Geocoding failed.";
@@ -438,6 +484,7 @@ export function useWhatAboutMe(source: string) {
    * dropdown — the coordinates are already known from the Nominatim response.
    */
   async function searchByCoords(lat: number, lon: number, displayName: string) {
+    lastLookup.value = { lat, lon, name: displayName };
     await fetchTimeSeries(lat, lon, displayName);
   }
 
@@ -448,6 +495,7 @@ export function useWhatAboutMe(source: string) {
       const { lat, lon } = await getBrowserLocation();
       const displayName = await reverseGeocode(lat, lon);
       const shortName = displayName.split(",").slice(0, 2).join(",").trim();
+      lastLookup.value = { lat, lon, name: shortName };
       await fetchTimeSeries(lat, lon, shortName);
     } catch (e: unknown) {
       error.value = e instanceof Error ? e.message : "Location access failed.";
@@ -480,6 +528,9 @@ export function useWhatAboutMe(source: string) {
     firstDecadeLabel,
     lastDecadeLabel,
     deltaPositive,
+    setVariable,
+    refreshForCurrentLocation,
+    hasLocation: computed(() => lastLookup.value !== null),
     searchByAddress,
     searchByCoords,
     searchByLocation,

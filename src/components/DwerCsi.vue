@@ -80,53 +80,72 @@
       </div>
     </div>
 
-    <Tabs v-model:value="activeTab" class="mt-4">
-      <div class="sm:hidden mb-3">
-        <Select
-          v-model="activeTab"
-          :options="tabOptions"
-          optionLabel="label"
-          optionValue="value"
-          class="w-full"
+    <div
+      class="mt-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden relative"
+    >
+      <Transition
+        enter-active-class="transition-opacity duration-150"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition-opacity duration-300"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+      >
+        <div
+          v-if="isTransitioning"
+          class="absolute inset-0 z-10 pointer-events-none animate-pulse bg-white/40 dark:bg-gray-800/40"
         />
-      </div>
-      <div class="hidden sm:block">
-        <TabList>
-          <Tab
-            v-for="v in variables"
-            :key="v.varName"
-            :value="v.varName"
-            class="px-5 py-2.5 data-[p-active=false]:bg-slate-50 dark:data-[p-active=false]:bg-slate-700"
-            >{{ v.label }}</Tab
-          >
-        </TabList>
-      </div>
-
-      <TabPanels>
-        <TabPanel v-for="v in variables" :key="v.varName" :value="v.varName">
-          <ZarrDirectMap
-            :source="STORE_URL_TILES"
-            :varName="v.varName"
-            :timeSteps="492"
-            :clim="v.clim"
-            :spatialDims="SWWA_SPATIAL_DIMS"
-            :colormap="v.colormap"
-            :climUnit="v.climUnit"
-            :fillValue="1e20"
-            :proj4="SWWA_PROJ4"
-            :bounds="SWWA_BOUNDS"
-            :unitConverter="v.unitConverter"
+      </Transition>
+      <Tabs v-model:value="activeTab">
+        <div class="sm:hidden px-4 pt-4 mb-3">
+          <Select
+            v-model="activeTab"
+            :options="tabOptions"
+            optionLabel="label"
+            optionValue="value"
+            class="w-full"
           />
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
+        </div>
+        <div class="hidden sm:block">
+          <TabList>
+            <Tab
+              v-for="v in variables"
+              :key="v.varName"
+              :value="v.varName"
+              class="px-5 py-2.5 data-[p-active=false]:bg-slate-50 dark:data-[p-active=false]:bg-slate-700"
+              >{{ v.label }}</Tab
+            >
+          </TabList>
+        </div>
 
-    <WhatAboutMe :source="STORE_URL_TIMES" />
+        <TabPanels>
+          <TabPanel v-for="v in variables" :key="v.varName" :value="v.varName">
+            <ZarrDirectMap
+              :source="STORE_URL_TILES"
+              :varName="v.varName"
+              :timeSteps="492"
+              :clim="v.clim"
+              :spatialDims="SWWA_SPATIAL_DIMS"
+              :colormap="v.colormap"
+              :climUnit="v.climUnit"
+              :fillValue="1e20"
+              :proj4="SWWA_PROJ4"
+              :bounds="SWWA_BOUNDS"
+              :unitConverter="v.unitConverter"
+            />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+
+      <div class="border-t border-gray-200 dark:border-gray-700 px-6 py-6">
+        <WhatAboutMe :source="STORE_URL_TIMES" :variable="activeVariable" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { RouterLink } from "vue-router";
 import Tabs from "primevue/tabs";
 import TabList from "primevue/tablist";
@@ -140,39 +159,31 @@ import {
   SWWA_SPATIAL_DIMS,
   SWWA_PROJ4,
   SWWA_BOUNDS,
-  COLORMAP_TEMP,
-  COLORMAP_PRECIP,
 } from "@/composables/useZarrDirectMap";
-import { kelvinToCelsius, precipToMmPerDay } from "@/utils/unitConversion";
+import {
+  CLIMATE_VARIABLES,
+  getClimateVariableConfig,
+  type ClimateVariableConfig,
+  type ClimateVariableName,
+} from "@/config/climateVariables";
 
-const activeTab = ref("tasmax");
+const activeTab = ref<ClimateVariableName>("tasmax");
+const isTransitioning = ref(false);
+let transitionTimer: ReturnType<typeof setTimeout> | null = null;
 
-const variables = [
-  {
-    varName: "tasmax",
-    label: "Max Temperature",
-    clim: [6.85, 51.85] as [number, number],
-    colormap: COLORMAP_TEMP,
-    climUnit: " °C",
-    unitConverter: kelvinToCelsius,
-  },
-  {
-    varName: "tasmin",
-    label: "Min Temperature",
-    clim: [-3.15, 36.85] as [number, number],
-    colormap: COLORMAP_TEMP,
-    climUnit: " °C",
-    unitConverter: kelvinToCelsius,
-  },
-  {
-    varName: "pr",
-    label: "Precipitation",
-    clim: [0, 8.64] as [number, number],
-    colormap: COLORMAP_PRECIP,
-    climUnit: " mm/day",
-    unitConverter: precipToMmPerDay,
-  },
-];
+watch(activeTab, () => {
+  if (transitionTimer) clearTimeout(transitionTimer);
+  isTransitioning.value = true;
+  transitionTimer = setTimeout(() => {
+    isTransitioning.value = false;
+  }, 700);
+});
+
+const variables = CLIMATE_VARIABLES;
+
+const activeVariable = computed<ClimateVariableConfig>(() =>
+  getClimateVariableConfig(activeTab.value),
+);
 
 const tabOptions = variables.map(({ varName, label }) => ({
   value: varName,

@@ -2,10 +2,16 @@ import { describe, it, expect } from "vitest";
 import { mount } from "@vue/test-utils";
 import { createRouter, createMemoryHistory } from "vue-router";
 import DwerCsi from "@/components/DwerCsi.vue";
+import { CLIMATE_VARIABLES } from "@/config/climateVariables";
 
 // Stub PrimeVue Tabs with pass-through wrappers so slot content (ZarrDirectMap) renders.
 // Stub ZarrDirectMap itself to prevent maplibre/zarr lifecycle from running.
 const tabPassThrough = { template: "<div><slot /></div>" };
+const whatAboutMeStub = {
+  props: ["source", "variable"],
+  template:
+    '<div data-test="what-about-me" :data-source="source" :data-var="variable?.varName"></div>',
+};
 
 const router = createRouter({
   history: createMemoryHistory(),
@@ -29,7 +35,7 @@ function mountDwerCsi() {
         TabPanel: { template: "<div><slot /></div>", props: ["value"] },
         Select: true,
         ZarrDirectMap: true,
-        WhatAboutMe: true,
+        WhatAboutMe: whatAboutMeStub,
       },
     },
   });
@@ -104,5 +110,14 @@ describe("DwerCsi", () => {
       (m) => (m.attributes("varname") ?? m.attributes("var-name")) === "pr",
     )!;
     expect(pr.attributes("clim") ?? pr.html()).toMatch(/8\.64/);
+  });
+
+  it("passes rechunked source and active variable to WhatAboutMe", () => {
+    const wrapper = mountDwerCsi();
+    const wam = wrapper.find('[data-test="what-about-me"]');
+    expect(wam.attributes("data-source")).toBe(
+      "https://projects.pawsey.org.au/dwer-zarr-store-rechunked/data.zarr",
+    );
+    expect(wam.attributes("data-var")).toBe(CLIMATE_VARIABLES[0]?.varName);
   });
 });
