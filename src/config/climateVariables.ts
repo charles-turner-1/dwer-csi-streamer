@@ -1,7 +1,4 @@
-import {
-  COLORMAP_PRECIP,
-  COLORMAP_TEMP,
-} from "@/composables/useZarrDirectMap";
+import { COLORMAP_PRECIP, COLORMAP_TEMP } from "@/composables/useZarrDirectMap";
 import {
   kelvinToCelsius,
   precipToMmPerDay,

@@ -149,7 +149,10 @@ ChartJS.register(
   Legend,
 );
 
-const props = defineProps<{ source: string; variable: ClimateVariableConfig }>();
+const props = defineProps<{
+  source: string;
+  variable: ClimateVariableConfig;
+}>();
 
 const wam = useWhatAboutMe(
   props.source,

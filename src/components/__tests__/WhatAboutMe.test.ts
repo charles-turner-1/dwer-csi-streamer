@@ -39,7 +39,7 @@ vi.mock("@/composables/useWhatAboutMe", () => ({
 vi.mock("vue-chartjs", () => ({
   Line: {
     name: "Line",
-    template: "<div data-test=\"line-chart\" />",
+    template: '<div data-test="line-chart" />',
   },
 }));
 
