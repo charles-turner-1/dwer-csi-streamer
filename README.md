@@ -1,5 +1,7 @@
 # DWER CSI Streamer
 
+[![codecov](https://codecov.io/gh/charles-turner-1/dwer-csi-streamer/graph/badge.svg)](https://codecov.io/gh/charles-turner-1/dwer-csi-streamer)
+
 > [!WARNING]
 > This package has been scaffolded by Claude. Details may be and probably are incorrect whilst this warning is still here.
 
@@ -69,10 +71,13 @@ npm run dev
 ```
 
 ```bash
-npm run build      # type-check + production build
-npm run test       # unit tests (Vitest)
-npm run format     # Prettier
+npm run build         # type-check + production build
+npm run test          # unit tests (Vitest)
+npm run test:coverage # unit tests with coverage output
+npm run format        # Prettier
 ```
+
+Codecov uploads run on `main` pushes and same-repo pull requests. Fork-based PRs still generate coverage in CI, but skip the upload step because GitHub does not expose the same auth context there.
 
 The Python environment (for generating Kerchunk reference files) uses [Pixi](https://pixi.sh):
 
