@@ -81,8 +81,24 @@
     </div>
 
     <div
-      class="mt-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden"
+      class="mt-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden relative"
+      :class="{ 'blur-lg': isLoading }"
     >
+      <Transition
+        enter-active-class="transition-opacity duration-150"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition-opacity duration-300"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+      >
+        <div
+          v-if="isLoading"
+          class="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
+        >
+          <div class="loader"></div>
+        </div>
+      </Transition>
       <Tabs v-model:value="activeTab">
         <div class="sm:hidden px-4 pt-4 mb-3">
           <Select
@@ -132,7 +148,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { RouterLink } from "vue-router";
 import Tabs from "primevue/tabs";
 import TabList from "primevue/tablist";
@@ -155,6 +171,16 @@ import {
 } from "@/config/climateVariables";
 
 const activeTab = ref<ClimateVariableName>("tasmax");
+const isLoading = ref(false);
+let loadingTimer: ReturnType<typeof setTimeout> | null = null;
+
+watch(activeTab, () => {
+  if (loadingTimer) clearTimeout(loadingTimer);
+  isLoading.value = true;
+  loadingTimer = setTimeout(() => {
+    isLoading.value = false;
+  }, 300);
+});
 
 const variables = CLIMATE_VARIABLES;
 
@@ -172,3 +198,28 @@ const STORE_URL_TILES =
 const STORE_URL_TIMES =
   "https://projects.pawsey.org.au/dwer-zarr-store-rechunked/data.zarr";
 </script>
+
+<style scoped>
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  width: 100px;
+  height: 100px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.dark .loader {
+  border-color: rgba(255, 255, 255, 0.1);
+  border-top-color: #60a5fa;
+}
+</style>
