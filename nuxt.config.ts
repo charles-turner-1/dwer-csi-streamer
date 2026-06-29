@@ -10,6 +10,9 @@ const getGitCommitSha = () => {
   }
 };
 
+const baseURL =
+  process.env.NODE_ENV === "production" ? "/dwer-csi-streamer/" : "/";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
@@ -17,8 +20,18 @@ export default defineNuxtConfig({
   modules: ["@nuxt/ui", "@nuxt/content", "@posthog/nuxt"],
   css: ["~/assets/css/main.css"],
   app: {
-    baseURL:
-      process.env.NODE_ENV === "production" ? "/dwer-csi-streamer/" : "/",
+    baseURL,
+    head: {
+      // Use the ACCESS-NRI logo (in public/) as the favicon. Prefixed with the
+      // base URL so it resolves correctly under the GitHub Pages subpath.
+      link: [
+        {
+          rel: "icon",
+          type: "image/svg+xml",
+          href: `${baseURL}ACCESS-logo.svg`,
+        },
+      ],
+    },
   },
   runtimeConfig: {
     public: {
