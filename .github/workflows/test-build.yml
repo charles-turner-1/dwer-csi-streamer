@@ -10,6 +10,12 @@ jobs:
   test-build:
     runs-on: ubuntu-latest
 
+    env:
+      NITRO_PRESET: github_pages
+      NUXT_APP_BASE_URL: /dwer-csi-streamer/
+      NUXT_PUBLIC_POSTHOG_KEY: ${{ secrets.NUXT_PUBLIC_POSTHOG_KEY }}
+      NUXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NUXT_PUBLIC_POSTHOG_HOST }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -17,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "23"
+          node-version: "26"
           cache: "npm"
 
       - name: Install dependencies
@@ -37,18 +43,18 @@ jobs:
           fail_ci_if_error: true
           verbose: true
 
-      - name: Build project (includes type checking)
-        run: NODE_ENV=production npm run build
+      - name: Generate static site
+        run: NODE_ENV=production npm run generate
 
       - name: Check build artifacts
         run: |
-          if [ ! -d "dist" ]; then
-            echo "Build failed: dist directory not created"
+          if [ ! -d ".output/public" ]; then
+            echo "Build failed: .output/public directory not created"
             exit 1
           fi
-          if [ ! -f "dist/index.html" ]; then
-            echo "Build failed: index.html not found in dist"
+          if [ ! -f ".output/public/index.html" ]; then
+            echo "Build failed: index.html not found in .output/public"
             exit 1
           fi
           echo "Build successful! Generated files:"
-          ls -la dist/
+          ls -la .output/public/
