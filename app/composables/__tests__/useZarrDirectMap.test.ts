@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { ref, nextTick } from "vue";
 
 // --- Mock heavy dependencies before importing the composable ---
 
@@ -37,6 +38,9 @@ vi.mock("zarrita", () => ({
   ),
 }));
 
+// usePosthog is a Nuxt auto-import; provide a stub for the bare happy-dom env.
+vi.stubGlobal("usePosthog", () => ({ capture: vi.fn() }));
+
 import {
   fetchTimeDates,
   useZarrDirectMap,
@@ -45,6 +49,31 @@ import {
   SWWA_SPATIAL_DIMS,
   SWWA_BOUNDS,
 } from "~/composables/useZarrDirectMap";
+import type { ClimateVariableConfig } from "~/config/climateVariables";
+import type { UnitConverter } from "~/utils/unitConversion";
+
+// Build a ClimateVariableConfig for tests (the composable only reads varName,
+// clim, colormap, climUnit and unitConverter).
+function makeVar(
+  over: Partial<ClimateVariableConfig> = {},
+): ClimateVariableConfig {
+  return {
+    varName: "tasmax",
+    label: "Max Temperature",
+    clim: [280, 325],
+    colormap: COLORMAP_TEMP,
+    climUnit: " K",
+    unitConverter: undefined as unknown as UnitConverter,
+    whatAboutMe: {
+      introMetric: "",
+      headlineMetric: "",
+      chartTitleMetric: "",
+      axisLabel: "",
+      unitLabel: "",
+    },
+    ...over,
+  };
+}
 
 // ---------------------------------------------------------------------------
 // Exported constants
@@ -129,40 +158,44 @@ describe("fetchTimeDates", () => {
 
 describe("useZarrDirectMap initial state", () => {
   it("exposes timeIndex=0, opacity=85, timeDates=null on creation", () => {
-    // Import the helper inline since it's light
     const { timeIndex, opacity, timeDates } = useZarrDirectMap(
       "https://example.com/store.zarr",
-      "tasmax",
+      makeVar(),
       492,
-      [280, 325],
       { lat: "rlat", lon: "rlon" },
-      COLORMAP_TEMP,
     );
     expect(timeIndex.value).toBe(0);
     expect(opacity.value).toBe(85);
     expect(timeDates.value).toBeNull();
   });
 
-  it("timeSteps matches the passed prop", () => {
+  it("initialises clim from the active variable", () => {
+    const { climLower, climUpper } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar({ clim: [6.85, 51.85] }),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(climLower.value).toBe(6.85);
+    expect(climUpper.value).toBe(51.85);
+  });
+
+  it("timeSteps matches the passed value", () => {
     const { timeSteps } = useZarrDirectMap(
       "https://example.com/store.zarr",
-      "tasmax",
+      makeVar(),
       492,
-      [280, 325],
       { lat: "rlat", lon: "rlon" },
-      COLORMAP_TEMP,
     );
     expect(timeSteps).toBe(492);
   });
 
-  it("colourbarStyle gradient contains colormap colours", () => {
+  it("colourbarStyle gradient contains the active variable's colormap colours", () => {
     const { colourbarStyle } = useZarrDirectMap(
       "https://example.com/store.zarr",
-      "tasmax",
+      makeVar({ colormap: COLORMAP_TEMP }),
       492,
-      [280, 325],
       { lat: "rlat", lon: "rlon" },
-      COLORMAP_TEMP,
     );
     const style = colourbarStyle.value;
     expect(style.background).toContain("linear-gradient");
@@ -172,12 +205,41 @@ describe("useZarrDirectMap initial state", () => {
 });
 
 // ---------------------------------------------------------------------------
+// useZarrDirectMap — reacting to a variable change
+// ---------------------------------------------------------------------------
+
+describe("useZarrDirectMap reactive variable", () => {
+  it("resets clim to the new variable's defaults when the variable changes", async () => {
+    const variable = ref(makeVar({ varName: "tasmax", clim: [6.85, 51.85] }));
+    const { climLower, climUpper, colourbarStyle } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      variable,
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+
+    expect(climLower.value).toBe(6.85);
+
+    variable.value = makeVar({
+      varName: "pr",
+      clim: [0, 8.64],
+      colormap: COLORMAP_PRECIP,
+    });
+    await nextTick();
+
+    expect(climLower.value).toBe(0);
+    expect(climUpper.value).toBe(8.64);
+    expect(colourbarStyle.value.background).toContain(COLORMAP_PRECIP[0]);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // useZarrDirectMap — unit converter integration
 // ---------------------------------------------------------------------------
-// Note: ZarrLayer is only constructed inside onMounted when mapContainer.value
-// is non-null (requires a real DOM element). These tests verify the converter
-// is invoked correctly by setClim — the toRaw call is unconditional and
-// happens before the null-guarded zarrLayer?.setClim().
+// Note: ZarrLayer is only constructed once the map mounts (requires a real DOM
+// element + map "load"). These tests verify the converter is invoked correctly
+// by setClim — the toRaw call is unconditional and happens before the
+// null-guarded zarrLayer?.setClim().
 
 describe("useZarrDirectMap with unitConverter", () => {
   it("setClim calls converter.toRaw on both values", () => {
@@ -188,15 +250,9 @@ describe("useZarrDirectMap with unitConverter", () => {
 
     const { setClim } = useZarrDirectMap(
       "https://example.com/store.zarr",
-      "tasmax",
+      makeVar({ clim: [6.85, 51.85], unitConverter: converter }),
       492,
-      [6.85, 51.85],
       { lat: "rlat", lon: "rlon" },
-      COLORMAP_TEMP,
-      undefined,
-      undefined,
-      undefined,
-      converter,
     );
 
     setClim([10, 40]);
@@ -205,14 +261,12 @@ describe("useZarrDirectMap with unitConverter", () => {
     expect(converter.toRaw).toHaveBeenCalledWith(40);
   });
 
-  it("setClim does NOT call toRaw when no converter provided", () => {
+  it("setClim does NOT throw when no converter provided", () => {
     const { setClim } = useZarrDirectMap(
       "https://example.com/store.zarr",
-      "tasmax",
+      makeVar(),
       492,
-      [280, 325],
       { lat: "rlat", lon: "rlon" },
-      COLORMAP_TEMP,
     );
 
     expect(() => setClim([285, 320])).not.toThrow();
