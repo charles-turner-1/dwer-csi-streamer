@@ -44,7 +44,7 @@ import {
   COLORMAP_PRECIP,
   SWWA_SPATIAL_DIMS,
   SWWA_BOUNDS,
-} from "@/composables/useZarrDirectMap";
+} from "~/composables/useZarrDirectMap";
 
 // ---------------------------------------------------------------------------
 // Exported constants

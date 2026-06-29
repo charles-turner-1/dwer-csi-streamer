@@ -248,6 +248,12 @@
 </template>
 
 <script setup lang="ts">
+useSeoMeta({
+  title: "About this project",
+  description:
+    "A serverless tool for streaming scientific climate datasets directly from the cloud, for exploration and engagement.",
+});
+
 const linkCards = [
   {
     href: "/view-data",

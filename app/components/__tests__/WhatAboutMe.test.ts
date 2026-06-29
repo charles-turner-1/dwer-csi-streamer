@@ -2,13 +2,13 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { ref } from "vue";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import WhatAboutMe from "@/components/WhatAboutMe.vue";
-import { CLIMATE_VARIABLES } from "@/config/climateVariables";
+import WhatAboutMe from "~/components/WhatAboutMe.vue";
+import { CLIMATE_VARIABLES } from "~/config/climateVariables";
 
 const setVariable = vi.fn();
 const refreshForCurrentLocation = vi.fn();
 
-vi.mock("@/composables/useWhatAboutMe", () => ({
+vi.mock("~/composables/useWhatAboutMe", () => ({
   useWhatAboutMe: vi.fn(() => ({
     loading: ref(false),
     error: ref<string | null>(null),

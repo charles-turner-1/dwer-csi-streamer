@@ -2,9 +2,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { ref } from "vue";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import ZarrDirectMap from "@/components/ZarrDirectMap.vue";
-import { kelvinToCelsius } from "@/utils/unitConversion";
-import { useZarrDirectMap } from "@/composables/useZarrDirectMap";
+import ZarrDirectMap from "~/components/ZarrDirectMap.vue";
+import { kelvinToCelsius } from "~/utils/unitConversion";
+import { useZarrDirectMap } from "~/composables/useZarrDirectMap";
 
 // ---------------------------------------------------------------------------
 // Mock composable — we test ZarrDirectMap's UI logic in isolation
@@ -34,7 +34,7 @@ const mockState = {
   setProjection: mockSetProjection,
 };
 
-vi.mock("@/composables/useZarrDirectMap", () => ({
+vi.mock("~/composables/useZarrDirectMap", () => ({
   useZarrDirectMap: vi.fn(() => mockState),
   // Re-export the colormap/dimension constants consumed elsewhere so the mock
   // does not break unrelated imports.

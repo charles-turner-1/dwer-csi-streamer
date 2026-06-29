@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { kelvinToCelsius, precipToMmPerDay } from "@/utils/unitConversion";
+import { kelvinToCelsius, precipToMmPerDay } from "~/utils/unitConversion";
 
 // ---------------------------------------------------------------------------
 // kelvinToCelsius

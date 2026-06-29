@@ -118,7 +118,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -134,8 +133,8 @@ import { Line } from "vue-chartjs";
 import {
   useWhatAboutMe,
   type NominatimSuggestion,
-} from "@/composables/useWhatAboutMe";
-import type { ClimateVariableConfig } from "@/config/climateVariables";
+} from "~/composables/useWhatAboutMe";
+import type { ClimateVariableConfig } from "~/config/climateVariables";
 
 ChartJS.register(
   CategoryScale,

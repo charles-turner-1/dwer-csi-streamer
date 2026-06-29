@@ -144,8 +144,8 @@
 
 <script setup lang="ts">
 import "maplibre-gl/dist/maplibre-gl.css";
-import { useZarrDirectMap } from "@/composables/useZarrDirectMap";
-import type { UnitConverter } from "@/utils/unitConversion";
+import { useZarrDirectMap } from "~/composables/useZarrDirectMap";
+import type { UnitConverter } from "~/utils/unitConversion";
 
 const { capture } = usePosthog();
 

@@ -37,7 +37,7 @@ vi.mock("zarrita", () => ({
 }));
 
 // fetchTimeDates — return a synthetic 492-label array
-vi.mock("@/composables/useZarrDirectMap", () => ({
+vi.mock("~/composables/useZarrDirectMap", () => ({
   fetchTimeDates: vi.fn().mockResolvedValue(
     Array.from({ length: 492 }, (_, i) => {
       const year = 1980 + Math.floor(i / 12);
@@ -65,8 +65,8 @@ import { get, open } from "zarrita";
 import {
   useWhatAboutMe,
   type NominatimSuggestion,
-} from "@/composables/useWhatAboutMe";
-import { precipToMmPerDay } from "@/utils/unitConversion";
+} from "~/composables/useWhatAboutMe";
+import { precipToMmPerDay } from "~/utils/unitConversion";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 

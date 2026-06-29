@@ -1,8 +1,8 @@
 // @vitest-environment nuxt
 import { describe, it, expect } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import IndexPage from "@/pages/index.vue";
-import LinkCard from "@/components/LinkCard.vue";
+import IndexPage from "~/pages/index.vue";
+import LinkCard from "~/components/LinkCard.vue";
 
 function mountHome() {
   return mountSuspended(IndexPage);

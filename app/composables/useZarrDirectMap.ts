@@ -2,7 +2,7 @@ import { ref, computed, onMounted, onUnmounted } from "vue";
 import maplibregl from "maplibre-gl";
 import { ZarrLayer, type LoadingState } from "@carbonplan/zarr-layer";
 import { FetchStore, root, open, get } from "zarrita";
-import type { UnitConverter } from "@/utils/unitConversion";
+import type { UnitConverter } from "~/utils/unitConversion";
 
 export const COLORMAP_TEMP = [
   "#440154",

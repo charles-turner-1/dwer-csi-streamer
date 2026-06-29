@@ -147,13 +147,19 @@ import {
   SWWA_SPATIAL_DIMS,
   SWWA_PROJ4,
   SWWA_BOUNDS,
-} from "@/composables/useZarrDirectMap";
+} from "~/composables/useZarrDirectMap";
 import {
   CLIMATE_VARIABLES,
   getClimateVariableConfig,
   type ClimateVariableConfig,
   type ClimateVariableName,
-} from "@/config/climateVariables";
+} from "~/config/climateVariables";
+
+useSeoMeta({
+  title: "View the Data",
+  description:
+    "Explore WRF regional climate model output (temperatures, rainfall) streamed directly from Pawsey Acacia object storage.",
+});
 
 const activeTab = ref<ClimateVariableName>("tasmax");
 const isLoading = ref(false);

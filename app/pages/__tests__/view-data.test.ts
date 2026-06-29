@@ -1,8 +1,8 @@
 // @vitest-environment nuxt
 import { describe, it, expect } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import ViewData from "@/pages/view-data.vue";
-import { CLIMATE_VARIABLES } from "@/config/climateVariables";
+import ViewData from "~/pages/view-data.vue";
+import { CLIMATE_VARIABLES } from "~/config/climateVariables";
 
 const STORE_URL = "https://projects.pawsey.org.au/dwer-zarr-store/data.zarr";
 const RECHUNKED_URL =

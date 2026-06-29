@@ -1,9 +1,9 @@
-import { COLORMAP_PRECIP, COLORMAP_TEMP } from "@/composables/useZarrDirectMap";
+import { COLORMAP_PRECIP, COLORMAP_TEMP } from "~/composables/useZarrDirectMap";
 import {
   kelvinToCelsius,
   precipToMmPerDay,
   type UnitConverter,
-} from "@/utils/unitConversion";
+} from "~/utils/unitConversion";
 
 export type ClimateVariableName = "tasmax" | "tasmin" | "pr";
 

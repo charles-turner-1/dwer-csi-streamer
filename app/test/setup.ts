@@ -9,7 +9,7 @@ config.global.stubs = {
   // Example: 'RouterLink': true
 };
 
-// ResizeObserver is used by maplibre-gl and PrimeVue; happy-dom doesn't include it
+// ResizeObserver is used by maplibre-gl and Nuxt UI; happy-dom doesn't include it
 class ResizeObserverMock implements ResizeObserver {
   constructor(_callback: ResizeObserverCallback) {}
   observe(_target: Element, _options?: ResizeObserverOptions): void {}

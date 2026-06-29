@@ -31,11 +31,17 @@
 
 <script setup lang="ts">
 import type { TabsItem } from "@nuxt/ui";
-import ref01degJson from "@/assets/ref-01deg.json";
-import ref1degJson from "@/assets/ref-1deg.json";
+import ref01degJson from "~/assets/ref-01deg.json";
+import ref1degJson from "~/assets/ref-1deg.json";
 
 const ref01deg = ref01degJson as Record<string, unknown>;
 const ref1deg = ref1degJson as Record<string, unknown>;
+
+useSeoMeta({
+  title: "ACCESS Model Datasets",
+  description:
+    "Proof of concept: interactively explore ACCESS climate model output streamed directly from Pawsey Acacia object storage.",
+});
 
 interface DatasetTab {
   value: string;

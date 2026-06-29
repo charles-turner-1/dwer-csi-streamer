@@ -1,8 +1,8 @@
 import { ref, computed } from "vue";
 import { FetchStore, root, open, get, slice } from "zarrita";
 import { fetchTimeDates } from "./useZarrDirectMap";
-import { kelvinToCelsius, type UnitConverter } from "@/utils/unitConversion";
-import type { ClimateVariableName } from "@/config/climateVariables";
+import { kelvinToCelsius, type UnitConverter } from "~/utils/unitConversion";
+import type { ClimateVariableName } from "~/config/climateVariables";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 

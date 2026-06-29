@@ -22,6 +22,8 @@ export default defineNuxtConfig({
   app: {
     baseURL,
     head: {
+      title: "Zarr Data Streamer",
+      titleTemplate: "%s · Zarr Data Streamer",
       // Use the ACCESS-NRI logo (in public/) as the favicon. Prefixed with the
       // base URL so it resolves correctly under the GitHub Pages subpath.
       link: [

@@ -123,7 +123,7 @@
 
 <script setup lang="ts">
 import "maplibre-gl/dist/maplibre-gl.css";
-import { useZarrMap, CLIM } from "@/composables/useZarrMap";
+import { useZarrMap, CLIM } from "~/composables/useZarrMap";
 
 const { capture } = usePosthog();
 
