@@ -17,7 +17,9 @@ vi.mock("~/composables/useZarrMap", () => ({
       chunks: false,
       error: null,
     }),
-    colourbarStyle: ref({ background: "linear-gradient(to right, #440154, #fde725)" }),
+    colourbarStyle: ref({
+      background: "linear-gradient(to right, #440154, #fde725)",
+    }),
     onTimeChange: vi.fn(),
     onOpacityChange: vi.fn(),
     setClim: vi.fn(),

@@ -450,9 +450,19 @@ describe("useZarrDirectMap loadingState watch", () => {
       { lat: "rlat", lon: "rlon" },
     );
 
-    loadingState.value = { loading: true, metadata: true, chunks: true, error: null };
+    loadingState.value = {
+      loading: true,
+      metadata: true,
+      chunks: true,
+      error: null,
+    };
     await nextTick();
-    loadingState.value = { loading: false, metadata: true, chunks: true, error: null };
+    loadingState.value = {
+      loading: false,
+      metadata: true,
+      chunks: true,
+      error: null,
+    };
     await nextTick();
     // Watch callback executed the success capture branch without throwing.
   });
@@ -465,7 +475,12 @@ describe("useZarrDirectMap loadingState watch", () => {
       { lat: "rlat", lon: "rlon" },
     );
 
-    loadingState.value = { loading: true, metadata: false, chunks: false, error: null };
+    loadingState.value = {
+      loading: true,
+      metadata: false,
+      chunks: false,
+      error: null,
+    };
     await nextTick();
     loadingState.value = {
       loading: false,
