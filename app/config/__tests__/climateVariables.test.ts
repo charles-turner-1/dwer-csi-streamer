@@ -37,8 +37,13 @@ describe("CLIMATE_VARIABLES", () => {
 
   it("whatAboutMe has all UI fields", () => {
     for (const v of CLIMATE_VARIABLES) {
-      const { introMetric, headlineMetric, chartTitleMetric, axisLabel, unitLabel } =
-        v.whatAboutMe;
+      const {
+        introMetric,
+        headlineMetric,
+        chartTitleMetric,
+        axisLabel,
+        unitLabel,
+      } = v.whatAboutMe;
       expect(introMetric).toBeTruthy();
       expect(headlineMetric).toBeTruthy();
       expect(chartTitleMetric).toBeTruthy();

@@ -11,7 +11,7 @@
             >{{ timeIndex + 1 }} / {{ timeSteps }}</span
           >
         </label>
-        <USlider 
+        <USlider
           v-model="timeIndex"
           min="0"
           :max="timeSteps - 1"
@@ -22,7 +22,7 @@
         <label class="text-sm font-medium text-gray-700 dark:text-gray-300"
           >Opacity:</label
         >
-        <USlider 
+        <USlider
           v-model="opacity"
           min="0"
           max="100"

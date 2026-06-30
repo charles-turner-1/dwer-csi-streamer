@@ -5,7 +5,8 @@ import DashboardLayout from "~/layouts/dashboard.vue";
 
 const stubs = {
   UHeader: {
-    template: "<header><slot /><slot name='right' /><slot name='body' /></header>",
+    template:
+      "<header><slot /><slot name='right' /><slot name='body' /></header>",
   },
   UNavigationMenu: true,
   UDashboardGroup: { template: "<div><slot /></div>" },
