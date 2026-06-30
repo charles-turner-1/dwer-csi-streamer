@@ -55,11 +55,16 @@ vi.mock("maplibre-gl", () => ({
   },
 }));
 
-import { useZarrDirectMap, COLORMAP_TEMP } from "~/composables/useZarrDirectMap";
+import {
+  useZarrDirectMap,
+  COLORMAP_TEMP,
+} from "~/composables/useZarrDirectMap";
 import type { ClimateVariableConfig } from "~/config/climateVariables";
 import type { UnitConverter } from "~/utils/unitConversion";
 
-function makeVar(over: Partial<ClimateVariableConfig> = {}): ClimateVariableConfig {
+function makeVar(
+  over: Partial<ClimateVariableConfig> = {},
+): ClimateVariableConfig {
   return {
     varName: "tasmax",
     label: "Max Temperature",
@@ -94,7 +99,8 @@ function makeWrapper(variable: { value: ClimateVariableConfig }) {
       }
       return { setContainer };
     },
-    template: '<div><div :ref="setContainer" style="width:100px;height:100px"></div></div>',
+    template:
+      '<div><div :ref="setContainer" style="width:100px;height:100px"></div></div>',
   });
 }
 
