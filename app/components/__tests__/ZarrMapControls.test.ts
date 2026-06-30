@@ -161,4 +161,39 @@ describe("ZarrMapControls", () => {
       expect(onTimeChange).toHaveBeenCalled();
     });
   });
+
+  describe("opacity slider interaction", () => {
+    it("calls onOpacityChange when the opacity slider changes", async () => {
+      const wrapper = await mountControls();
+      const sliders = wrapper.findAll("input[type='range']");
+      // Second slider is opacity (time is first).
+      await sliders[1]!.trigger("input");
+      expect(onOpacityChange).toHaveBeenCalled();
+    });
+  });
+
+  describe("projection select interaction", () => {
+    it("calls onProjectionChange when the projection select changes", async () => {
+      const wrapper = await mountControls();
+      const select = wrapper.find("select");
+      await select.trigger("change");
+      expect(onProjectionChange).toHaveBeenCalled();
+    });
+  });
+
+  describe("clim input interaction", () => {
+    it("calls onClimChange when the min clim input changes", async () => {
+      const wrapper = await mountControls();
+      const inputs = wrapper.findAll("input[data-testid='input-number']");
+      await inputs[0]!.trigger("input");
+      expect(onClimChange).toHaveBeenCalled();
+    });
+
+    it("calls onClimChange when the max clim input changes", async () => {
+      const wrapper = await mountControls();
+      const inputs = wrapper.findAll("input[data-testid='input-number']");
+      await inputs[1]!.trigger("input");
+      expect(onClimChange).toHaveBeenCalled();
+    });
+  });
 });

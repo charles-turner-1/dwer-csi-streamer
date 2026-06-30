@@ -79,4 +79,12 @@ describe("view-data page", () => {
     expect(wam.attributes("data-source")).toBe(RECHUNKED_URL);
     expect(wam.attributes("data-var")).toBe(CLIMATE_VARIABLES[0]?.varName);
   });
+
+  it("renders navigation items for all three climate variables", async () => {
+    const wrapper = await mountViewData();
+    const text = wrapper.text();
+    expect(text).toContain("Max Temperature");
+    expect(text).toContain("Min Temperature");
+    expect(text).toContain("Precipitation");
+  });
 });

@@ -3,6 +3,10 @@ import { ref, nextTick } from "vue";
 
 // --- Mock heavy dependencies before importing the composable ---
 
+vi.mock("~/composables/usePosthog", () => ({
+  usePosthog: () => ({ capture: vi.fn() }),
+}));
+
 vi.mock("maplibre-gl", () => ({
   default: {
     Map: vi.fn().mockImplementation(() => ({
@@ -48,6 +52,7 @@ import {
   COLORMAP_PRECIP,
   SWWA_SPATIAL_DIMS,
   SWWA_BOUNDS,
+  SWWA_PROJ4,
 } from "~/composables/useZarrDirectMap";
 import type { ClimateVariableConfig } from "~/config/climateVariables";
 import type { UnitConverter } from "~/utils/unitConversion";
@@ -97,6 +102,11 @@ describe("exported constants", () => {
   it("SWWA_BOUNDS is a 4-element tuple of numbers", () => {
     expect(SWWA_BOUNDS).toHaveLength(4);
     SWWA_BOUNDS.forEach((v) => expect(typeof v).toBe("number"));
+  });
+
+  it("SWWA_PROJ4 is a non-empty string", () => {
+    expect(typeof SWWA_PROJ4).toBe("string");
+    expect(SWWA_PROJ4.length).toBeGreaterThan(0);
   });
 });
 
@@ -270,5 +280,124 @@ describe("useZarrDirectMap with unitConverter", () => {
     );
 
     expect(() => setClim([285, 320])).not.toThrow();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// useZarrDirectMap — derived computed values
+// ---------------------------------------------------------------------------
+
+describe("useZarrDirectMap computed values", () => {
+  it("climRange equals |clim[1] - clim[0]|", () => {
+    const { climRange } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar({ clim: [280, 325] }),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(climRange.value).toBeCloseTo(45);
+  });
+
+  it("climStep is positive", () => {
+    const { climStep } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar({ clim: [0, 8.64] }),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(climStep.value).toBeGreaterThan(0);
+  });
+
+  it("climFractionDigits is a non-negative integer", () => {
+    const { climFractionDigits } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar({ clim: [0, 8.64] }),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(climFractionDigits.value).toBeGreaterThanOrEqual(0);
+    expect(Number.isInteger(climFractionDigits.value)).toBe(true);
+  });
+
+  it("climDefaults matches the active variable's clim", () => {
+    const { climDefaults } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar({ clim: [6.85, 51.85] }),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(climDefaults.value).toEqual([6.85, 51.85]);
+  });
+
+  it("climUnit matches the active variable's climUnit", () => {
+    const { climUnit } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar({ climUnit: " °C" }),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(climUnit.value).toBe(" °C");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// useZarrDirectMap — handlers before map mounts (zarrLayer is null)
+// ---------------------------------------------------------------------------
+
+describe("useZarrDirectMap handlers (no map mounted)", () => {
+  it("onTimeChange does not throw", () => {
+    const { onTimeChange } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar(),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(() => onTimeChange()).not.toThrow();
+  });
+
+  it("onOpacityChange does not throw", () => {
+    const { onOpacityChange } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar(),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(() => onOpacityChange()).not.toThrow();
+  });
+
+  it("onClimChange does not throw", () => {
+    const { onClimChange } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar(),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(() => onClimChange()).not.toThrow();
+  });
+
+  it("onProjectionChange does not throw", () => {
+    const { onProjectionChange } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar(),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(() => onProjectionChange()).not.toThrow();
+  });
+
+  it("resetClim restores climLower and climUpper to the variable's defaults", () => {
+    const { climLower, climUpper, resetClim } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar({ clim: [6.85, 51.85] }),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+
+    climLower.value = 10;
+    climUpper.value = 40;
+    resetClim();
+
+    expect(climLower.value).toBe(6.85);
+    expect(climUpper.value).toBe(51.85);
   });
 });
