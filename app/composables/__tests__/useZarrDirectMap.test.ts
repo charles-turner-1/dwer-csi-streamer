@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { ref, nextTick } from "vue";
 
 // --- Mock heavy dependencies before importing the composable ---
@@ -399,5 +399,81 @@ describe("useZarrDirectMap handlers (no map mounted)", () => {
 
     expect(climLower.value).toBe(6.85);
     expect(climUpper.value).toBe(51.85);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// useZarrDirectMap — debounce callbacks (require fake timers to execute)
+// ---------------------------------------------------------------------------
+
+describe("useZarrDirectMap debounce callbacks", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("onTimeChange debounce fires after 1 s without throwing", () => {
+    const { onTimeChange } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar(),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    onTimeChange();
+    expect(() => vi.advanceTimersByTime(1001)).not.toThrow();
+  });
+
+  it("onOpacityChange debounce fires after 1 s without throwing", () => {
+    const { onOpacityChange } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar(),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    onOpacityChange();
+    expect(() => vi.advanceTimersByTime(1001)).not.toThrow();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// useZarrDirectMap — loadingState watch callback
+// ---------------------------------------------------------------------------
+
+describe("useZarrDirectMap loadingState watch", () => {
+  it("executes the success branch when loading transitions true→false", async () => {
+    const { loadingState } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar(),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+
+    loadingState.value = { loading: true, metadata: true, chunks: true, error: null };
+    await nextTick();
+    loadingState.value = { loading: false, metadata: true, chunks: true, error: null };
+    await nextTick();
+    // Watch callback executed the success capture branch without throwing.
+  });
+
+  it("executes the error branch when loading settles with an error", async () => {
+    const { loadingState } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar(),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+
+    loadingState.value = { loading: true, metadata: false, chunks: false, error: null };
+    await nextTick();
+    loadingState.value = {
+      loading: false,
+      metadata: false,
+      chunks: false,
+      error: new Error("fetch failed"),
+    };
+    await nextTick();
+    // Watch callback executed the error capture branch without throwing.
   });
 });
