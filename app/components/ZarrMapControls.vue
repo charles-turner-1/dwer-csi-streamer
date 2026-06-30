@@ -38,7 +38,7 @@
     <div class="space-y-1">
       <label
         class="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap"
-        >Projection:</label
+        >Map Projection:</label
       >
       <USelect
         v-model="projection"

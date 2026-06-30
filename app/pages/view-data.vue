@@ -7,7 +7,7 @@
     <!-- Variable selector -->
     <div>
       <p
-        class="px-2.5 mb-1 text-xs font-semibold uppercase tracking-wide text-muted"
+        class="px-1.5 mb-1 text-s font-bold uppercase tracking-wide text-muted"
       >
         Variable
       </p>
