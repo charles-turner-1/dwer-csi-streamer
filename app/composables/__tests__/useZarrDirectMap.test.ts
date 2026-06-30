@@ -1,6 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { ref, nextTick } from "vue";
 
 // --- Mock heavy dependencies before importing the composable ---
+
+vi.mock("~/composables/usePosthog", () => ({
+  usePosthog: () => ({ capture: vi.fn() }),
+}));
 
 vi.mock("maplibre-gl", () => ({
   default: {
@@ -37,6 +42,9 @@ vi.mock("zarrita", () => ({
   ),
 }));
 
+// usePosthog is a Nuxt auto-import; provide a stub for the bare happy-dom env.
+vi.stubGlobal("usePosthog", () => ({ capture: vi.fn() }));
+
 import {
   fetchTimeDates,
   useZarrDirectMap,
@@ -44,7 +52,33 @@ import {
   COLORMAP_PRECIP,
   SWWA_SPATIAL_DIMS,
   SWWA_BOUNDS,
+  SWWA_PROJ4,
 } from "~/composables/useZarrDirectMap";
+import type { ClimateVariableConfig } from "~/config/climateVariables";
+import type { UnitConverter } from "~/utils/unitConversion";
+
+// Build a ClimateVariableConfig for tests (the composable only reads varName,
+// clim, colormap, climUnit and unitConverter).
+function makeVar(
+  over: Partial<ClimateVariableConfig> = {},
+): ClimateVariableConfig {
+  return {
+    varName: "tasmax",
+    label: "Max Temperature",
+    clim: [280, 325],
+    colormap: COLORMAP_TEMP,
+    climUnit: " K",
+    unitConverter: undefined as unknown as UnitConverter,
+    whatAboutMe: {
+      introMetric: "",
+      headlineMetric: "",
+      chartTitleMetric: "",
+      axisLabel: "",
+      unitLabel: "",
+    },
+    ...over,
+  };
+}
 
 // ---------------------------------------------------------------------------
 // Exported constants
@@ -68,6 +102,11 @@ describe("exported constants", () => {
   it("SWWA_BOUNDS is a 4-element tuple of numbers", () => {
     expect(SWWA_BOUNDS).toHaveLength(4);
     SWWA_BOUNDS.forEach((v) => expect(typeof v).toBe("number"));
+  });
+
+  it("SWWA_PROJ4 is a non-empty string", () => {
+    expect(typeof SWWA_PROJ4).toBe("string");
+    expect(SWWA_PROJ4.length).toBeGreaterThan(0);
   });
 });
 
@@ -129,40 +168,44 @@ describe("fetchTimeDates", () => {
 
 describe("useZarrDirectMap initial state", () => {
   it("exposes timeIndex=0, opacity=85, timeDates=null on creation", () => {
-    // Import the helper inline since it's light
     const { timeIndex, opacity, timeDates } = useZarrDirectMap(
       "https://example.com/store.zarr",
-      "tasmax",
+      makeVar(),
       492,
-      [280, 325],
       { lat: "rlat", lon: "rlon" },
-      COLORMAP_TEMP,
     );
     expect(timeIndex.value).toBe(0);
     expect(opacity.value).toBe(85);
     expect(timeDates.value).toBeNull();
   });
 
-  it("timeSteps matches the passed prop", () => {
+  it("initialises clim from the active variable", () => {
+    const { climLower, climUpper } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar({ clim: [6.85, 51.85] }),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(climLower.value).toBe(6.85);
+    expect(climUpper.value).toBe(51.85);
+  });
+
+  it("timeSteps matches the passed value", () => {
     const { timeSteps } = useZarrDirectMap(
       "https://example.com/store.zarr",
-      "tasmax",
+      makeVar(),
       492,
-      [280, 325],
       { lat: "rlat", lon: "rlon" },
-      COLORMAP_TEMP,
     );
     expect(timeSteps).toBe(492);
   });
 
-  it("colourbarStyle gradient contains colormap colours", () => {
+  it("colourbarStyle gradient contains the active variable's colormap colours", () => {
     const { colourbarStyle } = useZarrDirectMap(
       "https://example.com/store.zarr",
-      "tasmax",
+      makeVar({ colormap: COLORMAP_TEMP }),
       492,
-      [280, 325],
       { lat: "rlat", lon: "rlon" },
-      COLORMAP_TEMP,
     );
     const style = colourbarStyle.value;
     expect(style.background).toContain("linear-gradient");
@@ -172,12 +215,41 @@ describe("useZarrDirectMap initial state", () => {
 });
 
 // ---------------------------------------------------------------------------
+// useZarrDirectMap — reacting to a variable change
+// ---------------------------------------------------------------------------
+
+describe("useZarrDirectMap reactive variable", () => {
+  it("resets clim to the new variable's defaults when the variable changes", async () => {
+    const variable = ref(makeVar({ varName: "tasmax", clim: [6.85, 51.85] }));
+    const { climLower, climUpper, colourbarStyle } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      variable,
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+
+    expect(climLower.value).toBe(6.85);
+
+    variable.value = makeVar({
+      varName: "pr",
+      clim: [0, 8.64],
+      colormap: COLORMAP_PRECIP,
+    });
+    await nextTick();
+
+    expect(climLower.value).toBe(0);
+    expect(climUpper.value).toBe(8.64);
+    expect(colourbarStyle.value.background).toContain(COLORMAP_PRECIP[0]);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // useZarrDirectMap — unit converter integration
 // ---------------------------------------------------------------------------
-// Note: ZarrLayer is only constructed inside onMounted when mapContainer.value
-// is non-null (requires a real DOM element). These tests verify the converter
-// is invoked correctly by setClim — the toRaw call is unconditional and
-// happens before the null-guarded zarrLayer?.setClim().
+// Note: ZarrLayer is only constructed once the map mounts (requires a real DOM
+// element + map "load"). These tests verify the converter is invoked correctly
+// by setClim — the toRaw call is unconditional and happens before the
+// null-guarded zarrLayer?.setClim().
 
 describe("useZarrDirectMap with unitConverter", () => {
   it("setClim calls converter.toRaw on both values", () => {
@@ -188,15 +260,9 @@ describe("useZarrDirectMap with unitConverter", () => {
 
     const { setClim } = useZarrDirectMap(
       "https://example.com/store.zarr",
-      "tasmax",
+      makeVar({ clim: [6.85, 51.85], unitConverter: converter }),
       492,
-      [6.85, 51.85],
       { lat: "rlat", lon: "rlon" },
-      COLORMAP_TEMP,
-      undefined,
-      undefined,
-      undefined,
-      converter,
     );
 
     setClim([10, 40]);
@@ -205,16 +271,224 @@ describe("useZarrDirectMap with unitConverter", () => {
     expect(converter.toRaw).toHaveBeenCalledWith(40);
   });
 
-  it("setClim does NOT call toRaw when no converter provided", () => {
+  it("setClim does NOT throw when no converter provided", () => {
     const { setClim } = useZarrDirectMap(
       "https://example.com/store.zarr",
-      "tasmax",
+      makeVar(),
       492,
-      [280, 325],
       { lat: "rlat", lon: "rlon" },
-      COLORMAP_TEMP,
     );
 
     expect(() => setClim([285, 320])).not.toThrow();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// useZarrDirectMap — derived computed values
+// ---------------------------------------------------------------------------
+
+describe("useZarrDirectMap computed values", () => {
+  it("climRange equals |clim[1] - clim[0]|", () => {
+    const { climRange } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar({ clim: [280, 325] }),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(climRange.value).toBeCloseTo(45);
+  });
+
+  it("climStep is positive", () => {
+    const { climStep } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar({ clim: [0, 8.64] }),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(climStep.value).toBeGreaterThan(0);
+  });
+
+  it("climFractionDigits is a non-negative integer", () => {
+    const { climFractionDigits } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar({ clim: [0, 8.64] }),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(climFractionDigits.value).toBeGreaterThanOrEqual(0);
+    expect(Number.isInteger(climFractionDigits.value)).toBe(true);
+  });
+
+  it("climDefaults matches the active variable's clim", () => {
+    const { climDefaults } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar({ clim: [6.85, 51.85] }),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(climDefaults.value).toEqual([6.85, 51.85]);
+  });
+
+  it("climUnit matches the active variable's climUnit", () => {
+    const { climUnit } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar({ climUnit: " °C" }),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(climUnit.value).toBe(" °C");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// useZarrDirectMap — handlers before map mounts (zarrLayer is null)
+// ---------------------------------------------------------------------------
+
+describe("useZarrDirectMap handlers (no map mounted)", () => {
+  it("onTimeChange does not throw", () => {
+    const { onTimeChange } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar(),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(() => onTimeChange()).not.toThrow();
+  });
+
+  it("onOpacityChange does not throw", () => {
+    const { onOpacityChange } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar(),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(() => onOpacityChange()).not.toThrow();
+  });
+
+  it("onClimChange does not throw", () => {
+    const { onClimChange } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar(),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(() => onClimChange()).not.toThrow();
+  });
+
+  it("onProjectionChange does not throw", () => {
+    const { onProjectionChange } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar(),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    expect(() => onProjectionChange()).not.toThrow();
+  });
+
+  it("resetClim restores climLower and climUpper to the variable's defaults", () => {
+    const { climLower, climUpper, resetClim } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar({ clim: [6.85, 51.85] }),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+
+    climLower.value = 10;
+    climUpper.value = 40;
+    resetClim();
+
+    expect(climLower.value).toBe(6.85);
+    expect(climUpper.value).toBe(51.85);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// useZarrDirectMap — debounce callbacks (require fake timers to execute)
+// ---------------------------------------------------------------------------
+
+describe("useZarrDirectMap debounce callbacks", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("onTimeChange debounce fires after 1 s without throwing", () => {
+    const { onTimeChange } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar(),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    onTimeChange();
+    expect(() => vi.advanceTimersByTime(1001)).not.toThrow();
+  });
+
+  it("onOpacityChange debounce fires after 1 s without throwing", () => {
+    const { onOpacityChange } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar(),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+    onOpacityChange();
+    expect(() => vi.advanceTimersByTime(1001)).not.toThrow();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// useZarrDirectMap — loadingState watch callback
+// ---------------------------------------------------------------------------
+
+describe("useZarrDirectMap loadingState watch", () => {
+  it("executes the success branch when loading transitions true→false", async () => {
+    const { loadingState } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar(),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+
+    loadingState.value = {
+      loading: true,
+      metadata: true,
+      chunks: true,
+      error: null,
+    };
+    await nextTick();
+    loadingState.value = {
+      loading: false,
+      metadata: true,
+      chunks: true,
+      error: null,
+    };
+    await nextTick();
+    // Watch callback executed the success capture branch without throwing.
+  });
+
+  it("executes the error branch when loading settles with an error", async () => {
+    const { loadingState } = useZarrDirectMap(
+      "https://example.com/store.zarr",
+      makeVar(),
+      492,
+      { lat: "rlat", lon: "rlon" },
+    );
+
+    loadingState.value = {
+      loading: true,
+      metadata: false,
+      chunks: false,
+      error: null,
+    };
+    await nextTick();
+    loadingState.value = {
+      loading: false,
+      metadata: false,
+      chunks: false,
+      error: new Error("fetch failed"),
+    };
+    await nextTick();
+    // Watch callback executed the error capture branch without throwing.
   });
 });

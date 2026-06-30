@@ -5,6 +5,10 @@ import {
   type UnitConverter,
 } from "~/utils/unitConversion";
 
+// TODO: We need to figure out a way to populate this automatically by inspecting
+// our zarr file. We might be able to get these out of moppy? Presumably we have,
+// at the very least, lists of variable names somewhere? Either that or we can
+// create a bit of logic to extract the variables from the zarr file.
 export type ClimateVariableName = "tasmax" | "tasmin" | "pr";
 
 export interface ClimateVariableUi {

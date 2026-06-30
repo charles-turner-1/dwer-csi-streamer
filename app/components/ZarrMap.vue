@@ -11,12 +11,10 @@
             >{{ timeIndex + 1 }} / {{ timeSteps }}</span
           >
         </label>
-        <input
-          type="range"
+        <USlider
+          v-model="timeIndex"
           min="0"
           :max="timeSteps - 1"
-          v-model.number="timeIndex"
-          @input="onTimeChange"
           class="flex-1 accent-blue-600"
         />
       </div>
@@ -24,12 +22,10 @@
         <label class="text-sm font-medium text-gray-700 dark:text-gray-300"
           >Opacity:</label
         >
-        <input
-          type="range"
+        <USlider
+          v-model="opacity"
           min="0"
           max="100"
-          v-model.number="opacity"
-          @input="onOpacityChange"
           class="w-24 accent-blue-600"
         />
       </div>
