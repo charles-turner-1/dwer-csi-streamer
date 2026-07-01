@@ -2,7 +2,6 @@ import { ref, computed } from "vue";
 import { FetchStore, root, open, get, slice } from "zarrita";
 import { fetchTimeDates } from "./useZarrDirectMap";
 import { kelvinToCelsius, type UnitConverter } from "~/utils/unitConversion";
-import type { ClimateVariableName } from "~/config/climateVariables";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -314,7 +313,9 @@ export interface HeadlineStat {
  */
 export function useWhatAboutMe(
   source: string,
-  initialVariableName: ClimateVariableName = "tasmax",
+  // A zarr data-variable name (resolved directly against the store), so a plain
+  // `string` — the set of valid names is now discovered from the opened dataset.
+  initialVariableName: string = "tasmax",
   initialUnitConverter: UnitConverter = kelvinToCelsius,
 ) {
   const loading = ref(false);
@@ -325,7 +326,7 @@ export function useWhatAboutMe(
   const trendLine = ref<number[] | null>(null);
   const headline = ref<HeadlineStat | null>(null);
   const timeLabels = ref<string[] | null>(null);
-  const variableName = ref<ClimateVariableName>(initialVariableName);
+  const variableName = ref<string>(initialVariableName);
   const unitConverter = ref<UnitConverter>(initialUnitConverter);
   const lastLookup = ref<{ lat: number; lon: number; name: string } | null>(
     null,
@@ -449,7 +450,7 @@ export function useWhatAboutMe(
     }
   }
 
-  function setVariable(name: ClimateVariableName, converter: UnitConverter) {
+  function setVariable(name: string, converter: UnitConverter) {
     variableName.value = name;
     unitConverter.value = converter;
   }

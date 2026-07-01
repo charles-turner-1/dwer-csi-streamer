@@ -13,6 +13,24 @@ vi.mock("~/composables/useZarrDirectMap", async (importOriginal) => {
   };
 });
 
+// The page opens the dataset on mount to reconcile its variable list. Stub it so
+// no real fetch happens; the store-only containers (rotated_pole, time_bnds) here
+// also exercise the filter that keeps the nav to the three curated variables.
+vi.mock("~/composables/useClimateDataset", () => ({
+  openClimateDataset: vi.fn(() =>
+    Promise.resolve({
+      data_vars: {
+        tasmax: {},
+        tasmin: {},
+        pr: {},
+        rotated_pole: {},
+        time_bnds: {},
+      },
+      coords: { time: { dates: () => [] } },
+    }),
+  ),
+}));
+
 import ViewData from "~/pages/view-data.vue";
 import { useZarrDirectMap } from "~/composables/useZarrDirectMap";
 import { CLIMATE_VARIABLES } from "~/config/climateVariables";

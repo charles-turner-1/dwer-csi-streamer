@@ -16,15 +16,21 @@ vi.mock("~/composables/usePosthog", () => ({
   usePosthog: () => ({ capture: vi.fn() }),
 }));
 
-vi.mock("zarrita", () => ({
-  FetchStore: vi.fn().mockImplementation(() => ({})),
-  root: vi.fn().mockReturnValue({ resolve: vi.fn().mockReturnValue({}) }),
-  open: vi.fn().mockResolvedValue({}),
-  get: vi.fn().mockResolvedValue({
-    data: new Float64Array([0, 31]),
-    shape: [2],
-    stride: [1],
-  }),
+// onMounted → fetchTimeDates opens the dataset via xarray-ts; stub it so the
+// lifecycle tests stay offline.
+vi.mock("~/composables/useClimateDataset", () => ({
+  openClimateDataset: vi.fn(() =>
+    Promise.resolve({
+      coords: {
+        time: {
+          dates: () => [
+            new Date(Date.UTC(1949, 11, 1)),
+            new Date(Date.UTC(1950, 0, 1)),
+          ],
+        },
+      },
+    }),
+  ),
 }));
 
 vi.mock("@carbonplan/zarr-layer", () => ({
