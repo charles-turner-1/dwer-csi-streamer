@@ -9,7 +9,7 @@ import {
 } from "vue";
 import maplibregl from "maplibre-gl";
 import { ZarrLayer, type LoadingState } from "@carbonplan/zarr-layer";
-import { FetchStore, root, open, get } from "zarrita";
+import { openClimateDataset } from "~/composables/useClimateDataset";
 import type { ClimateVariableConfig } from "~/config/climateVariables";
 
 export const COLORMAP_TEMP = [
@@ -54,13 +54,12 @@ export const SWWA_SPATIAL_DIMS = { lat: "rlat", lon: "rlon" };
 const COAST_OUTLINE_ID = "coast-outline";
 
 export async function fetchTimeDates(source: string): Promise<string[]> {
-  const store = new FetchStore(source);
-  const arr = await open(root(store).resolve("time"), { kind: "array" });
-  const chunk = await get(arr);
-  const data = chunk.data as Float64Array;
-  const base = Date.UTC(1949, 11, 1); // days since 1949-12-01
-  return Array.from(data, (v) =>
-    new Date(base + v * 86400000).toLocaleString("en-AU", {
+  const ds = await openClimateDataset(source);
+  // xarray-ts CF-decodes the time axis from its `units`/`calendar` attributes
+  // (e.g. "days since 1949-12-01", gregorian), so we no longer hardcode the base.
+  const dates = ds.coords.time?.dates() ?? [];
+  return dates.map((d) =>
+    d.toLocaleString("en-AU", {
       day: "numeric",
       month: "short",
       year: "numeric",

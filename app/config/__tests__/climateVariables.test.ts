@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   CLIMATE_VARIABLES,
+  getAvailableClimateVariables,
   getClimateVariableConfig,
 } from "~/config/climateVariables";
 
@@ -74,5 +75,26 @@ describe("getClimateVariableConfig", () => {
     // Cast to bypass TypeScript — exercises the defensive fallback branch.
     const config = getClimateVariableConfig("unknown" as "tasmax");
     expect(config.varName).toBe("tasmax");
+  });
+});
+
+describe("getAvailableClimateVariables", () => {
+  it("keeps only curated variables present in the dataset, in curated order", () => {
+    // A realistic data_vars listing includes store-only containers with no
+    // curated entry (rotated_pole, time_bnds) — those must be dropped.
+    const names = ["pr", "rotated_pole", "tasmax", "time_bnds", "tasmin"];
+    const available = getAvailableClimateVariables(names);
+    expect(available.map((v) => v.varName)).toEqual(["tasmax", "tasmin", "pr"]);
+  });
+
+  it("drops curated variables absent from the dataset", () => {
+    const available = getAvailableClimateVariables(["tasmax"]);
+    expect(available.map((v) => v.varName)).toEqual(["tasmax"]);
+  });
+
+  it("returns an empty array when no curated variables are present", () => {
+    expect(getAvailableClimateVariables(["rotated_pole", "time_bnds"])).toEqual(
+      [],
+    );
   });
 });

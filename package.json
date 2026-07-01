@@ -30,6 +30,7 @@
     "tailwindcss": "^4.3.0",
     "vue": "^3.5.34",
     "vue-chartjs": "^5.3.3",
+    "xarray-ts": "^0.1.5",
     "zarrita": "^0.6.1"
   },
   "devDependencies": {

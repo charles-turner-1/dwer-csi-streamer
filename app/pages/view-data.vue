@@ -130,10 +130,12 @@ import {
 } from "~/composables/useZarrDirectMap";
 import {
   CLIMATE_VARIABLES,
+  getAvailableClimateVariables,
   getClimateVariableConfig,
   type ClimateVariableConfig,
   type ClimateVariableName,
 } from "~/config/climateVariables";
+import { openClimateDataset } from "~/composables/useClimateDataset";
 
 definePageMeta({ layout: "dashboard" });
 
@@ -149,8 +151,17 @@ const activeVariable = computed<ClimateVariableConfig>(() =>
   getClimateVariableConfig(activeTab.value),
 );
 
+// The variables shown are driven by what the opened dataset actually contains.
+// Seed with the full curated list so the sidebar renders immediately, then
+// reconcile to `data_vars ∩ registry` once the dataset resolves (dropping any
+// curated variable absent from the store, and store-only containers like
+// `rotated_pole`/`time_bnds` that have no curated entry).
+// Left unannotated so each element keeps its literal `varName` (a
+// `ClimateVariableName`), which the nav `onSelect` assigns back into `activeTab`.
+const availableVariables = ref([...CLIMATE_VARIABLES]);
+
 const variableItems = computed<NavigationMenuItem[]>(() =>
-  CLIMATE_VARIABLES.map(({ varName, label }) => ({
+  availableVariables.value.map(({ varName, label }) => ({
     label,
     active: activeTab.value === varName,
     onSelect: () => {
@@ -171,4 +182,11 @@ const map = useZarrDirectMap(
   SWWA_SPATIAL_DIMS,
   { fillValue: 1e20, proj4: SWWA_PROJ4, bounds: SWWA_BOUNDS },
 );
+
+onMounted(async () => {
+  const ds = await openClimateDataset(STORE_URL_TILES);
+  availableVariables.value = getAvailableClimateVariables(
+    Object.keys(ds.data_vars),
+  );
+});
 </script>

@@ -26,18 +26,16 @@ vi.mock("@carbonplan/zarr-layer", () => ({
   })),
 }));
 
-// zarrita mock — controllable per-test via mockGetResult
-let mockGetResult: Float64Array = new Float64Array([0]);
+// useClimateDataset mock — fetchTimeDates now opens the dataset via xarray-ts and
+// reads its CF-decoded time axis. The decoding itself is xarray-ts's concern; here
+// we control the Date[] it yields and assert our formatting. `undefined` models a
+// missing / non-decodable time axis.
+let mockTimeDates: Date[] | undefined = [];
 
-vi.mock("zarrita", () => ({
-  FetchStore: vi.fn().mockImplementation(() => ({})),
-  root: vi.fn().mockReturnValue({ resolve: vi.fn().mockReturnValue({}) }),
-  open: vi.fn().mockResolvedValue({}),
-  get: vi.fn().mockImplementation(() =>
+vi.mock("~/composables/useClimateDataset", () => ({
+  openClimateDataset: vi.fn(() =>
     Promise.resolve({
-      data: mockGetResult,
-      shape: [mockGetResult.length],
-      stride: [1],
+      coords: { time: { dates: () => mockTimeDates } },
     }),
   ),
 }));
@@ -119,46 +117,38 @@ describe("fetchTimeDates", () => {
     vi.clearAllMocks();
   });
 
-  it("decodes value 0.0 to 1 Dec 1949 00:00 UTC", async () => {
-    mockGetResult = new Float64Array([0]);
+  it("formats a decoded Date as a day/short-month/year string in UTC", async () => {
+    mockTimeDates = [new Date(Date.UTC(1949, 11, 1))]; // 1 Dec 1949 UTC
     const dates = await fetchTimeDates("https://example.com/store.zarr");
-    // 1949-12-01 UTC
     expect(dates[0]).toContain("1949");
     expect(dates[0]).toContain("Dec");
     expect(dates[0]).toContain("1");
   });
 
-  it("decodes 365 days to 1 Dec 1950 (non-leap year)", async () => {
-    mockGetResult = new Float64Array([365]);
+  it("uses the UTC calendar day (near-midnight Date keeps its UTC date)", async () => {
+    // 16 Jan 1980 00:00 UTC — must not roll back a day under a local timezone.
+    mockTimeDates = [new Date(Date.UTC(1980, 0, 16))];
     const dates = await fetchTimeDates("https://example.com/store.zarr");
-    expect(dates[0]).toContain("1950");
-    expect(dates[0]).toContain("Dec");
+    expect(dates[0]).toContain("1980");
+    expect(dates[0]).toContain("Jan");
+    expect(dates[0]).toContain("16");
   });
 
-  it("decodes fractional day to correct date (0.5 days = still 1 Dec 1949 UTC)", async () => {
-    // 0.5 days = 12 hours after 1949-12-01 00:00 UTC — still 1 Dec 1949
-    mockGetResult = new Float64Array([0.5]);
-    const dates = await fetchTimeDates("https://example.com/store.zarr");
-    expect(dates[0]).toContain("Dec");
-    expect(dates[0]).toContain("1949");
-  });
-
-  it("returns an array the same length as the input data", async () => {
-    mockGetResult = new Float64Array([0, 31, 59, 90]);
+  it("returns an array the same length as the decoded dates", async () => {
+    mockTimeDates = [
+      new Date(Date.UTC(1949, 11, 1)),
+      new Date(Date.UTC(1950, 0, 1)),
+      new Date(Date.UTC(1950, 1, 1)),
+      new Date(Date.UTC(1950, 2, 1)),
+    ];
     const dates = await fetchTimeDates("https://example.com/store.zarr");
     expect(dates).toHaveLength(4);
   });
 
-  it("decodes a known monthly offset correctly (Jan 1980 ≈ day 10988)", async () => {
-    // Days from 1949-12-01 to 1980-01-16 (mid-month, typical CF centroid)
-    // 1980-01-16 UTC:  Date.UTC(1980,0,16) = 317174400000 ms
-    // base:            Date.UTC(1949,11,1) = -633830400000 ms  (negative, pre-epoch)
-    // diff ms = 317174400000 - (-633830400000) = 951004800000
-    // diff days = 951004800000 / 86400000 = 11007
-    mockGetResult = new Float64Array([11007]);
+  it("returns an empty array when the time axis is not decodable", async () => {
+    mockTimeDates = undefined; // dates() returns undefined for a raw/absent axis
     const dates = await fetchTimeDates("https://example.com/store.zarr");
-    expect(dates[0]).toContain("1980");
-    expect(dates[0]).toContain("Jan");
+    expect(dates).toEqual([]);
   });
 });
 
